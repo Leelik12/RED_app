@@ -149,6 +149,10 @@
                         <StackPanel>
                             <TextBlock Text="ИНТЕРФЕЙС ГЕНЕРАЦИИ :: СТАТЫ" FontSize="22" Margin="0,0,0,20"/>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <TextBlock Text="ИМЯ ПЕРСОНАЖА:" Foreground="#999999" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                                <TextBox x:Name="TxtCharName" Width="300" Background="#1A1A1A" Foreground="#FFFFFF" BorderBrush="#FF4444" BorderThickness="2" FontSize="16" FontWeight="Bold" Padding="8,5" CaretBrush="#00D4B2"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                                 <RadioButton x:Name="RbCalc" Content="Ручная настройка" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold" IsChecked="True" Checked="ModeChanged" Margin="0,0,20,0"/>
                                 <RadioButton x:Name="RbRandom" Content="Полный рандом" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold" Checked="ModeChanged"/>
                             </StackPanel>
