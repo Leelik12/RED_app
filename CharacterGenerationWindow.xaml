@@ -97,6 +97,28 @@
             <Setter Property="Padding" Value="15,10"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
+
+        <Style TargetType="ToolTip">
+            <Setter Property="Background" Value="#050505"/>
+            <Setter Property="Foreground" Value="#00D4B2"/>
+            <Setter Property="BorderBrush" Value="#FF4444"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="MaxWidth" Value="300"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="2">
+                            <TextBlock Text="{TemplateBinding Content}" TextWrapping="Wrap" FontSize="14" FontFamily="Consolas"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -638,16 +660,33 @@
                                                                     <ColumnDefinition Width="80"/>
                                                                 </Grid.ColumnDefinitions>
 
-                                                                <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#E0E0E0" VerticalAlignment="Center"/>
+                                                                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                                                    <Button Content="X" Style="{StaticResource SmallBtn}" Width="20" Height="20" Margin="0,0,5,0"
+                                                                            Foreground="#FF4444" BorderBrush="#FF4444" FontSize="12"
+                                                                            Visibility="{Binding RemoveButtonVisibility}" Tag="{Binding}" Click="BtnRemoveVariant_Click"/>
+
+                                                                    <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" VerticalAlignment="Center" 
+                                                                               ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+
+                                                                    <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" 
+                                                                             Visibility="{Binding SubNameVisibility}"
+                                                                             Margin="10,0,0,0" Width="100" Background="#1A1A1A" Foreground="#00D4B2" BorderBrush="#00D4B2" BorderThickness="1"
+                                                                             Padding="2" VerticalAlignment="Center" FontFamily="Consolas"/>
+                                                                </StackPanel>
+
                                                                 <TextBlock Grid.Column="1" Text="{Binding StatName}" Foreground="#757575" VerticalAlignment="Center" TextAlignment="Center"/>
 
-                                                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                                                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding NormalControlsVisibility}">
                                                                     <Button Content="-" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnMinus_Click"/>
                                                                     <TextBlock Text="{Binding Level}" Width="40" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFFFFF" FontSize="18"/>
                                                                     <Button Content="+" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnPlus_Click"/>
                                                                 </StackPanel>
 
-                                                                <TextBlock Grid.Column="3" Text="{Binding Total}" Foreground="#00D4B2" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                                <Button Grid.Column="2" Content="+ ДОБАВИТЬ" Background="#1A1A1A" Foreground="#00D4B2" BorderBrush="#00D4B2" BorderThickness="1" Padding="10,2" FontSize="12" Height="24" FontWeight="Bold" Cursor="Hand"
+                                                                        Visibility="{Binding AddButtonVisibility}" Tag="{Binding}" Click="BtnAddVariant_Click"/>
+
+                                                                <TextBlock Grid.Column="3" Text="{Binding Total}" Foreground="#00D4B2" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"
+                                                                           Visibility="{Binding NormalControlsVisibility}"/>
                                                             </Grid>
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>

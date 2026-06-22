@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
 
 namespace CyberpunkRED_Generator
 {
@@ -54,6 +55,25 @@ namespace CyberpunkRED_Generator
         public bool IsBasic { get; set; }
         public bool IsX2 { get; set; }
 
+        //
+        public string Category { get; set; }
+        public bool CanAddMultiple { get; set; }
+        public bool IsVariant { get; set; }
+        public int FreeLevels { get; set; }
+
+        private string _subName = "";
+        public string SubName
+        {
+            get => _subName;
+            set { _subName = value; OnPropertyChanged(); }
+        }
+
+        public Visibility NormalControlsVisibility => CanAddMultiple ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility AddButtonVisibility => CanAddMultiple ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility SubNameVisibility => IsVariant ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility RemoveButtonVisibility => IsVariant ? Visibility.Visible : Visibility.Collapsed;
+        //
+
         private int _baseStatValue = 5;
 
         private int _level;
@@ -62,6 +82,8 @@ namespace CyberpunkRED_Generator
             get => _level;
             set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Total)); }
         }
+
+        public string Description { get; set; }
 
         public int Total => _baseStatValue + Level;
 
@@ -81,7 +103,7 @@ namespace CyberpunkRED_Generator
     public class SkillCategory
     {
         public string CategoryName { get; set; }
-        public List<SkillRow> Skills { get; set; }
+        public ObservableCollection<SkillRow> Skills { get; set; }
     }
 
     // ==========================================
@@ -224,11 +246,16 @@ namespace CyberpunkRED_Generator
                 {
                     foreach (var skill in cat.Skills)
                     {
-                        if (skill.Level > 0)
+                        // Не сохраняем "пустые" базовые плашки-кнопки (CanAddMultiple)
+                        if (skill.Level > 0 && !skill.CanAddMultiple)
                         {
+                            string exportName = skill.IsVariant && !string.IsNullOrWhiteSpace(skill.SubName)
+                                                ? $"{skill.Name}: {skill.SubName}"
+                                                : skill.Name;
+
                             charData.Skills.Add(new SkillSaveData
                             {
-                                Name = skill.Name,
+                                Name = exportName,
                                 Level = skill.Level,
                                 Total = skill.Total
                             });
@@ -559,8 +586,24 @@ namespace CyberpunkRED_Generator
 
             foreach (var group in grouped)
             {
-                var cat = new SkillCategory { CategoryName = group.Key.ToUpper(), Skills = new List<SkillRow>() };
-                foreach (var def in group) cat.Skills.Add(new SkillRow { Name = def.Name, StatName = def.Stat, IsBasic = def.IsBasic, IsX2 = def.IsX2, Level = def.IsBasic ? 2 : 0 });
+                var cat = new SkillCategory { CategoryName = group.Key.ToUpper(), Skills = new ObservableCollection<SkillRow>() };
+                foreach (var def in group)
+                {
+                    cat.Skills.Add(new SkillRow
+                    {
+                        Category = def.Category,
+                        Name = def.Name,
+                        StatName = def.Stat,
+                        IsBasic = def.IsBasic,
+                        IsX2 = def.IsX2,
+                        //Level = def.IsBasic ? 2 : 0,
+                        Description = def.Description,
+                        CanAddMultiple = def.CanAddMultiple,
+                        IsVariant = false,
+                        Level = def.IsBasic ? 2 : def.FreeLevels,
+                        FreeLevels = def.FreeLevels
+                    });
+                }
                 _categories.Add(cat);
             }
 
@@ -568,11 +611,64 @@ namespace CyberpunkRED_Generator
             UpdatePointsCounter();
         }
 
+        private void BtnAddVariant_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is SkillRow parentSkill)
+            {
+                var category = _categories.FirstOrDefault(c => c.CategoryName == parentSkill.Category.ToUpper());
+                if (category != null)
+                {
+                    int index = category.Skills.IndexOf(parentSkill);
+
+                    var variant = new SkillRow
+                    {
+                        Category = parentSkill.Category,
+                        Name = parentSkill.Name,
+                        StatName = parentSkill.StatName,
+                        IsBasic = false,
+                        IsX2 = parentSkill.IsX2,
+                        Description = parentSkill.Description,
+                        CanAddMultiple = false,
+                        IsVariant = true,
+                        Level = 0
+                    };
+
+                    int statVal = 5;
+                    switch (variant.StatName)
+                    {
+                        case "ИНТ": statVal = GetStat(TxtInt); break;
+                        case "РЕА": statVal = GetStat(TxtRef); break;
+                        case "ЛВК": statVal = GetStat(TxtDex); break;
+                        case "ТЕХ": statVal = GetStat(TxtTech); break;
+                        case "ХАР": statVal = GetStat(TxtCool); break;
+                        case "ВОЛЯ": statVal = GetStat(TxtWill); break;
+                        case "ЭМП": statVal = GetStat(TxtEmp); break;
+                    }
+                    variant.UpdateBaseStat(statVal);
+
+                    category.Skills.Insert(index + 1, variant);
+                }
+            }
+        }
+
+        private void BtnRemoveVariant_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is SkillRow variantSkill)
+            {
+                var category = _categories.FirstOrDefault(c => c.CategoryName == variantSkill.Category.ToUpper());
+                if (category != null)
+                {
+                    category.Skills.Remove(variantSkill);
+                    UpdatePointsCounter();
+                }
+            }
+        }
+
         private void SkillBtnMinus_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.Tag is SkillRow skill)
             {
-                int minLevel = skill.IsBasic ? 2 : 0;
+                int minLevel = skill.IsBasic ? 2 : skill.FreeLevels;
                 if (skill.Level > minLevel)
                 {
                     skill.Level--;
@@ -598,8 +694,13 @@ namespace CyberpunkRED_Generator
         {
             int spent = 0;
             foreach (var cat in _categories)
+            {
                 foreach (var skill in cat.Skills)
-                    spent += skill.Level * (skill.IsX2 ? 2 : 1);
+                {
+                    int paidLevels = Math.Max(0, skill.Level - skill.FreeLevels);
+                    spent += paidLevels * (skill.IsX2 ? 2 : 1);
+                }
+            }
             return spent;
         }
 
