@@ -1,0 +1,12 @@
+﻿<Window x:Class="CyberpunkRED_Generator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cyberpunk RED - Главное меню" Height="300" Width="400" Background="#1a1a1a" WindowStartupLocation="CenterScreen">
+    <StackPanel VerticalAlignment="Center" Margin="20">
+        <TextBlock Text="CYBERPUNK RED" Foreground="Red" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <Button Content="1. Генерация персонажа" Height="40" Margin="0,5" Background="Red" Foreground="White" FontWeight="Bold" Click="BtnGenerate_Click"/>
+        <Button Content="2. Лист персонажа (Заглушка)" Height="40" Margin="0,5" Background="#333" Foreground="Gray" IsEnabled="False"/>
+        <Button Content="3. Экран Гейм-мастера (Заглушка)" Height="40" Margin="0,5" Background="#333" Foreground="Gray" IsEnabled="False"/>
+    </StackPanel>
+</Window>
