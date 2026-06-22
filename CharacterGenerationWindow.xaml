@@ -1,61 +1,82 @@
 ﻿<Window x:Class="CyberpunkRED_Generator.CharacterGenerationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ТЕРМИНАЛ: Генерация" Height="700" Width="950" Background="#050505" WindowStartupLocation="CenterScreen" FontFamily="Consolas">
+        Title="ТЕРМИНАЛ: Создание персонажа" Height="850" Width="1100" Background="#000000" WindowStartupLocation="CenterScreen" FontFamily="Consolas">
 
     <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FF3333"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style TargetType="TabItem">
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="#000000"/>
+            <Setter Property="Width" Value="6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Track x:Name="PART_Track" IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb>
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="#00D4B2" CornerRadius="3"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="#1A1A1A"/>
-            <Setter Property="Foreground" Value="#00FFCC"/>
+            <Setter Property="Background" Value="#0A0A0A"/>
+            <Setter Property="Foreground" Value="#00D4B2"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="5,8"/>
-            
+            <Setter Property="Padding" Value="8,8"/>
             <Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF3333"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#050505"/>
-                
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#FF3333"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#050505"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF4444"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#000000"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#FF4444"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#000000"/>
             </Style.Resources>
         </Style>
-        
+
         <Style TargetType="ComboBox">
-            <Setter Property="Foreground" Value="#00FFCC"/>
-            <Setter Property="Background" Value="#1A1A1A"/>
-            <Setter Property="BorderBrush" Value="#FF3333"/>
+            <Setter Property="Foreground" Value="#00D4B2"/>
+            <Setter Property="Background" Value="#0A0A0A"/>
+            <Setter Property="BorderBrush" Value="#FF4444"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <ToggleButton x:Name="ToggleButton" 
-                                          Background="{TemplateBinding Background}" 
-                                          BorderBrush="{TemplateBinding BorderBrush}" 
-                                          BorderThickness="{TemplateBinding BorderThickness}" 
-                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ToggleButton x:Name="ToggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
                                         <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <Path x:Name="Arrow" Fill="#00FFCC" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Data="M 0 0 L 5 5 L 10 0 Z"/>
+                                            <Path x:Name="Arrow" Fill="#00D4B2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Data="M 0 0 L 5 5 L 10 0 Z"/>
                                         </Border>
                                     </ControlTemplate>
                                 </ToggleButton.Template>
                             </ToggleButton>
-
-                            <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" Margin="10,8,30,8" VerticalAlignment="Center" HorizontalAlignment="Left" />
-
-                            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
-                                <Grid x:Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="300">
-                                    <Border x:Name="DropDownBorder" Background="#0A0A0A" BorderThickness="2" BorderBrush="#FF3333"/>
+                            <ContentPresenter IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" TextElement.Foreground="{TemplateBinding Foreground}" Margin="10,8,30,8" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                            <Popup Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                                <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="300">
+                                    <Border Background="#000000" BorderThickness="2" BorderBrush="#FF4444"/>
                                     <ScrollViewer Margin="1" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
@@ -66,183 +87,582 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
-        <Style x:Key="StatName" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-            <Setter Property="Foreground" Value="#00FFCC"/>
-            <Setter Property="Width" Value="60"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="18"/>
-        </Style>
-
-        <Style x:Key="StatValue" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-            <Setter Property="Foreground" Value="#FFFFFF"/>
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="24"/>
-        </Style>
 
         <Style x:Key="CyberButton" TargetType="Button">
-            <Setter Property="Background" Value="#FF3333"/>
-            <Setter Property="Foreground" Value="#050505"/>
+            <Setter Property="Background" Value="#FF4444"/>
+            <Setter Property="Foreground" Value="#000000"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Padding" Value="15,10"/>
             <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-
-        <Style x:Key="StatBtn" TargetType="Button">
-            <Setter Property="Width" Value="32"/>
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="Background" Value="#1A1A1A"/>
-            <Setter Property="Foreground" Value="#00FFCC"/>
-            <Setter Property="BorderBrush" Value="#00FFCC"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="18"/>
         </Style>
     </Window.Resources>
 
-    <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1.5*"/>
-        </Grid.ColumnDefinitions>
-
-        <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="20" Margin="0,0,15,0">
-            <StackPanel>
-                <TextBlock Text="ИНТЕРФЕЙС ГЕНЕРАЦИИ :: СТАТЫ" FontSize="22" Margin="0,0,0,20"/>
-
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <RadioButton x:Name="RbCalc" Content="Ручная настройка" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold" IsChecked="True" Checked="ModeChanged" Margin="0,0,20,0"/>
-                    <RadioButton x:Name="RbRandom" Content="Полный рандом" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold" Checked="ModeChanged"/>
-                </StackPanel>
-
-                <StackPanel x:Name="PanelCalc" Margin="0,0,0,20">
-                    <TextBlock Text="ДОПУСК (ПУЛ ОЧКОВ):" Foreground="#888888" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="CbRank" SelectionChanged="CbRank_SelectionChanged" Background="#1A1A1A" Foreground="#00FFCC" FontSize="16" FontWeight="Bold" Padding="8">
-                        <ComboBoxItem Content="Второстепенный персонаж (50)" Tag="50"/>
-                        <ComboBoxItem Content="Стандартный персонаж (62)" IsSelected="True" Tag="62"/>
-                        <ComboBoxItem Content="Главная роль 2-го плана (70)" Tag="70"/>
-                        <ComboBoxItem Content="Второстепенный герой (75)" Tag="75"/>
-                        <ComboBoxItem Content="Главный герой (80)" Tag="80"/>
-                    </ComboBox>
-                    <TextBlock FontSize="18" Margin="0,15,0,0">
-                        <Run Text="ДОСТУПНО ОЧКОВ: " Foreground="#FFFFFF"/>
-                        <Run x:Name="TxtPointsLeft" Text="62" Foreground="#00FFCC" FontSize="22"/>
-                    </TextBlock>
-                </StackPanel>
-
-                <StackPanel x:Name="PanelRandom" Visibility="Collapsed" Margin="0,0,0,20">
-                    <Button Content="ЗАПУСК АЛГОРИТМА 3D4" Style="{StaticResource CyberButton}" Click="BtnRollStats_Click" Margin="0,0,0,10"/>
-                    <TextBlock Text="Система сгенерирует значения от 2 до 8." Foreground="#888888" FontSize="14"/>
-                </StackPanel>
-
-                <UniformGrid x:Name="StatsGrid" Columns="2" Margin="0,10,0,0">
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="INT:" Style="{StaticResource StatName}" ToolTip="Интеллект"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtInt" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtInt" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtInt" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="REF:" Style="{StaticResource StatName}" ToolTip="Реакция"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtRef" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtRef" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtRef" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="DEX:" Style="{StaticResource StatName}" ToolTip="Ловкость"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtDex" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtDex" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtDex" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="TECH:" Style="{StaticResource StatName}" ToolTip="Техника"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtTech" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtTech" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtTech" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="COOL:" Style="{StaticResource StatName}" ToolTip="Крутость"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtCool" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtCool" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtCool" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="WILL:" Style="{StaticResource StatName}" ToolTip="Воля"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtWill" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtWill" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtWill" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="LUCK:" Style="{StaticResource StatName}" ToolTip="Удача"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtLuck" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtLuck" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtLuck" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="MOVE:" Style="{StaticResource StatName}" ToolTip="Скорость"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtMove" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtMove" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtMove" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="BODY:" Style="{StaticResource StatName}" ToolTip="Телосложение"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtBody" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtBody" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtBody" Click="BtnPlus_Click"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="5,8">
-                        <TextBlock Text="EMP:" Style="{StaticResource StatName}" ToolTip="Эмпатия"/>
-                        <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtEmp" Click="BtnMinus_Click"/>
-                        <TextBlock x:Name="TxtEmp" Text="2" Style="{StaticResource StatValue}"/>
-                        <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtEmp" Click="BtnPlus_Click"/>
-                    </StackPanel>
-                </UniformGrid>
-
-                <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="18">
-                    <Run Text="ОБЩАЯ СУММА СТАТОВ: " Foreground="#888888"/>
-                    <Run x:Name="TxtTotalStats" Text="20" Foreground="#00FFCC" FontWeight="Bold" FontSize="24"/>
-                </TextBlock>
-
-            </StackPanel>
+    <Grid>
+        <Border Background="#0A0A0A" BorderBrush="#00D4B2" BorderThickness="0,0,0,2" VerticalAlignment="Top" Height="60" Padding="20,0">
+            <TextBlock x:Name="TxtProgress" Text="ЭТАП 1: ХАРАКТЕРИСТИКИ" Foreground="#00D4B2" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
         </Border>
 
-        <Border Grid.Column="1" BorderBrush="#00FFCC" BorderThickness="2" Background="#0A0A0A" Padding="20">
-            <StackPanel>
-                <TextBlock Text="СИСТЕМНЫЕ ПОКАЗАТЕЛИ" Foreground="#00FFCC" FontSize="20" Margin="0,0,0,20"/>
+        <TabControl x:Name="WizardTabControl" Background="Transparent" BorderThickness="0" Margin="0,60,0,0">
 
-                <Grid Margin="0,12">
-                    <TextBlock Text="ПЗ (Hit Points):" Foreground="#FFFFFF"/>
-                    <TextBlock x:Name="TxtHp" Text="10" Foreground="#00FFCC" HorizontalAlignment="Right" FontSize="20"/>
-                </Grid>
-                <Grid Margin="0,12">
-                    <TextBlock Text="Порог тяж. ранения:" Foreground="#FFFFFF"/>
-                    <TextBlock x:Name="TxtWounded" Text="5" Foreground="#FF3333" HorizontalAlignment="Right" FontSize="20"/>
-                </Grid>
-                <Grid Margin="0,12">
-                    <TextBlock Text="Спасбросок смерти:" Foreground="#FFFFFF"/>
-                    <TextBlock x:Name="TxtDeathSave" Text="2" Foreground="#00FFCC" HorizontalAlignment="Right" FontSize="20"/>
-                </Grid>
-                <Grid Margin="0,12">
-                    <TextBlock Text="Человечность (ЧЕЛ):" Foreground="#FFFFFF"/>
-                    <TextBlock x:Name="TxtHumanity" Text="20" Foreground="#00FFCC" HorizontalAlignment="Right" FontSize="20"/>
-                </Grid>
+            <TabItem>
+                <Grid Margin="20">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="#FF3333"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                        <Style x:Key="StatName" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Foreground" Value="#00FFCC"/>
+                            <Setter Property="Width" Value="60"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="FontSize" Value="18"/>
+                        </Style>
+                        <Style x:Key="StatValue" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="Foreground" Value="#FFFFFF"/>
+                            <Setter Property="Width" Value="40"/>
+                            <Setter Property="TextAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="FontSize" Value="24"/>
+                        </Style>
+                        <Style x:Key="StatBtn" TargetType="Button">
+                            <Setter Property="Width" Value="32"/>
+                            <Setter Property="Height" Value="32"/>
+                            <Setter Property="Background" Value="#1A1A1A"/>
+                            <Setter Property="Foreground" Value="#00FFCC"/>
+                            <Setter Property="BorderBrush" Value="#00FFCC"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="FontSize" Value="18"/>
+                        </Style>
+                    </Grid.Resources>
 
-                <Button Content="ПОДТВЕРДИТЬ И ПРОДОЛЖИТЬ" Style="{StaticResource CyberButton}" Margin="0,50,0,0" Height="50" FontSize="18" Click="Button_Click"/>
-            </StackPanel>
-        </Border>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="20" Margin="0,0,15,0">
+                        <StackPanel>
+                            <TextBlock Text="ИНТЕРФЕЙС ГЕНЕРАЦИИ :: СТАТЫ" FontSize="22" Margin="0,0,0,20"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <RadioButton x:Name="RbCalc" Content="Ручная настройка" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold" IsChecked="True" Checked="ModeChanged" Margin="0,0,20,0"/>
+                                <RadioButton x:Name="RbRandom" Content="Полный рандом" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold" Checked="ModeChanged"/>
+                            </StackPanel>
+
+                            <StackPanel x:Name="PanelCalc" Margin="0,0,0,20">
+                                <TextBlock Text="ДОПУСК (ПУЛ ОЧКОВ):" Foreground="#888888" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="CbRank" SelectionChanged="CbRank_SelectionChanged" Background="#1A1A1A" Foreground="#00FFCC" Padding="8">
+                                    <ComboBoxItem Content="Второстепенный персонаж (50)" Tag="50"/>
+                                    <ComboBoxItem Content="Стандартный персонаж (62)" IsSelected="True" Tag="62"/>
+                                    <ComboBoxItem Content="Главная роль 2-го плана (70)" Tag="70"/>
+                                    <ComboBoxItem Content="Второстепенный герой (75)" Tag="75"/>
+                                    <ComboBoxItem Content="Главный герой (80)" Tag="80"/>
+                                </ComboBox>
+                                <TextBlock FontSize="18" Margin="0,15,0,0">
+                                    <Run Text="ДОСТУПНО ОЧКОВ: " Foreground="#FFFFFF"/>
+                                    <Run x:Name="TxtPointsLeft" Text="62" Foreground="#00FFCC" FontSize="22"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel x:Name="PanelRandom" Visibility="Collapsed" Margin="0,0,0,20">
+                                <Button Content="ЗАПУСК АЛГОРИТМА 3D4" Style="{StaticResource CyberButton}" Click="BtnRollStats_Click" Margin="0,0,0,10"/>
+                                <TextBlock Text="Система сгенерирует значения от 2 до 8." Foreground="#888888" FontSize="14"/>
+                            </StackPanel>
+
+                            <UniformGrid x:Name="StatsGrid" Columns="2" Margin="0,10,0,0">
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="INT:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtInt" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtInt" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtInt" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="REF:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtRef" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtRef" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtRef" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="DEX:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtDex" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtDex" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtDex" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="TECH:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtTech" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtTech" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtTech" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="COOL:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtCool" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtCool" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtCool" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="WILL:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtWill" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtWill" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtWill" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="LUCK:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtLuck" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtLuck" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtLuck" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="MOVE:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtMove" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtMove" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtMove" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="BODY:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtBody" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtBody" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtBody" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5,8">
+                                    <TextBlock Text="EMP:" Style="{StaticResource StatName}"/>
+                                    <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtEmp" Click="StatBtnMinus_Click"/>
+                                    <TextBlock x:Name="TxtEmp" Text="2" Style="{StaticResource StatValue}"/>
+                                    <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtEmp" Click="StatBtnPlus_Click"/>
+                                </StackPanel>
+                            </UniformGrid>
+
+                            <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="18">
+                                <Run Text="ОБЩАЯ СУММА СТАТОВ: " Foreground="#888888"/>
+                                <Run x:Name="TxtTotalStats" Text="20" Foreground="#00FFCC" FontWeight="Bold" FontSize="24"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" BorderBrush="#00FFCC" BorderThickness="2" Background="#0A0A0A" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="СИСТЕМНЫЕ ПОКАЗАТЕЛИ" Foreground="#00FFCC" FontSize="20" Margin="0,0,0,20"/>
+                                <Grid Margin="0,12">
+                                    <TextBlock Text="ПЗ (Hit Points):" Foreground="#FFFFFF"/>
+                                    <TextBlock x:Name="TxtHp" Text="10" Foreground="#00FFCC" HorizontalAlignment="Right" FontSize="20"/>
+                                </Grid>
+                                <Grid Margin="0,12">
+                                    <TextBlock Text="Порог тяж. ранения:" Foreground="#FFFFFF"/>
+                                    <TextBlock x:Name="TxtWounded" Text="5" Foreground="#FF3333" HorizontalAlignment="Right" FontSize="20"/>
+                                </Grid>
+                                <Grid Margin="0,12">
+                                    <TextBlock Text="Спасбросок смерти:" Foreground="#FFFFFF"/>
+                                    <TextBlock x:Name="TxtDeathSave" Text="2" Foreground="#00FFCC" HorizontalAlignment="Right" FontSize="20"/>
+                                </Grid>
+                                <Grid Margin="0,12">
+                                    <TextBlock Text="Человечность (ЧЕЛ):" Foreground="#FFFFFF"/>
+                                    <TextBlock x:Name="TxtHumanity" Text="20" Foreground="#00FFCC" HorizontalAlignment="Right" FontSize="20"/>
+                                </Grid>
+                            </StackPanel>
+                            <Button Grid.Row="1" Content="ПРОДОЛЖИТЬ [ЖИЗНЕННЫЙ ПУТЬ]" Style="{StaticResource CyberButton}" Click="BtnNextStep_Click"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem>
+                <Grid Margin="20">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="#FF4444"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderBrush="#FF4444" BorderThickness="2" Background="#000000" Padding="20" Margin="0,0,15,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="ИНТЕРФЕЙС ГЕНЕРАЦИИ :: ЖИЗНЕННЫЙ ПУТЬ" FontSize="22" Margin="0,0,0,20"/>
+                            <Button Grid.Row="1" Content="АЛГОРИТМ РАНДОМА (БРОСОК 1D10)" Style="{StaticResource CyberButton}" Click="BtnLifepathRandom_Click" Margin="0,0,0,20"/>
+
+                            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly">
+                                <StackPanel Margin="0,0,15,0">
+                                    <TextBlock Text="Культурное происхождение:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbOrigin" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Личность:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbPersonality" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Стиль одежды:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbClothing" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Прическа:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbHair" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Что ты ценишь больше всего:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbValue" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Как ты относишься к людям:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbPeople" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Самый ценный человек:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbPerson" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Самая ценная вещь:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbPossession" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Семейное происхождение:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbFamilyBackground" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Окружение детства:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbChildhood" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Что случилось с родителями:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbParents" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Трагедия в семье:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbFamilyCrisis" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Твоя цель в жизни:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbLifeGoal" SelectionChanged="UpdateLifepathLog"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="1" BorderBrush="#00D4B2" BorderThickness="2" Background="#000000" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="ФАЙЛ ДОСЬЕ ПЕРСОНАЖА" Foreground="#00D4B2" FontSize="20" Margin="0,0,0,20"/>
+
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="TxtLifepathLog" Foreground="#E0E0E0" TextWrapping="Wrap" FontSize="15" LineHeight="24" Text="> СБОР ДАННЫХ..."/>
+                            </ScrollViewer>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                                <Button Content="НАЗАД" Style="{StaticResource CyberButton}" Click="BtnPrevStep_Click" Margin="0,0,10,0"/>
+                                <Button Content="ПРОДОЛЖИТЬ [РОЛЕВОЙ ПУТЬ]" Style="{StaticResource CyberButton}" Click="BtnNextStep_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem>
+                <Grid Margin="20">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="#FF4444"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderBrush="#FF4444" BorderThickness="2" Background="#000000" Padding="20" Margin="0,0,15,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="ИНТЕРФЕЙС ГЕНЕРАЦИИ :: РОЛЬ" FontSize="22" Margin="0,0,0,20"/>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,20">
+                                <TextBlock Text="ВЫБЕРИТЕ РОЛЬ:" Foreground="#999999" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                                <ComboBox x:Name="CbRole" Width="200" SelectionChanged="CbRole_SelectionChanged"/>
+                                <Button Content="РАНДОМ ПУТИ" Style="{StaticResource CyberButton}" Click="BtnRoleRandom_Click" Margin="20,0,0,0" Padding="10,4"/>
+                            </StackPanel>
+
+                            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly">
+                                <StackPanel x:Name="PanelQuestions" Margin="0,0,15,0">
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="1" BorderBrush="#00D4B2" BorderThickness="2" Background="#000000" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="ДОСЬЕ: РОЛЕВОЙ ПУТЬ" Foreground="#00D4B2" FontSize="20" Margin="0,0,0,20"/>
+
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="TxtRoleLog" Foreground="#E0E0E0" TextWrapping="Wrap" FontSize="15" LineHeight="24" Text="> ОЖИДАНИЕ ВЫБОРА..."/>
+                            </ScrollViewer>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                                <Button Content="НАЗАД" Style="{StaticResource CyberButton}" Click="BtnPrevStep_Click" Margin="0,0,10,0"/>
+                                <Button Content="ПРОДОЛЖИТЬ [СВЯЗИ]" Style="{StaticResource CyberButton}" Click="BtnNextStep_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem>
+                <Grid Margin="20">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="#FF4444"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderBrush="#FF4444" BorderThickness="2" Background="#000000" Padding="20" Margin="0,0,15,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="ИНТЕРФЕЙС ГЕНЕРАЦИИ :: СВЯЗИ" FontSize="22" Margin="0,0,0,20"/>
+                            <Button Grid.Row="1" Content="АЛГОРИТМ РАНДОМА (1D10 - 7)" Style="{StaticResource CyberButton}" Click="BtnRelationsRandom_Click" Margin="0,0,0,20" HorizontalAlignment="Left"/>
+
+                            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly">
+                                <StackPanel Margin="0,0,15,0">
+                                    <TextBlock Text="Количество друзей:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbCountFriends" SelectionChanged="CountChanged">
+                                        <ComboBoxItem Content="0" Tag="0"/>
+                                        <ComboBoxItem Content="1" Tag="1"/>
+                                        <ComboBoxItem Content="2" Tag="2"/>
+                                        <ComboBoxItem Content="3" Tag="3"/>
+                                    </ComboBox>
+                                    <StackPanel x:Name="PanelFriends" Visibility="Collapsed" Margin="10,0,0,10">
+                                        <StackPanel x:Name="SlotF1">
+                                            <TextBlock Text="Друг 1:" Foreground="#00D4B2"/>
+                                            <ComboBox x:Name="CbF1" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="SlotF2">
+                                            <TextBlock Text="Друг 2:" Foreground="#00D4B2"/>
+                                            <ComboBox x:Name="CbF2" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="SlotF3">
+                                            <TextBlock Text="Друг 3:" Foreground="#00D4B2"/>
+                                            <ComboBox x:Name="CbF3" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Количество врагов:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbCountEnemies" SelectionChanged="CountChanged">
+                                        <ComboBoxItem Content="0" Tag="0"/>
+                                        <ComboBoxItem Content="1" Tag="1"/>
+                                        <ComboBoxItem Content="2" Tag="2"/>
+                                        <ComboBoxItem Content="3" Tag="3"/>
+                                    </ComboBox>
+                                    <StackPanel x:Name="PanelEnemies" Visibility="Collapsed" Margin="10,0,0,10">
+                                        <StackPanel x:Name="SlotE1" Margin="0,0,0,15">
+                                            <TextBlock Text="ВРАГ 1" Foreground="#FF4444" Margin="0,0,0,5" FontSize="18"/>
+                                            <TextBlock Text="Кто он:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE1Who" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Причина вражды:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE1Cause" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Кто кого ненавидит:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE1Hate" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Что они сделают:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE1Action" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="SlotE2" Margin="0,0,0,15">
+                                            <TextBlock Text="ВРАГ 2" Foreground="#FF4444" Margin="0,0,0,5" FontSize="18"/>
+                                            <TextBlock Text="Кто он:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE2Who" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Причина вражды:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE2Cause" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Кто кого ненавидит:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE2Hate" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Что они сделают:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE2Action" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="SlotE3" Margin="0,0,0,15">
+                                            <TextBlock Text="ВРАГ 3" Foreground="#FF4444" Margin="0,0,0,5" FontSize="18"/>
+                                            <TextBlock Text="Кто он:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE3Who" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Причина вражды:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE3Cause" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Кто кого ненавидит:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE3Hate" SelectionChanged="UpdateRelationsLog"/>
+                                            <TextBlock Text="Что они сделают:" Foreground="#999999"/>
+                                            <ComboBox x:Name="CbE3Action" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Количество трагических романов:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbCountLove" SelectionChanged="CountChanged">
+                                        <ComboBoxItem Content="0" Tag="0"/>
+                                        <ComboBoxItem Content="1" Tag="1"/>
+                                        <ComboBoxItem Content="2" Tag="2"/>
+                                        <ComboBoxItem Content="3" Tag="3"/>
+                                    </ComboBox>
+                                    <StackPanel x:Name="PanelLove" Visibility="Collapsed" Margin="10,0,0,10">
+                                        <StackPanel x:Name="SlotL1">
+                                            <TextBlock Text="Роман 1:" Foreground="#00D4B2"/>
+                                            <ComboBox x:Name="CbL1" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="SlotL2">
+                                            <TextBlock Text="Роман 2:" Foreground="#00D4B2"/>
+                                            <ComboBox x:Name="CbL2" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="SlotL3">
+                                            <TextBlock Text="Роман 3:" Foreground="#00D4B2"/>
+                                            <ComboBox x:Name="CbL3" SelectionChanged="UpdateRelationsLog"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="1" BorderBrush="#00D4B2" BorderThickness="2" Background="#000000" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="ДОСЬЕ: СОЦИАЛЬНЫЕ СВЯЗИ" Foreground="#00D4B2" FontSize="20" Margin="0,0,0,20"/>
+
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="TxtRelationsLog" Foreground="#E0E0E0" TextWrapping="Wrap" FontSize="15" LineHeight="24" Text="> СБОР ДАННЫХ..."/>
+                            </ScrollViewer>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                                <Button Content="НАЗАД" Style="{StaticResource CyberButton}" Click="BtnPrevStep_Click" Margin="0,0,10,0"/>
+                                <Button Content="ПРОДОЛЖИТЬ [НАВЫКИ]" Style="{StaticResource CyberButton}" Click="BtnNextStep_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem>
+                <Grid Margin="20">
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="#E0E0E0"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                        <Style x:Key="SmallBtn" TargetType="Button">
+                            <Setter Property="Background" Value="#0A0A0A"/>
+                            <Setter Property="Foreground" Value="#00D4B2"/>
+                            <Setter Property="BorderBrush" Value="#00D4B2"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Width" Value="28"/>
+                            <Setter Property="Height" Value="28"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border BorderBrush="#FF4444" BorderThickness="2" Background="#0A0A0A" Padding="20" Margin="0,0,0,15">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="ДОСТУПНО ОЧКОВ НАВЫКОВ:" Foreground="#999999" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                            <TextBlock x:Name="TxtSkillPoints" Text="60" Foreground="#00D4B2" FontSize="26" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <TextBlock Text="/ 86" Foreground="#555555" FontSize="20" VerticalAlignment="Bottom" Margin="5,0,0,2"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" BorderBrush="#00D4B2" BorderThickness="2" Background="#000000" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Margin="0,0,15,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="НАВЫК" Foreground="#00D4B2" FontSize="18"/>
+                                <TextBlock Grid.Column="1" Text="СТАТ" Foreground="#00D4B2" FontSize="18" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="УРОВЕНЬ" Foreground="#00D4B2" FontSize="18" TextAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="СУММА" Foreground="#00D4B2" FontSize="18" TextAlignment="Center"/>
+                            </Grid>
+
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="IcCategories">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,0,15,25">
+                                                <Border Background="#FF4444" Padding="10,5" Margin="0,0,0,10">
+                                                    <TextBlock Text="{Binding CategoryName}" Foreground="#000000" FontSize="18" FontWeight="Bold"/>
+                                                </Border>
+
+                                                <ItemsControl ItemsSource="{Binding Skills}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid Margin="0,6">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="2*"/>
+                                                                    <ColumnDefinition Width="80"/>
+                                                                    <ColumnDefinition Width="120"/>
+                                                                    <ColumnDefinition Width="80"/>
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#E0E0E0" VerticalAlignment="Center"/>
+                                                                <TextBlock Grid.Column="1" Text="{Binding StatName}" Foreground="#757575" VerticalAlignment="Center" TextAlignment="Center"/>
+
+                                                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                                                                    <Button Content="-" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnMinus_Click"/>
+                                                                    <TextBlock Text="{Binding Level}" Width="40" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFFFFF" FontSize="18"/>
+                                                                    <Button Content="+" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnPlus_Click"/>
+                                                                </StackPanel>
+
+                                                                <TextBlock Grid.Column="3" Text="{Binding Total}" Foreground="#00D4B2" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                        <Button Content="НАЗАД" Style="{StaticResource CyberButton}" Click="BtnPrevStep_Click" Margin="0,0,10,0"/>
+                        <Button Content="ЗАВЕРШИТЬ СОЗДАНИЕ" Style="{StaticResource CyberButton}" Click="BtnFinish_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>

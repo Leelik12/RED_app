@@ -27,17 +27,9 @@ G:\GitRepos\RED_app\bin\Debug\CyberpunkGen.exe
 G:\GitRepos\RED_app\bin\Debug\CyberpunkGen.pdb
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.csproj.AssemblyReference.cache
 G:\GitRepos\RED_app\obj\Debug\CharacterGenerationWindow.baml
-G:\GitRepos\RED_app\obj\Debug\LifepathRelationsWindow.baml
-G:\GitRepos\RED_app\obj\Debug\LifepathWindow.baml
 G:\GitRepos\RED_app\obj\Debug\MainWindow.baml
-G:\GitRepos\RED_app\obj\Debug\RoleAndSkillsWindow.baml
-G:\GitRepos\RED_app\obj\Debug\RoleLifepathWindow.baml
 G:\GitRepos\RED_app\obj\Debug\CharacterGenerationWindow.g.cs
-G:\GitRepos\RED_app\obj\Debug\LifepathRelationsWindow.g.cs
-G:\GitRepos\RED_app\obj\Debug\LifepathWindow.g.cs
 G:\GitRepos\RED_app\obj\Debug\MainWindow.g.cs
-G:\GitRepos\RED_app\obj\Debug\RoleAndSkillsWindow.g.cs
-G:\GitRepos\RED_app\obj\Debug\RoleLifepathWindow.g.cs
 G:\GitRepos\RED_app\obj\Debug\Core\App.g.cs
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen_MarkupCompile.cache
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.g.resources

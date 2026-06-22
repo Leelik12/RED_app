@@ -55,21 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="RoleAndSkillsWindow.xaml.cs">
-      <DependentUpon>RoleAndSkillsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="RoleLifepathWindow.xaml.cs">
-      <DependentUpon>RoleLifepathWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="CharacterGenerationWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LifepathRelationsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LifepathWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -85,24 +71,10 @@
       <DependentUpon>CharacterGenerationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="CoreDataBase.cs" />
-    <Compile Include="LifepathRelationsWindow.xaml.cs">
-      <DependentUpon>LifepathRelationsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LifepathWindow.xaml.cs">
-      <DependentUpon>LifepathWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="RoleAndSkillsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RoleLifepathWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
