@@ -920,7 +920,7 @@ namespace CyberpunkRED_Generator
 
             new SkillDef { Category = "Образовательные Навыки", Name = "Знание местности (Твой дом)", Stat = "ИНТ", IsBasic = true, IsX2 = false,
                 Description = "Позволяет хорошо знать определенный район и разбираться в планах различных группировок, как политических, так и преступных. Каждый раз, когда ты повышаешь этот навык, ты должен выбрать конкретное\r\nместо, которое не может быть больше, чем один район или община" },
-            new SkillDef { Category = "Образовательные Навыки", Name = "Знание местности", Stat = "ИНТ", IsBasic = true, IsX2 = false, CanAddMultiple = true,
+            new SkillDef { Category = "Образовательные Навыки", Name = "Знание местности", Stat = "ИНТ", IsBasic = false, IsX2 = false, CanAddMultiple = true,
                 Description = "Позволяет хорошо знать определенный район и разбираться в планах различных группировок, как политических, так и преступных. Каждый раз, когда ты повышаешь этот навык, ты должен выбрать конкретное\r\nместо, которое не может быть больше, чем один район или община" },
 
 
@@ -950,7 +950,7 @@ namespace CyberpunkRED_Generator
                 Description = "Умение говорить на определенном языке. Вы должны выбрать определенный язык, когда повышаете этот навык" },
             new SkillDef { Category = "Образовательные Навыки", Name = "Язык (Родной)", Stat = "ИНТ", IsBasic = false, IsX2 = false, FreeLevels = 4, 
                 Description = "Язык вашего культурного происхождения. Дается бесплатно на 4 уровне." },
-            new SkillDef { Category = "Образовательные Навыки", Name = "Язык", Stat = "ИНТ", IsBasic = true, IsX2 = false, CanAddMultiple = true,
+            new SkillDef { Category = "Образовательные Навыки", Name = "Язык", Stat = "ИНТ", IsBasic = false, IsX2 = false, CanAddMultiple = true,
                 Description = "Умение говорить на определенном языке. Вы должны выбрать определенный язык, когда повышаете этот навык" },
 
 

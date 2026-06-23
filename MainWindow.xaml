@@ -6,7 +6,7 @@
         <TextBlock Text="CYBERPUNK RED" Foreground="Red" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
         <Button Content="1. Генерация персонажа" Height="40" Margin="0,5" Background="Red" Foreground="White" FontWeight="Bold" Click="BtnGenerate_Click"/>
-        <Button Content="2. Лист персонажа (Заглушка)" Height="40" Margin="0,5" Background="#333" Foreground="Gray" IsEnabled="False"/>
+        <Button Content="2. Лист персонажа" Height="40" Margin="0,5" Background="Red" Foreground="White" FontWeight="Bold" Click="BtnLoadCharacter_Click"/>
         <Button Content="3. Экран Гейм-мастера (Заглушка)" Height="40" Margin="0,5" Background="#333" Foreground="Gray" IsEnabled="False"/>
     </StackPanel>
 </Window>

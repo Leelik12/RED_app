@@ -57,3 +57,5 @@ G:\GitRepos\RED_app\bin\Debug\System.Text.Encodings.Web.xml
 G:\GitRepos\RED_app\bin\Debug\System.Text.Json.xml
 G:\GitRepos\RED_app\bin\Debug\System.Threading.Tasks.Extensions.xml
 G:\GitRepos\RED_app\obj\Debug\Cyberpun.5568DDEF.Up2Date
+G:\GitRepos\RED_app\obj\Debug\CharacterSheetWindow.baml
+G:\GitRepos\RED_app\obj\Debug\CharacterSheetWindow.g.cs
