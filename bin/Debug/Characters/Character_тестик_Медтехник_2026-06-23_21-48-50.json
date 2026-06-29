@@ -17,7 +17,10 @@
     "HP": 40,
     "WoundedThreshold": 20,
     "DeathSave": 4,
-    "Humanity": 50
+    "Humanity": 50,
+    "CurrentHumanity": 14,
+    "MaxHumanity": 88,
+    "CurrentLuck": 1
   },
   "Lifepath": {
     "Культурное происхождение": "Африка (к югу от Сахары)",
@@ -60,29 +63,24 @@
   ],
   "Skills": [
     {
-      "Name": "Внимательность",
-      "Level": 2,
-      "Total": 8
-    },
-    {
       "Name": "Концентрация",
       "Level": 2,
       "Total": 9
     },
     {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 8
+    },
+    {
       "Name": "Атлетика",
       "Level": 2,
-      "Total": 9
+      "Total": 7
     },
     {
       "Name": "Скрытность",
       "Level": 2,
-      "Total": 9
-    },
-    {
-      "Name": "Знание местности (Твой дом)",
-      "Level": 2,
-      "Total": 8
+      "Total": 7
     },
     {
       "Name": "Образование",
@@ -100,24 +98,29 @@
       "Total": 10
     },
     {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 8
+    },
+    {
       "Name": "Рукопашный бой",
       "Level": 2,
-      "Total": 9
+      "Total": 7
     },
     {
       "Name": "Уклонение",
       "Level": 2,
-      "Total": 9
+      "Total": 7
     },
     {
       "Name": "Общение",
       "Level": 2,
-      "Total": 7
+      "Total": 3
     },
     {
       "Name": "Проницательность",
       "Level": 2,
-      "Total": 7
+      "Total": 3
     },
     {
       "Name": "Убеждение",
@@ -128,6 +131,128 @@
       "Name": "Первая помощь",
       "Level": 2,
       "Total": 9
+    }
+  ],
+  "Notes": "СЛУЖИЛ В АФГАНЕ, БРАЛ ПЕНТАГОН ШТУРМОМ В СОЛО",
+  "Armor": {
+    "HeadSp": "52",
+    "HeadPenalty": "2",
+    "BodySp": "67",
+    "BodyPenalty": "2",
+    "ShieldSp": "228",
+    "ShieldPenalty": "0"
+  },
+  "Weapons": [
+    {
+      "Name": "КАЛАШМАТ НАХОЙ",
+      "Damage": "10d6",
+      "Ammo": "95/95 300",
+      "Rof": "950",
+      "Notes": "ЗА СТАЛИНА СУКА"
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": "ЕБАНЫЙ ДЕЗЕРТ ИГЛ",
+      "Damage": "-3D1",
+      "Ammo": "6/6 6",
+      "Rof": "0,5",
+      "Notes": "ХУЙНЯ АМЕРИКАНСКАЯ"
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    }
+  ],
+  "StyleNotes": "там бля, о бля, гибридный мальчик, одет как полупокер ",
+  "Housing": "Хата бабки которую я депну завтра",
+  "Rent": "мильон деняк в день",
+  "Lifestyle": "дешевый полупубертат",
+  "AmmoValue": "есть",
+  "CashValue": "нет (-666)",
+  "GearItems": [
+    {
+      "Name": "ананас",
+      "Notes": "Легендарный предмет из вендинга за 2 евродоллара"
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": "постирония",
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": "у эу уэ",
+      "Notes": "влфмроадлозиваьэдлоивуаивад"
     }
   ]
 }

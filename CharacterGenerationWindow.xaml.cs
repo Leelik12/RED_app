@@ -28,6 +28,16 @@ namespace CyberpunkRED_Generator
         public List<EnemyData> Enemies { get; set; } = new List<EnemyData>();
         public List<string> TragicLoves { get; set; } = new List<string>();
         public List<SkillSaveData> Skills { get; set; } = new List<SkillSaveData>();
+        public string Notes { get; set; }
+        public CyberpunkRED_Generator.ArmorData Armor { get; set; } = new CyberpunkRED_Generator.ArmorData();
+        public List<CyberpunkRED_Generator.WeaponData> Weapons { get; set; } = new List<CyberpunkRED_Generator.WeaponData>();
+        public string StyleNotes { get; set; }
+        public string Housing { get; set; }
+        public string Rent { get; set; }
+        public string Lifestyle { get; set; }
+        public string AmmoValue { get; set; }
+        public string CashValue { get; set; }
+        public List<CyberpunkRED_Generator.GearRowItem> GearItems { get; set; } = new List<CyberpunkRED_Generator.GearRowItem>();
     }
 
     public class EnemyData

@@ -190,10 +190,10 @@
 
                             <Border Grid.Row="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="0,0,0,6">
                                 <Grid>
-                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2">
+                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
                                         <TextBlock Text="ЗАМЕТКИ" Style="{StaticResource RedHeaderText}" FontSize="12"/>
                                     </Border>
-                                    <TextBlock Text="Связано с досье на вкладке 2" Foreground="#555555" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+                                    <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC"/>
                                 </Grid>
                             </Border>
 
@@ -206,7 +206,11 @@
                                     <TextBlock Text="ЧЕЛОВЕЧНОСТЬ" Style="{StaticResource RedHeaderText}"/>
                                 </Border>
                                 <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4">
-                                    <TextBlock Text="{Binding SystemStats[Humanity]}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBox Text="{Binding CurrentHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Right" MinWidth="25"/>
+                                        <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="4,0"/>
+                                        <TextBox Text="{Binding MaxHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Left" MinWidth="25"/>
+                                    </StackPanel>
                                 </Border>
                             </Grid>
 
@@ -268,14 +272,33 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="#FF3333" BorderThickness="1" Background="#111111" Margin="0,2">
+                                        <Border BorderBrush="#FF3333" BorderThickness="1" Background="#111111" Margin="0,2" ToolTip="{Binding TooltipText}" ToolTipService.InitialShowDelay="150">
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border Background="#FF3333" Padding="2">
                                                     <TextBlock Text="{Binding Name}" Foreground="#050505" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                 </Border>
-                                                <TextBlock Text="{Binding Value}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Padding="0,5"/>
+
+                                                <Grid Margin="0,5">
+                                                    <TextBlock x:Name="SingleStat" Text="{Binding CurrentValue}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+                                                    <StackPanel x:Name="FractionalStat" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+                                                        <TextBox Text="{Binding CurrentValue, UpdateSourceTrigger=PropertyChanged}" 
+                                         Foreground="#00FFCC" FontSize="24" FontWeight="Bold" 
+                                         Background="Transparent" BorderThickness="0" 
+                                         IsReadOnly="{Binding IsReadOnly}" CaretBrush="#00FFCC" MinWidth="18" TextAlignment="Right"/>
+                                                        <TextBlock Text="/" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" Margin="2,0"/>
+
+                                                        <TextBlock Text="{Binding BaseValue}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold"/>
+                                                    </StackPanel>
+                                                </Grid>
                                             </StackPanel>
                                         </Border>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsFractional}" Value="True">
+                                                <Setter TargetName="SingleStat" Property="Visibility" Value="Collapsed"/>
+                                                <Setter TargetName="FractionalStat" Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -307,7 +330,7 @@
                                             <ItemsControl ItemsSource="{Binding Skills}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid Margin="0,1.5">
+                                                        <Grid Margin="0,1">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="28"/>
@@ -380,7 +403,7 @@
                                             <ItemsControl ItemsSource="{Binding Skills}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid Margin="0,1.5">
+                                                        <Grid Margin="0,1">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="28"/>
@@ -453,7 +476,7 @@
                                             <ItemsControl ItemsSource="{Binding Skills}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid Margin="0,1.5">
+                                                        <Grid Margin="0,1">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="28"/>
@@ -535,10 +558,10 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="Защита головы" Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
                                         <Border Grid.Column="1" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBlock Text="—" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding Armor.HeadSp, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                         <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBlock Text="—" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding Armor.HeadPenalty, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                     </Grid>
                                     <Grid Margin="0,2" Height="25">
@@ -550,10 +573,10 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="Защита туловища" Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
                                         <Border Grid.Column="1" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBlock Text="—" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding Armor.BodySp, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                         <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBlock Text="—" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding Armor.BodyPenalty, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                     </Grid>
                                     <Grid Margin="0,2" Height="25">
@@ -565,10 +588,10 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="Щит" Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
                                         <Border Grid.Column="1" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBlock Text="—" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding Armor.ShieldSp, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                         <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBlock Text="—" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding Armor.ShieldPenalty, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                     </Grid>
                                     <TextBlock Text="Штрафы брони применяются к РЕА, ЛВК и СКО" Foreground="#FF3333" FontSize="11" Margin="0,6,0,0"/>
@@ -584,11 +607,11 @@
                                 <StackPanel Margin="0,35,0,0">
                                     <Grid Margin="0,0,0,4">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="70"/>
-                                            <ColumnDefinition Width="70"/>
-                                            <ColumnDefinition Width="70"/>
-                                            <ColumnDefinition Width="200"/>
+                                            <ColumnDefinition Width="2.5*"/>
+                                            <ColumnDefinition Width="1.2*"/>
+                                            <ColumnDefinition Width="1.2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="2.5*"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="ОРУЖИЕ" Foreground="#888888" FontSize="12" FontWeight="Bold"/>
                                         <TextBlock Grid.Column="1" Text="УРОН" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
@@ -596,11 +619,28 @@
                                         <TextBlock Grid.Column="3" Text="ROF" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
                                         <TextBlock Grid.Column="4" Text="ЗАМЕТКИ" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
                                     </Grid>
-                                    <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Height="22"/>
-                                    <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Height="22"/>
-                                    <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Height="22"/>
-                                    <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Height="22"/>
-                                    <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Height="22"/>
+                                    <ItemsControl ItemsSource="{Binding Weapons}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Height="26">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="2.5*"/>
+                                                            <ColumnDefinition Width="1.2*"/>
+                                                            <ColumnDefinition Width="1.2*"/>
+                                                            <ColumnDefinition Width="1*"/>
+                                                            <ColumnDefinition Width="2.5*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBox Grid.Column="0" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC"/>
+                                                        <TextBox Grid.Column="1" Text="{Binding Damage, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
+                                                        <TextBox Grid.Column="2" Text="{Binding Ammo, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
+                                                        <TextBox Grid.Column="3" Text="{Binding Rof, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
+                                                        <TextBox Grid.Column="4" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -612,120 +652,249 @@
                 <Grid Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1.2*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="2.2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border BorderBrush="#333333" BorderThickness="0,0,1,0" Margin="0,0,10,0" Padding="0,0,10,0">
+                    <Border Grid.Column="0" BorderBrush="#333333" BorderThickness="0,0,1,0" Padding="0,0,10,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Border Style="{StaticResource RedHeader}" BorderThickness="2" Margin="0,0,0,10">
-                                <TextBlock Text="ЖИЗНЕННЫЙ ПУТЬ" Style="{StaticResource RedHeaderText}" HorizontalAlignment="Center"/>
-                            </Border>
-                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                                <ItemsControl ItemsSource="{Binding Lifepath}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="0,0,0,8">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Key}" Foreground="#999999" FontSize="12" FontWeight="Bold" Margin="2,0,0,2"/>
-                                                <Border Grid.Row="1" Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1" Padding="10,6">
-                                                    <TextBlock Text="{Binding Value}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
-                                                </Border>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </Grid>
-                    </Border>
 
-                    <Border Grid.Column="1" BorderBrush="#333333" BorderThickness="0,0,1,0" Margin="0,0,10,0" Padding="0,0,10,0">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
                             <Border Style="{StaticResource RedHeader}" BorderThickness="2" Margin="0,0,0,10">
-                                <TextBlock Text="РОЛЕВОЙ ПУТЬ" Style="{StaticResource RedHeaderText}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="ДОСЬЕ ПЕРСОНАЖА" Style="{StaticResource RedHeaderText}" HorizontalAlignment="Center"/>
                             </Border>
+
                             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                                <ItemsControl ItemsSource="{Binding RoleLifepath}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="0,0,0,8">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Key}" Foreground="#FF3333" FontSize="12" FontWeight="Bold" Margin="2,0,0,2"/>
-                                                <Border Grid.Row="1" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="1" Padding="10,6">
-                                                    <TextBlock Text="{Binding Value}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
+                                <StackPanel Margin="0,0,5,0">
+                                    <TextBlock Text="ЖИЗНЕННЫЙ ПУТЬ" Foreground="#FF3333" FontSize="14" FontWeight="Bold" Margin="2,5,0,8"/>
+                                    <ItemsControl ItemsSource="{Binding Lifepath}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,8">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Text="{Binding Key}" Foreground="#999999" FontSize="12" FontWeight="Bold" Margin="2,0,0,2"/>
+                                                    <Border Grid.Row="1" Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1" Padding="10,6">
+                                                        <TextBlock Text="{Binding Value}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <Border BorderBrush="#333333" BorderThickness="0,1,0,0" Margin="0,10,0,10"/>
+
+                                    <TextBlock Text="РОЛЕВОЙ ПУТЬ" Foreground="#FF3333" FontSize="14" FontWeight="Bold" Margin="2,0,0,8"/>
+                                    <ItemsControl ItemsSource="{Binding RoleLifepath}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,8">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Text="{Binding Key}" Foreground="#FF3333" FontSize="12" FontWeight="Bold" Margin="2,0,0,2"/>
+                                                    <Border Grid.Row="1" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="1" Padding="10,6">
+                                                        <TextBlock Text="{Binding Value}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <Border BorderBrush="#333333" BorderThickness="0,1,0,0" Margin="0,10,0,10"/>
+
+                                    <TextBlock Text="СОЦИАЛЬНЫЕ СВЯЗИ" Foreground="#FF3333" FontSize="14" FontWeight="Bold" Margin="2,0,0,10"/>
+
+                                    <TextBlock Text="ДРУЗЬЯ" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" Margin="2,0,0,5"/>
+                                    <ItemsControl ItemsSource="{Binding Friends}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1" Padding="10,6" Margin="0,0,0,4">
+                                                    <TextBlock Text="{Binding}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
                                                 </Border>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <TextBlock Text="ТРАГИЧЕСКИЕ РОМАНЫ" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" Margin="2,12,0,5"/>
+                                    <ItemsControl ItemsSource="{Binding TragicLoves}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1" Padding="10,6" Margin="0,0,0,4">
+                                                    <TextBlock Text="{Binding}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <TextBlock Text="ВРАГИ" Foreground="#FF3333" FontSize="13" FontWeight="Bold" Margin="2,12,0,5"/>
+                                    <ItemsControl ItemsSource="{Binding Enemies}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="1" Padding="10" Margin="0,0,0,8">
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Who}" Foreground="#FF3333" FontWeight="Bold" FontSize="14" Margin="0,0,0,4"/>
+                                                        <TextBlock Text="{Binding Cause, StringFormat='Причина: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2"/>
+                                                        <TextBlock Text="{Binding Hate, StringFormat='Уровень: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2"/>
+                                                        <TextBlock Text="{Binding Action, StringFormat='План: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
                             </ScrollViewer>
                         </Grid>
                     </Border>
 
                     <Grid Grid.Column="2">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="6.0*"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="1.5*"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="1.0*"/>
                         </Grid.RowDefinitions>
-                        <Border Style="{StaticResource RedHeader}" BorderThickness="2" Margin="0,0,0,10">
-                            <TextBlock Text="СОЦИАЛЬНЫЕ СВЯЗИ" Style="{StaticResource RedHeaderText}" HorizontalAlignment="Center"/>
+
+                        <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Border Grid.Row="0" Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                    <TextBlock Text="СНАРЯЖЕНИЕ" Style="{StaticResource RedHeaderText}" FontSize="12"/>
+                                </Border>
+
+                                <Border Grid.Row="1" Background="#000000" Height="26" Margin="0,24,0,0" BorderBrush="#333333" BorderThickness="0,0,0,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="СНАРЯЖЕНИЕ" Foreground="#FFFFFF" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                        <TextBlock Grid.Column="1" Text="ЗАМЕТКИ" Foreground="#FFFFFF" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                    </Grid>
+                                </Border>
+
+                                <ItemsControl Grid.Row="2" ItemsSource="{Binding GearItems}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Height="24">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="1*"/>
+                                                        <ColumnDefinition Width="1"/>
+                                                        <ColumnDefinition Width="2*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBox Grid.Column="0" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" Padding="8,0,2,0" CaretBrush="#00FFCC"/>
+                                                    <Border Grid.Column="1" Background="#333333" Width="1" VerticalAlignment="Stretch"/>
+                                                    <TextBox Grid.Column="2" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" Padding="6,0,2,0" CaretBrush="#00FFCC"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Border Grid.Row="3" BorderBrush="#333333" BorderThickness="0,1,0,1" Height="28">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Background="#000000" Padding="10,0,0,0">
+                                            <TextBlock Text="БОЕПРИПАСЫ" Foreground="#FFFFFF" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <Border Grid.Column="1" Background="#333333" Width="1" VerticalAlignment="Stretch"/>
+                                        <TextBox Grid.Column="2" Text="{Binding AmmoValue, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Padding="6,0,0,0" CaretBrush="#00FFCC"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Grid.Row="4" Height="28">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Background="#000000" Padding="10,0,0,0">
+                                            <TextBlock Text="НАЛИЧНЫЕ" Foreground="#FFFFFF" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <Border Grid.Column="1" Background="#333333" Width="1" VerticalAlignment="Stretch"/>
+                                        <TextBox Grid.Column="2" Text="{Binding CashValue, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Padding="6,0,0,0" CaretBrush="#00FFCC"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
                         </Border>
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                            <StackPanel>
-                                <TextBlock Text="ДРУЗЬЯ" Foreground="#00FFCC" FontSize="15" FontWeight="Bold" Margin="2,0,0,5"/>
-                                <ItemsControl ItemsSource="{Binding Friends}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1" Padding="10,6" Margin="0,0,0,4">
-                                                <TextBlock Text="{Binding}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
 
-                                <TextBlock Text="ТРАГИЧЕСКИЕ РОМАНЫ" Foreground="#00FFCC" FontSize="15" FontWeight="Bold" Margin="2,15,0,5"/>
-                                <ItemsControl ItemsSource="{Binding TragicLoves}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1" Padding="10,6" Margin="0,0,0,4">
-                                                <TextBlock Text="{Binding}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                        <Border Grid.Row="2" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                            <Grid>
+                                <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                    <TextBlock Text="ОБРАЗ И СТИЛЬ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
+                                </Border>
+                                <TextBox Text="{Binding StyleNotes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" AcceptsReturn="True" TextWrapping="Wrap" Margin="8,24,8,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                            </Grid>
+                        </Border>
 
-                                <TextBlock Text="ВРАГИ" Foreground="#FF3333" FontSize="15" FontWeight="Bold" Margin="2,15,0,5"/>
-                                <ItemsControl ItemsSource="{Binding Enemies}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="1" Padding="10" Margin="0,0,0,8">
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding Who}" Foreground="#FF3333" FontWeight="Bold" FontSize="15" Margin="0,0,0,4"/>
-                                                    <TextBlock Text="{Binding Cause, StringFormat='Причина: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2"/>
-                                                    <TextBlock Text="{Binding Hate, StringFormat='Уровень: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2"/>
-                                                    <TextBlock Text="{Binding Action, StringFormat='План: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </ScrollViewer>
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="45*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="20*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="35*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                                <Grid>
+                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                        <TextBlock Text="ЖИЛЬЕ" Style="{StaticResource RedHeaderText}" FontSize="10"/>
+                                    </Border>
+                                    <TextBox Text="{Binding Housing, UpdateSourceTrigger=PropertyChanged}" 
+                                             Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" 
+                                             AcceptsReturn="True" TextWrapping="Wrap" Margin="6,22,6,4" CaretBrush="#00FFCC" 
+                                             VerticalScrollBarVisibility="Auto"/>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Column="2" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                                <Grid>
+                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                        <TextBlock Text="АРЕНДНАЯ ПЛАТА" Style="{StaticResource RedHeaderText}" FontSize="10"/>
+                                    </Border>
+                                    <TextBox Text="{Binding Rent, UpdateSourceTrigger=PropertyChanged}" 
+                                             Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" 
+                                             AcceptsReturn="True" TextWrapping="Wrap" Margin="6,22,6,4" CaretBrush="#00FFCC" 
+                                             VerticalScrollBarVisibility="Auto"/>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Column="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                                <Grid>
+                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                        <TextBlock Text="ОБРАЗ ЖИЗНИ" Style="{StaticResource RedHeaderText}" FontSize="10"/>
+                                    </Border>
+                                    <TextBox Text="{Binding Lifestyle, UpdateSourceTrigger=PropertyChanged}" 
+                                             Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" 
+                                             AcceptsReturn="True" TextWrapping="Wrap" Margin="6,22,6,4" CaretBrush="#00FFCC" 
+                                             VerticalScrollBarVisibility="Auto"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
                     </Grid>
+
                 </Grid>
             </TabItem>
         </TabControl>
