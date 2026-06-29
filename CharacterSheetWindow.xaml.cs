@@ -36,7 +36,16 @@ namespace CyberpunkRED_Generator
             set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); }
         }
 
-        public int Base => StatValue + Level;
+        // ДОБАВЛЕНА КОЛОНКА "ДОП"
+        private int _modifier;
+        public int Modifier
+        {
+            get => _modifier;
+            set { _modifier = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); }
+        }
+
+        // ТЕПЕРЬ СУММА СЧИТАЕТСЯ И С ДОПОМ
+        public int Base => StatValue + Level + Modifier;
 
         public string Description { get; set; }
 
@@ -134,7 +143,7 @@ namespace CyberpunkRED_Generator
                         RightSkillCategories2 = new List<SheetSkillCategory>()
                     };
 
-                    string[] statOrder = { "INT", "REF", "DEX", "TECH", "COOL", "WILL", "LUCK", "MOVE", "BODY", "EMP" };
+                    string[] statOrder = { "ИНТ", "РЕА", "ЛВК", "ТЕХ", "ХАР", "ВОЛЯ", "УДЧ", "СКО", "ТЕЛ", "ЭМП" };
                     foreach (string s in statOrder)
                     {
                         viewModel.HexStats.Add(new SheetStat { Name = s, Value = _originalData.Stats.ContainsKey(s) ? _originalData.Stats[s] : 5 });
