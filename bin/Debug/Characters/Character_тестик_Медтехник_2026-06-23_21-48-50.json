@@ -1,6 +1,7 @@
 ﻿{
   "Name": "тестик",
   "Role": "Медтехник",
+  "RoleAbilityNotes": "Способность отрезать пиписьки",
   "Stats": {
     "INT": 6,
     "REF": 6,
@@ -75,12 +76,12 @@
     {
       "Name": "Атлетика",
       "Level": 2,
-      "Total": 7
+      "Total": 5
     },
     {
       "Name": "Скрытность",
       "Level": 2,
-      "Total": 7
+      "Total": 5
     },
     {
       "Name": "Образование",
@@ -105,12 +106,12 @@
     {
       "Name": "Рукопашный бой",
       "Level": 2,
-      "Total": 7
+      "Total": 5
     },
     {
       "Name": "Уклонение",
       "Level": 2,
-      "Total": 7
+      "Total": 5
     },
     {
       "Name": "Общение",
@@ -138,7 +139,7 @@
     "HeadSp": "52",
     "HeadPenalty": "2",
     "BodySp": "67",
-    "BodyPenalty": "2",
+    "BodyPenalty": "4",
     "ShieldSp": "228",
     "ShieldPenalty": "0"
   },
@@ -254,5 +255,89 @@
       "Name": "у эу уэ",
       "Notes": "влфмроадлозиваьэдлоивуаивад"
     }
-  ]
+  ],
+  "CyberwareBlocks": [
+    {
+      "Name": "НЕЙРОИМПЛАНТЫ (NEURALWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 5,
+      "OptionsText": "",
+      "SlotsText": "свободно 5/5"
+    },
+    {
+      "Name": "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3"
+    },
+    {
+      "Name": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3"
+    },
+    {
+      "Name": "КИБЕРАУДИО (CYBERAUDIO)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3"
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4"
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4"
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3"
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3"
+    },
+    {
+      "Name": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7"
+    },
+    {
+      "Name": "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7"
+    }
+  ],
+  "CriticalInjuries": "ffffffffff",
+  "Addictions": "dddddddddddddd"
 }

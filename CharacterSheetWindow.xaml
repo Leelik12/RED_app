@@ -104,434 +104,398 @@
 
         <TabControl x:Name="SheetTabControl">
             <TabItem Header="СТР. 1: ХАРАКТЕРИСТИКИ И НАВЫКИ">
-
                 <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.7*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="2.0*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="3.2*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="2.5*"/>
+                    </Grid.ColumnDefinitions>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.7*"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="2.*"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="3.2*"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="2.5*"/>
-                        </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="180"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                        <Grid Grid.Column="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="180"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="1.5*"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="1.2*"/>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="0,0,0,6">
+                            <TextBlock Text="PORTRAIT" Foreground="#FF3333" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                        </Border>
 
-                            <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="0,0,0,6">
-                                <TextBlock Text="PORTRAIT" Foreground="#FF3333" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.5"/>
+                        <Grid Grid.Row="1" Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource RedHeader}" BorderThickness="2,2,0,2">
+                                <TextBlock Text="ИМЯ" Style="{StaticResource RedHeaderText}"/>
                             </Border>
-
-                            <Grid Grid.Row="1" Margin="0,0,0,4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Style="{StaticResource RedHeader}" BorderThickness="2,2,0,2">
-                                    <TextBlock Text="ИМЯ" Style="{StaticResource RedHeaderText}"/>
-                                </Border>
-                                <Border Grid.Column="1" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="2" Padding="8,4">
-                                    <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="15" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Border>
-                            </Grid>
-
-                            <Grid Grid.Row="2" Margin="0,0,0,4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Style="{StaticResource RedHeader}" BorderThickness="2,2,0,2">
-                                    <TextBlock Text="РОЛЬ" Style="{StaticResource RedHeaderText}"/>
-                                </Border>
-                                <Border Grid.Column="1" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="2" Padding="8,4">
-                                    <TextBlock Text="{Binding Role}" Foreground="#00FFCC" FontSize="15" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Border>
-                            </Grid>
-
-                            <Grid Grid.Row="3" Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="45"/>
-                                </Grid.ColumnDefinitions>
-                                <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
-                                    <Grid>
-                                        <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2">
-                                            <TextBlock Text="СПОСОБНОСТЬ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
-                                        </Border>
-                                        <TextBlock Text="{Binding Role}" Foreground="#00FFCC" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,8"/>
-                                    </Grid>
-                                </Border>
-                                <Border Grid.Column="1" Background="#FF3333" Margin="4,0,0,0">
-                                    <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="РАНГ" Foreground="#050505" FontWeight="Heavy" FontSize="12" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="4" Foreground="#050505" FontWeight="Heavy" FontSize="22" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-
-                            <Border Grid.Row="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="0,0,0,6">
-                                <Grid>
-                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
-                                        <TextBlock Text="ЗАМЕТКИ" Style="{StaticResource RedHeaderText}" FontSize="12"/>
-                                    </Border>
-                                    <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC"/>
-                                </Grid>
-                            </Border>
-
-                            <Grid Grid.Row="5" Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Style="{StaticResource RedHeader}" BorderThickness="2,2,0,2">
-                                    <TextBlock Text="ЧЕЛОВЕЧНОСТЬ" Style="{StaticResource RedHeaderText}"/>
-                                </Border>
-                                <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBox Text="{Binding CurrentHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Right" MinWidth="25"/>
-                                        <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="4,0"/>
-                                        <TextBox Text="{Binding MaxHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Left" MinWidth="25"/>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-
-                            <Grid Grid.Row="6" Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" BorderBrush="#FF3333" BorderThickness="2,2,1,2" Background="#0A0A0A">
-                                    <StackPanel>
-                                        <Border Background="#FF3333">
-                                            <TextBlock Text="ПЗ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
-                                        </Border>
-                                        <TextBlock Text="{Binding SystemStats[HP]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
-                                    </StackPanel>
-                                </Border>
-                                <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="1,2,1,2" Background="#0A0A0A">
-                                    <StackPanel>
-                                        <Border Background="#FF3333">
-                                            <TextBlock Text="ТЯЖ. РАНЕНИЕ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
-                                        </Border>
-                                        <TextBlock Text="{Binding SystemStats[WoundedThreshold]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
-                                    </StackPanel>
-                                </Border>
-                                <Border Grid.Column="2" BorderBrush="#FF3333" BorderThickness="1,2,2,2" Background="#0A0A0A">
-                                    <StackPanel>
-                                        <Border Background="#FF3333">
-                                            <TextBlock Text="ИСП. СМЕРТИ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
-                                        </Border>
-                                        <TextBlock Text="{Binding SystemStats[DeathSave]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-
-                            <Border Grid.Row="7" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="0,0,0,6">
-                                <Grid>
-                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2">
-                                        <TextBlock Text="КРИТ. ТРАВМЫ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
-                                    </Border>
-                                </Grid>
-                            </Border>
-
-                            <Border Grid.Row="8" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
-                                <Grid>
-                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2">
-                                        <TextBlock Text="ЗАВИСИМОСТИ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
-                                    </Border>
-                                </Grid>
+                            <Border Grid.Column="1" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="2" Padding="8,4">
+                                <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="15" FontWeight="Bold" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
 
-                        <Border Grid.Column="2" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="4">
-                            <ItemsControl ItemsSource="{Binding HexStats}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <UniformGrid Columns="1"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border BorderBrush="#FF3333" BorderThickness="1" Background="#111111" Margin="0,2" ToolTip="{Binding TooltipText}" ToolTipService.InitialShowDelay="150">
-                                            <StackPanel VerticalAlignment="Center">
-                                                <Border Background="#FF3333" Padding="2">
-                                                    <TextBlock Text="{Binding Name}" Foreground="#050505" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                </Border>
+                        <Grid Grid.Row="2" Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource RedHeader}" BorderThickness="2,2,0,2">
+                                <TextBlock Text="РОЛЬ" Style="{StaticResource RedHeaderText}"/>
+                            </Border>
+                            <Border Grid.Column="1" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="2" Padding="8,4">
+                                <TextBlock Text="{Binding Role}" Foreground="#00FFCC" FontSize="15" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
 
-                                                <Grid Margin="0,5">
-                                                    <TextBlock x:Name="SingleStat" Text="{Binding CurrentValue}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <Grid Grid.Row="3" Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="45"/>
+                            </Grid.ColumnDefinitions>
+                            <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                                <Grid>
+                                    <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                        <TextBlock Text="{Binding Role, StringFormat='СПОСОБНОСТЬ: {0}'}" Style="{StaticResource RedHeaderText}" FontSize="11"/>
+                                    </Border>
+                                    <TextBox Text="{Binding RoleAbilityNotes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                                </Grid>
+                            </Border>
+                            <Border Grid.Column="1" Background="#FF3333" Margin="4,0,0,0">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="РАНГ" Foreground="#050505" FontWeight="Heavy" FontSize="12" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="4" Foreground="#050505" FontWeight="Heavy" FontSize="22" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
 
-                                                    <StackPanel x:Name="FractionalStat" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
-                                                        <TextBox Text="{Binding CurrentValue, UpdateSourceTrigger=PropertyChanged}" 
-                                         Foreground="#00FFCC" FontSize="24" FontWeight="Bold" 
-                                         Background="Transparent" BorderThickness="0" 
-                                         IsReadOnly="{Binding IsReadOnly}" CaretBrush="#00FFCC" MinWidth="18" TextAlignment="Right"/>
-                                                        <TextBlock Text="/" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" Margin="2,0"/>
+                        <Border Grid.Row="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="0,0,0,6">
+                            <Grid>
+                                <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                    <TextBlock Text="ЗАМЕТКИ" Style="{StaticResource RedHeaderText}" FontSize="12"/>
+                                </Border>
+                                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                            </Grid>
+                        </Border>
 
-                                                        <TextBlock Text="{Binding BaseValue}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </StackPanel>
+                        <Grid Grid.Row="5" Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource RedHeader}" BorderThickness="2,2,0,2">
+                                <TextBlock Text="ЧЕЛОВЕЧНОСТЬ" Style="{StaticResource RedHeaderText}"/>
+                            </Border>
+                            <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBox Text="{Binding CurrentHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Right" MinWidth="25"/>
+                                    <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="4,0"/>
+                                    <TextBox Text="{Binding MaxHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Left" MinWidth="25"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="6" Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" BorderBrush="#FF3333" BorderThickness="2,2,1,2" Background="#0A0A0A">
+                                <StackPanel>
+                                    <Border Background="#FF3333">
+                                        <TextBlock Text="ПЗ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding SystemStats[HP]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="1,2,1,2" Background="#0A0A0A">
+                                <StackPanel>
+                                    <Border Background="#FF3333">
+                                        <TextBlock Text="ТЯЖ. РАНЕНИЕ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding SystemStats[WoundedThreshold]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="2" BorderBrush="#FF3333" BorderThickness="1,2,2,2" Background="#0A0A0A">
+                                <StackPanel>
+                                    <Border Background="#FF3333">
+                                        <TextBlock Text="ИСП. СМЕРТИ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding SystemStats[DeathSave]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="4" Margin="0,0,0,10">
+                        <ItemsControl ItemsSource="{Binding HexStats}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="1"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#FF3333" BorderThickness="1" Background="#111111" Margin="0,2" ToolTip="{Binding TooltipText}" ToolTipService.InitialShowDelay="150">
+                                        <StackPanel VerticalAlignment="Center">
+                                            <Border Background="#FF3333" Padding="2">
+                                                <TextBlock Text="{Binding Name}" Foreground="#050505" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <Grid Margin="0,5">
+                                                <TextBlock x:Name="SingleStat" Text="{Binding CurrentValue}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <StackPanel x:Name="FractionalStat" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+                                                    <TextBox Text="{Binding CurrentValue, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" Background="Transparent" BorderThickness="0" IsReadOnly="{Binding IsReadOnly}" CaretBrush="#00FFCC" MinWidth="18" TextAlignment="Right"/>
+                                                    <TextBlock Text="/" Foreground="#00FFCC" FontSize="24" FontWeight="Bold" Margin="2,0"/>
+                                                    <TextBlock Text="{Binding BaseValue}" Foreground="#00FFCC" FontSize="24" FontWeight="Bold"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsFractional}" Value="True">
+                                            <Setter TargetName="SingleStat" Property="Visibility" Value="Collapsed"/>
+                                            <Setter TargetName="FractionalStat" Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <Border Grid.Row="0" Grid.Column="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4" Margin="0,0,0,10">
+                        <ItemsControl ItemsSource="{Binding CenterSkillCategories}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,4">
+                                        <Border BorderBrush="#00FFCC" BorderThickness="1" Background="#111111" Padding="4,2" Margin="0,0,0,4">
+                                            <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
                                         </Border>
-                                        <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding IsFractional}" Value="True">
-                                                <Setter TargetName="SingleStat" Property="Visibility" Value="Collapsed"/>
-                                                <Setter TargetName="FractionalStat" Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </DataTemplate.Triggers>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                        <Grid Margin="0,0,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="28"/>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="36"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="3" Text="ДОП" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="4" Text="СУМ" Foreground="#FF3333" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                        </Grid>
+                                        <ItemsControl ItemsSource="{Binding Skills}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="0,1">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="28"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="36"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+                                                            <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+                                                            <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC" Width="120" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
+                                                            <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <Border Grid.Column="1" Style="{StaticResource SkillBox}">
+                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                        </Border>
+                                                        <Border Grid.Column="2" Style="{StaticResource SkillBox}">
+                                                            <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
+                                                        </Border>
+                                                        <Border Grid.Column="3" Style="{StaticResource SkillBox}">
+                                                            <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                        </Border>
+                                                        <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
+                                                            <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <Border Grid.Row="0" Grid.Column="6" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4" Margin="0,0,0,10">
+                        <ItemsControl ItemsSource="{Binding RightSkillCategories1}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,4">
+                                        <Border BorderBrush="#00FFCC" BorderThickness="1" Background="#111111" Padding="4,2" Margin="0,0,0,4">
+                                            <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <Grid Margin="0,0,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="28"/>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="36"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="3" Text="ДОП" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="4" Text="СУМ" Foreground="#FF3333" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                        </Grid>
+                                        <ItemsControl ItemsSource="{Binding Skills}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="0,1">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="28"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="36"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+                                                            <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+                                                            <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC" Width="220" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
+                                                            <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <Border Grid.Column="1" Style="{StaticResource SkillBox}">
+                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                        </Border>
+                                                        <Border Grid.Column="2" Style="{StaticResource SkillBox}">
+                                                            <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
+                                                        </Border>
+                                                        <Border Grid.Column="3" Style="{StaticResource SkillBox}">
+                                                            <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                        </Border>
+                                                        <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
+                                                            <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <Border Grid.Row="0" Grid.Column="8" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4" Margin="0,0,0,10">
+                        <ItemsControl ItemsSource="{Binding RightSkillCategories2}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,4">
+                                        <Border BorderBrush="#00FFCC" BorderThickness="1" Background="#111111" Padding="4,2" Margin="0,0,0,4">
+                                            <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <Grid Margin="0,0,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="28"/>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="36"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="3" Text="ДОП" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="4" Text="СУМ" Foreground="#FF3333" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
+                                        </Grid>
+                                        <ItemsControl ItemsSource="{Binding Skills}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Margin="0,1">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="28"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="36"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+                                                            <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+                                                            <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC" Width="120" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
+                                                            <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <Border Grid.Column="1" Style="{StaticResource SkillBox}">
+                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                        </Border>
+                                                        <Border Grid.Column="2" Style="{StaticResource SkillBox}">
+                                                            <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
+                                                        </Border>
+                                                        <Border Grid.Column="3" Style="{StaticResource SkillBox}">
+                                                            <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                        </Border>
+                                                        <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
+                                                            <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                            <Grid>
+                                <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                    <TextBlock Text="КРИТ. ТРАВМЫ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
+                                </Border>
+                                <TextBox Text="{Binding CriticalInjuries, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                            </Grid>
                         </Border>
 
-                        <Border Grid.Column="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4">
-                            <ItemsControl ItemsSource="{Binding CenterSkillCategories}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Margin="0,0,0,4">
-                                            <Border BorderBrush="#00FFCC" BorderThickness="1" Background="#111111" Padding="4,2" Margin="0,0,0,4">
-                                                <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                            </Border>
-
-                                            <Grid Margin="0,0,0,2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="28"/>
-                                                    <ColumnDefinition Width="30"/>
-                                                    <ColumnDefinition Width="30"/>
-                                                    <ColumnDefinition Width="36"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="3" Text="ДОП" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="4" Text="СУМ" Foreground="#FF3333" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                            </Grid>
-
-                                            <ItemsControl ItemsSource="{Binding Skills}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid Margin="0,1">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="28"/>
-                                                                <ColumnDefinition Width="30"/>
-                                                                <ColumnDefinition Width="30"/>
-                                                                <ColumnDefinition Width="36"/>
-                                                            </Grid.ColumnDefinitions>
-
-                                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                                <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" 
-                                                                        Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click"
-                                                                        Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
-                                                                <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" 
-                                                                           Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                                <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" 
-                                                                           Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                                <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" 
-                                                                         Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC"
-                                                                         Width="120" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
-                                                                <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" 
-                                                                        Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click"
-                                                                        Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
-                                                            </StackPanel>
-
-                                                            <Border Grid.Column="1" Style="{StaticResource SkillBox}">
-                                                                <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
-                                                            </Border>
-                                                            <Border Grid.Column="2" Style="{StaticResource SkillBox}">
-                                                                <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
-                                                            </Border>
-                                                            <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                                <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
-                                                            </Border>
-                                                            <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
-                                                                <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
-                                                            </Border>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Border>
-
-                        <Border Grid.Column="6" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4">
-                            <ItemsControl ItemsSource="{Binding RightSkillCategories1}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Margin="0,0,0,4">
-                                            <Border BorderBrush="#00FFCC" BorderThickness="1" Background="#111111" Padding="4,2" Margin="0,0,0,4">
-                                                <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                            </Border>
-
-                                            <Grid Margin="0,0,0,2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="28"/>
-                                                    <ColumnDefinition Width="30"/>
-                                                    <ColumnDefinition Width="30"/>
-                                                    <ColumnDefinition Width="36"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="3" Text="ДОП" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="4" Text="СУМ" Foreground="#FF3333" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                            </Grid>
-
-                                            <ItemsControl ItemsSource="{Binding Skills}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid Margin="0,1">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="28"/>
-                                                                <ColumnDefinition Width="30"/>
-                                                                <ColumnDefinition Width="30"/>
-                                                                <ColumnDefinition Width="36"/>
-                                                            </Grid.ColumnDefinitions>
-
-                                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                                <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" 
-                                                                        Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click"
-                                                                        Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
-                                                                <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" 
-                                                                           Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                                <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" 
-                                                                           Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                                <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" 
-                                                                         Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC"
-                                                                         Width="220" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
-                                                                <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" 
-                                                                        Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click"
-                                                                        Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
-                                                            </StackPanel>
-
-                                                            <Border Grid.Column="1" Style="{StaticResource SkillBox}">
-                                                                <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
-                                                            </Border>
-                                                            <Border Grid.Column="2" Style="{StaticResource SkillBox}">
-                                                                <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
-                                                            </Border>
-                                                            <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                                <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
-                                                            </Border>
-                                                            <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
-                                                                <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
-                                                            </Border>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Border>
-
-                        <Border Grid.Column="8" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4">
-                            <ItemsControl ItemsSource="{Binding RightSkillCategories2}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Margin="0,0,0,4">
-                                            <Border BorderBrush="#00FFCC" BorderThickness="1" Background="#111111" Padding="4,2" Margin="0,0,0,4">
-                                                <TextBlock Text="{Binding Name}" Foreground="#00FFCC" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                            </Border>
-
-                                            <Grid Margin="0,0,0,2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="28"/>
-                                                    <ColumnDefinition Width="30"/>
-                                                    <ColumnDefinition Width="30"/>
-                                                    <ColumnDefinition Width="36"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="3" Text="ДОП" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                                <TextBlock Grid.Column="4" Text="СУМ" Foreground="#FF3333" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
-                                            </Grid>
-
-                                            <ItemsControl ItemsSource="{Binding Skills}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid Margin="0,1">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="28"/>
-                                                                <ColumnDefinition Width="30"/>
-                                                                <ColumnDefinition Width="30"/>
-                                                                <ColumnDefinition Width="36"/>
-                                                            </Grid.ColumnDefinitions>
-
-                                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                                <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" 
-                                                                        Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click"
-                                                                        Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
-                                                                <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" 
-                                                                           Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                                <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" 
-                                                                           Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                                <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" 
-                                                                         Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC"
-                                                                         Width="120" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
-                                                                <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" 
-                                                                        Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click"
-                                                                        Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
-                                                            </StackPanel>
-
-                                                            <Border Grid.Column="1" Style="{StaticResource SkillBox}">
-                                                                <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
-                                                            </Border>
-                                                            <Border Grid.Column="2" Style="{StaticResource SkillBox}">
-                                                                <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
-                                                            </Border>
-                                                            <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                                <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
-                                                            </Border>
-                                                            <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
-                                                                <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
-                                                            </Border>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                        <Border Grid.Row="2" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Height="65">
+                            <Grid>
+                                <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                    <TextBlock Text="ЗАВИСИМОСТИ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
+                                </Border>
+                                <TextBox Text="{Binding Addictions, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                            </Grid>
                         </Border>
                     </Grid>
 
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="15"/>
-                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="1.8*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8">
+                        <Border Grid.Column="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8">
                             <Grid>
                                 <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2">
                                     <TextBlock Text="БРОНЯ" Style="{StaticResource RedHeaderText}" FontSize="12"/>
@@ -548,7 +512,6 @@
                                         <TextBlock Grid.Column="1" Text="ОС" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
                                         <TextBlock Grid.Column="2" Text="ШТРАФ" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
                                     </Grid>
-
                                     <Grid Margin="0,2" Height="25">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="150"/>
@@ -611,13 +574,13 @@
                                             <ColumnDefinition Width="1.2*"/>
                                             <ColumnDefinition Width="1.2*"/>
                                             <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="2.5*"/>
+                                            <ColumnDefinition Width="4.0*"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="ОРУЖИЕ" Foreground="#888888" FontSize="12" FontWeight="Bold"/>
+                                        <TextBlock Text="ОРУЖИЕ" Foreground="#888888" FontSize="12" FontWeight="Bold" Margin="4,0,0,0"/>
                                         <TextBlock Grid.Column="1" Text="УРОН" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
                                         <TextBlock Grid.Column="2" Text="БОЕПР." Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
                                         <TextBlock Grid.Column="3" Text="ROF" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
-                                        <TextBlock Grid.Column="4" Text="ЗАМЕТКИ" Foreground="#888888" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                                        <TextBlock Grid.Column="4" Text="ЗАМЕТКИ" Foreground="#888888" FontSize="12" FontWeight="Bold" Margin="4,0,0,0"/>
                                     </Grid>
                                     <ItemsControl ItemsSource="{Binding Weapons}">
                                         <ItemsControl.ItemTemplate>
@@ -629,7 +592,7 @@
                                                             <ColumnDefinition Width="1.2*"/>
                                                             <ColumnDefinition Width="1.2*"/>
                                                             <ColumnDefinition Width="1*"/>
-                                                            <ColumnDefinition Width="2.5*"/>
+                                                            <ColumnDefinition Width="4.0*"/>
                                                         </Grid.ColumnDefinitions>
                                                         <TextBox Grid.Column="0" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC"/>
                                                         <TextBox Grid.Column="1" Text="{Binding Damage, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
@@ -895,6 +858,57 @@
                         </Grid>
                     </Grid>
 
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="СТР. 3: КИБЕРИМПЛАНТЫ">
+                <Grid Margin="0,10,0,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding CyberwareBlocks}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2" VerticalAlignment="Top"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="5" Height="150">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="30"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Border Grid.Row="0" Background="#FF3333" Padding="8,0">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <CheckBox IsChecked="{Binding IsInstalled}" VerticalAlignment="Center" Margin="0,0,8,0" Cursor="Hand"/>
+
+                                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="#050505" FontWeight="Heavy" FontSize="12" VerticalAlignment="Center"/>
+
+                                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <TextBlock Text="ЗАНЯТО: " Foreground="#050505" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                                                        <TextBox Text="{Binding UsedSlots, UpdateSourceTrigger=PropertyChanged}" Width="24" Height="20" Background="#050505" Foreground="#00FFCC" BorderThickness="0" TextAlignment="Center" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC"/>
+                                                        <TextBlock Text="{Binding SlotsText, StringFormat=' ({0})'}" Foreground="#050505" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+
+                                            <TextBox Grid.Row="1" Text="{Binding OptionsText, UpdateSourceTrigger=PropertyChanged}" 
+                                                     Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" 
+                                                     AcceptsReturn="True" TextWrapping="Wrap" Margin="6" CaretBrush="#00FFCC" 
+                                                     VerticalScrollBarVisibility="Auto"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
         </TabControl>

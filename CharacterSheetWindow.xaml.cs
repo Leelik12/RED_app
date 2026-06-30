@@ -10,11 +10,22 @@ using System.Collections.ObjectModel;
 
 namespace CyberpunkRED_Generator
 {
+    public class CyberwareBlockItem : INotifyPropertyChanged
+    {
+        private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
+        private bool _isInstalled; public bool IsInstalled { get => _isInstalled; set { _isInstalled = value; OnPropertyChanged(); } }
+        private int _usedSlots; public int UsedSlots { get => _usedSlots; set { _usedSlots = value; OnPropertyChanged(); OnPropertyChanged(nameof(SlotsText)); } }
+        private int _maxSlots; public int MaxSlots { get => _maxSlots; set { _maxSlots = value; OnPropertyChanged(); OnPropertyChanged(nameof(SlotsText)); } }
+        private string _optionsText; public string OptionsText { get => _optionsText; set { _optionsText = value; OnPropertyChanged(); } }
+        public string SlotsText => $"свободно {MaxSlots - UsedSlots}/{MaxSlots}";
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
     public class GearRowItem : INotifyPropertyChanged
     {
         private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
         private string _notes; public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
@@ -27,7 +38,6 @@ namespace CyberpunkRED_Generator
         private string _bodyPenalty; public string BodyPenalty { get => _bodyPenalty; set { _bodyPenalty = value; OnPropertyChanged(); } }
         private string _shieldSp; public string ShieldSp { get => _shieldSp; set { _shieldSp = value; OnPropertyChanged(); } }
         private string _shieldPenalty; public string ShieldPenalty { get => _shieldPenalty; set { _shieldPenalty = value; OnPropertyChanged(); } }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
@@ -39,7 +49,6 @@ namespace CyberpunkRED_Generator
         private string _ammo; public string Ammo { get => _ammo; set { _ammo = value; OnPropertyChanged(); } }
         private string _rof; public string Rof { get => _rof; set { _rof = value; OnPropertyChanged(); } }
         private string _notes; public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
@@ -47,34 +56,20 @@ namespace CyberpunkRED_Generator
     public class SheetStat : INotifyPropertyChanged
     {
         public string Name { get; set; }
-
-        private int _baseValue;
-        public int BaseValue { get => _baseValue; set { _baseValue = value; UpdateCurrentValue(); } }
-
-        private int _armorPenalty;
-        public int ArmorPenalty { get => _armorPenalty; set { _armorPenalty = value; UpdateCurrentValue(); } }
-
-        private int _implantModifier;
-        public int ImplantModifier { get => _implantModifier; set { _implantModifier = value; UpdateCurrentValue(); } }
-
+        private int _baseValue; public int BaseValue { get => _baseValue; set { _baseValue = value; UpdateCurrentValue(); } }
+        private int _armorPenalty; public int ArmorPenalty { get => _armorPenalty; set { _armorPenalty = value; UpdateCurrentValue(); } }
+        private int _implantModifier; public int ImplantModifier { get => _implantModifier; set { _implantModifier = value; UpdateCurrentValue(); } }
         public int Value { get => CurrentValue; set => CurrentValue = value; }
 
         private int _currentValue;
         public int CurrentValue
         {
             get => _currentValue;
-            set
-            {
-                _currentValue = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Value));
-                OnPropertyChanged(nameof(TooltipText));
-            }
+            set { _currentValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(Value)); OnPropertyChanged(nameof(TooltipText)); }
         }
 
         public bool IsFractional { get; set; }
         public bool IsReadOnly { get; set; }
-
         public string TooltipText => GenerateTooltip();
 
         private void UpdateCurrentValue()
@@ -92,7 +87,6 @@ namespace CyberpunkRED_Generator
             if (ArmorPenalty > 0) parts.Add($"-{ArmorPenalty} штраф за броню");
             if (ImplantModifier > 0) parts.Add($"+{ImplantModifier} имплант");
             else if (ImplantModifier < 0) parts.Add($"{ImplantModifier} имплант");
-
             return string.Join("\n", parts);
         }
 
@@ -104,25 +98,16 @@ namespace CyberpunkRED_Generator
     {
         public string Name { get; set; }
         public string StatName { get; set; }
-
-        private int _statValue;
-        public int StatValue { get => _statValue; set { _statValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
-
-        private int _level;
-        public int Level { get => _level; set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
-
-        private int _modifier;
-        public int Modifier { get => _modifier; set { _modifier = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
-
+        private int _statValue; public int StatValue { get => _statValue; set { _statValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
+        private int _level; public int Level { get => _level; set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
+        private int _modifier; public int Modifier { get => _modifier; set { _modifier = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
         public int Base => StatValue + Level + Modifier;
 
         public string Description { get; set; }
         public bool CanAddMultiple { get; set; }
         public bool IsVariant { get; set; }
         public string BaseName { get; set; }
-
-        private string _subName;
-        public string SubName { get => _subName; set { _subName = value; OnPropertyChanged(); } }
+        private string _subName; public string SubName { get => _subName; set { _subName = value; OnPropertyChanged(); } }
 
         public Visibility AddBtnVis => CanAddMultiple ? Visibility.Visible : Visibility.Collapsed;
         public Visibility RemoveBtnVis => IsVariant ? Visibility.Visible : Visibility.Collapsed;
@@ -149,17 +134,15 @@ namespace CyberpunkRED_Generator
         public Dictionary<string, int> Stats { get; set; }
         public Dictionary<string, int> SystemStats { get; set; }
 
-        private int _currentHumanity;
-        public int CurrentHumanity { get => _currentHumanity; set { _currentHumanity = value; OnPropertyChanged(); UpdateEmp(); } }
+        private int _currentHumanity; public int CurrentHumanity { get => _currentHumanity; set { _currentHumanity = value; OnPropertyChanged(); UpdateEmp(); } }
+        private int _maxHumanity; public int MaxHumanity { get => _maxHumanity; set { _maxHumanity = value; OnPropertyChanged(); } }
 
-        private int _maxHumanity;
-        public int MaxHumanity { get => _maxHumanity; set { _maxHumanity = value; OnPropertyChanged(); } }
+        // ЗАМЕТКИ И НОВОЕ ПОЛЕ СПОСОБНОСТИ
+        private string _notes; public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
+        private string _roleAbilityNotes; public string RoleAbilityNotes { get => _roleAbilityNotes; set { _roleAbilityNotes = value; OnPropertyChanged(); } }
 
-        private string _notes;
-        public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
-
-        // --- НОВЫЕ ПОЛЯ ДЛЯ ВКЛАДКИ 2 ---
         public ObservableCollection<GearRowItem> GearItems { get; set; }
+        public ObservableCollection<CyberwareBlockItem> CyberwareBlocks { get; set; }
 
         private string _ammoValue; public string AmmoValue { get => _ammoValue; set { _ammoValue = value; OnPropertyChanged(); } }
         private string _cashValue; public string CashValue { get => _cashValue; set { _cashValue = value; OnPropertyChanged(); } }
@@ -167,7 +150,6 @@ namespace CyberpunkRED_Generator
         private string _housing; public string Housing { get => _housing; set { _housing = value; OnPropertyChanged(); } }
         private string _rent; public string Rent { get => _rent; set { _rent = value; OnPropertyChanged(); } }
         private string _lifestyle; public string Lifestyle { get => _lifestyle; set { _lifestyle = value; OnPropertyChanged(); } }
-        // ---------------------------------
 
         private ArmorData _armor;
         public ArmorData Armor
@@ -255,6 +237,13 @@ namespace CyberpunkRED_Generator
                         if (skill.StatName == "EMP" || skill.StatName == "ЭМП") skill.StatValue = empStat.CurrentValue;
             }
         }
+
+        private string _criticalInjuries;
+        public string CriticalInjuries { get => _criticalInjuries; set { _criticalInjuries = value; OnPropertyChanged(); } }
+
+        private string _addictions;
+        public string Addictions { get => _addictions; set { _addictions = value; OnPropertyChanged(); } }
+
     }
 
     public partial class CharacterSheetWindow : Window
@@ -291,8 +280,8 @@ namespace CyberpunkRED_Generator
                         Enemies = _originalData.Enemies,
                         TragicLoves = _originalData.TragicLoves,
                         Notes = _originalData.Notes ?? "",
+                        RoleAbilityNotes = _originalData.RoleAbilityNotes ?? "", // Загрузка нового поля
 
-                        // Загрузка новых полей
                         StyleNotes = _originalData.StyleNotes ?? "",
                         Housing = _originalData.Housing ?? "",
                         Rent = _originalData.Rent ?? "",
@@ -303,17 +292,27 @@ namespace CyberpunkRED_Generator
                         HexStats = new List<SheetStat>(),
                         CenterSkillCategories = new List<SheetSkillCategory>(),
                         RightSkillCategories1 = new List<SheetSkillCategory>(),
-                        RightSkillCategories2 = new List<SheetSkillCategory>()
+                        RightSkillCategories2 = new List<SheetSkillCategory>(),
+
+                        CriticalInjuries = _originalData.CriticalInjuries ?? "",
+                        Addictions = _originalData.Addictions ?? "",
                     };
 
-                    // Генерация 17 строк инвентаря
                     viewModel.GearItems = new ObservableCollection<GearRowItem>();
-                    if (_originalData.GearItems != null)
-                    {
-                        foreach (var item in _originalData.GearItems) viewModel.GearItems.Add(item);
-                    }
+                    if (_originalData.GearItems != null) foreach (var item in _originalData.GearItems) viewModel.GearItems.Add(item);
                     while (viewModel.GearItems.Count < 17) viewModel.GearItems.Add(new GearRowItem());
 
+                    viewModel.CyberwareBlocks = new ObservableCollection<CyberwareBlockItem>();
+                    if (_originalData.CyberwareBlocks != null && _originalData.CyberwareBlocks.Count > 0)
+                    {
+                        foreach (var b in _originalData.CyberwareBlocks) viewModel.CyberwareBlocks.Add(b);
+                    }
+                    else
+                    {
+                        string[] names = { "НЕЙРОИМПЛАНТЫ (NEURALWARE)", "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)", "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)", "КИБЕРАУДИО (CYBERAUDIO)", "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)", "ПРАВАЯ КИБЕРРУКА (CYBERARM R)", "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)", "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)", "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)", "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)" };
+                        int[] slots = { 5, 3, 3, 3, 4, 4, 3, 3, 7, 7 };
+                        for (int i = 0; i < names.Length; i++) viewModel.CyberwareBlocks.Add(new CyberwareBlockItem { Name = names[i], MaxSlots = slots[i], UsedSlots = 0, IsInstalled = false, OptionsText = "" });
+                    }
 
                     string[] statOrder = { "ИНТ", "РЕА", "ЛВК", "ТЕХ", "ХАР", "ВОЛЯ", "УДЧ", "СКО", "ТЕЛ", "ЭМП" };
                     foreach (string s in statOrder)
@@ -339,13 +338,9 @@ namespace CyberpunkRED_Generator
                         if (s == "УДЧ" || key == "LUCK")
                         {
                             stat.IsFractional = true; stat.IsReadOnly = false;
-                            if (_originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("CurrentLuck"))
-                                stat.CurrentValue = _originalData.SystemStats["CurrentLuck"];
+                            if (_originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("CurrentLuck")) stat.CurrentValue = _originalData.SystemStats["CurrentLuck"];
                         }
-                        else if (s == "ЭМП" || key == "EMP")
-                        {
-                            stat.IsFractional = true; stat.IsReadOnly = true;
-                        }
+                        else if (s == "ЭМП" || key == "EMP") { stat.IsFractional = true; stat.IsReadOnly = true; }
                         viewModel.HexStats.Add(stat);
                     }
 
@@ -530,10 +525,10 @@ namespace CyberpunkRED_Generator
                     if (luckStat != null) _originalData.SystemStats["CurrentLuck"] = luckStat.CurrentValue;
 
                     _originalData.Notes = vm.Notes;
+                    _originalData.RoleAbilityNotes = vm.RoleAbilityNotes; // Сохранение новой заметки
                     _originalData.Armor = vm.Armor;
                     _originalData.Weapons = vm.Weapons.ToList();
 
-                    // Сохранение новых полей
                     _originalData.StyleNotes = vm.StyleNotes;
                     _originalData.Housing = vm.Housing;
                     _originalData.Rent = vm.Rent;
@@ -541,6 +536,11 @@ namespace CyberpunkRED_Generator
                     _originalData.AmmoValue = vm.AmmoValue;
                     _originalData.CashValue = vm.CashValue;
                     _originalData.GearItems = vm.GearItems.ToList();
+
+                    _originalData.CyberwareBlocks = vm.CyberwareBlocks.ToList();
+
+                    _originalData.CriticalInjuries = vm.CriticalInjuries;
+                    _originalData.Addictions = vm.Addictions;
 
                     _originalData.Skills.Clear();
                     var allCategories = vm.CenterSkillCategories.Concat(vm.RightSkillCategories1).Concat(vm.RightSkillCategories2);

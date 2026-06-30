@@ -20,6 +20,7 @@ namespace CyberpunkRED_Generator
     {
         public string Name { get; set; }
         public string Role { get; set; }
+        public string RoleAbilityNotes { get; set; }
         public Dictionary<string, int> Stats { get; set; } = new Dictionary<string, int>();
         public Dictionary<string, int> SystemStats { get; set; } = new Dictionary<string, int>();
         public Dictionary<string, string> Lifepath { get; set; } = new Dictionary<string, string>();
@@ -38,6 +39,9 @@ namespace CyberpunkRED_Generator
         public string AmmoValue { get; set; }
         public string CashValue { get; set; }
         public List<CyberpunkRED_Generator.GearRowItem> GearItems { get; set; } = new List<CyberpunkRED_Generator.GearRowItem>();
+        public List<CyberpunkRED_Generator.CyberwareBlockItem> CyberwareBlocks { get; set; } = new List<CyberpunkRED_Generator.CyberwareBlockItem>();
+        public string CriticalInjuries { get; set; }
+        public string Addictions { get; set; }
     }
 
     public class EnemyData
