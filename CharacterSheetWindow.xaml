@@ -98,6 +98,54 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="#0A0A0A"/>
+            <Setter Property="Foreground" Value="#00FFCC"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF3333"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#050505"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#FF3333"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#050505"/>
+            </Style.Resources>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="#00FFCC"/>
+            <Setter Property="Background" Value="#111111"/>
+            <Setter Property="BorderBrush" Value="#444444"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                            <Path x:Name="Arrow" Fill="#00FFCC" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" Data="M 0 0 L 4 4 L 8 0 Z"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" TextElement.Foreground="{TemplateBinding Foreground}" Margin="6,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                            <Popup Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                                <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="300">
+                                    <Border Background="#0A0A0A" BorderThickness="1" BorderBrush="#FF3333"/>
+                                    <ScrollViewer Margin="1" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="15,10,15,5">
@@ -216,28 +264,39 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+
                             <Border Grid.Column="0" BorderBrush="#FF3333" BorderThickness="2,2,1,2" Background="#0A0A0A">
                                 <StackPanel>
                                     <Border Background="#FF3333">
                                         <TextBlock Text="ПЗ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
                                     </Border>
-                                    <TextBlock Text="{Binding SystemStats[HP]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4">
+                                        <TextBox Text="{Binding CurrentHP, UpdateSourceTrigger=PropertyChanged}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#FFFFFF" TextAlignment="Right" MinWidth="25"/>
+                                        <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="2,0"/>
+                                        <TextBlock Text="{Binding MaxHP}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </Border>
-                            <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="1,2,1,2" Background="#0A0A0A">
+
+                            <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="1,2,1,2" Background="#0A0A0A" ToolTip="{Binding WoundTooltipText}" ToolTipService.InitialShowDelay="150">
                                 <StackPanel>
                                     <Border Background="#FF3333">
                                         <TextBlock Text="ТЯЖ. РАНЕНИЕ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
                                     </Border>
-                                    <TextBlock Text="{Binding SystemStats[WoundedThreshold]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
+                                    <TextBlock Text="{Binding WoundStateText}" Foreground="#FF3333" FontSize="15" FontWeight="Heavy" HorizontalAlignment="Center" Margin="0,7,0,0"/>
                                 </StackPanel>
                             </Border>
+
                             <Border Grid.Column="2" BorderBrush="#FF3333" BorderThickness="1,2,2,2" Background="#0A0A0A">
                                 <StackPanel>
                                     <Border Background="#FF3333">
                                         <TextBlock Text="ИСП. СМЕРТИ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
                                     </Border>
-                                    <TextBlock Text="{Binding SystemStats[DeathSave]}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4">
+                                        <TextBlock Text="{Binding CurrentDeathSave}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                                        <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="4,0"/>
+                                        <TextBlock Text="{Binding BaseDeathSave}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -324,7 +383,7 @@
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
                                                         </Border>
                                                         <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBox Text="{Binding DisplayModifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
                                                             <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
@@ -385,7 +444,7 @@
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
                                                         </Border>
                                                         <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBox Text="{Binding DisplayModifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
                                                             <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
@@ -446,7 +505,7 @@
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
                                                         </Border>
                                                         <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding Modifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBox Text="{Binding DisplayModifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
                                                             <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
@@ -469,12 +528,44 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                        <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Height="130">
                             <Grid>
-                                <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
-                                    <TextBlock Text="КРИТ. ТРАВМЫ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Border Grid.Row="0" Style="{StaticResource RedHeader}" HorizontalAlignment="Stretch" BorderThickness="0,0,2,2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="КРИТ. ТРАВМЫ" Style="{StaticResource RedHeaderText}" FontSize="11" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" Background="#111111" Foreground="#00FFCC" BorderThickness="1" BorderBrush="#444444" FontSize="11" Height="22" VerticalAlignment="Center" ItemsSource="{Binding AvailableInjuries}" SelectedItem="{Binding SelectedInjuryToAdd, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <Button Grid.Column="2" Content="+" Foreground="#050505" Background="Transparent" BorderThickness="0" Margin="4,0,0,0" Cursor="Hand" FontWeight="Bold" FontSize="16" Click="BtnAddInjury_Click" VerticalAlignment="Center"/>
+                                    </Grid>
                                 </Border>
-                                <TextBox Text="{Binding CriticalInjuries, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="2,4,2,2">
+                                    <ItemsControl ItemsSource="{Binding CriticalInjuriesList}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="#444444" BorderThickness="0,0,0,1" Padding="2" ToolTip="{Binding TooltipText}" ToolTipService.InitialShowDelay="150">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding Name}" Foreground="#FF3333" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                                        <Button Grid.Column="1" Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Cursor="Hand" FontWeight="Bold" FontSize="12" Click="BtnRemoveInjury_Click" Padding="4,0" VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
                             </Grid>
                         </Border>
 

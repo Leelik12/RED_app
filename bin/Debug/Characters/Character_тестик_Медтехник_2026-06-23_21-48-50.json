@@ -21,7 +21,8 @@
     "Humanity": 50,
     "CurrentHumanity": 14,
     "MaxHumanity": 88,
-    "CurrentLuck": 1
+    "CurrentLuck": 1,
+    "CurrentHP": 40
   },
   "Lifepath": {
     "Культурное происхождение": "Африка (к югу от Сахары)",
@@ -76,12 +77,12 @@
     {
       "Name": "Атлетика",
       "Level": 2,
-      "Total": 5
+      "Total": 9
     },
     {
       "Name": "Скрытность",
       "Level": 2,
-      "Total": 5
+      "Total": 9
     },
     {
       "Name": "Образование",
@@ -106,12 +107,12 @@
     {
       "Name": "Рукопашный бой",
       "Level": 2,
-      "Total": 5
+      "Total": 9
     },
     {
       "Name": "Уклонение",
       "Level": 2,
-      "Total": 5
+      "Total": 9
     },
     {
       "Name": "Общение",
@@ -137,9 +138,9 @@
   "Notes": "СЛУЖИЛ В АФГАНЕ, БРАЛ ПЕНТАГОН ШТУРМОМ В СОЛО",
   "Armor": {
     "HeadSp": "52",
-    "HeadPenalty": "2",
+    "HeadPenalty": "0",
     "BodySp": "67",
-    "BodyPenalty": "4",
+    "BodyPenalty": "0",
     "ShieldSp": "228",
     "ShieldPenalty": "0"
   },
@@ -339,5 +340,9 @@
     }
   ],
   "CriticalInjuries": "ffffffffff",
-  "Addictions": "dddddddddddddd"
+  "Addictions": "dddddddddddddd",
+  "CriticalInjuriesList": [
+    "Травма Шеи",
+    "Перелом Ноги"
+  ]
 }

@@ -42,6 +42,8 @@ namespace CyberpunkRED_Generator
         public List<CyberpunkRED_Generator.CyberwareBlockItem> CyberwareBlocks { get; set; } = new List<CyberpunkRED_Generator.CyberwareBlockItem>();
         public string CriticalInjuries { get; set; }
         public string Addictions { get; set; }
+
+        public List<string> CriticalInjuriesList { get; set; } = new List<string>();
     }
 
     public class EnemyData

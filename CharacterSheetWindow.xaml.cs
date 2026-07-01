@@ -10,6 +10,23 @@ using System.Collections.ObjectModel;
 
 namespace CyberpunkRED_Generator
 {
+    public class CriticalInjuryItem : INotifyPropertyChanged
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string QuickFix { get; set; }
+        public string Treatment { get; set; }
+        public int AllActionsPenalty { get; set; }
+        public int MovePenalty { get; set; }
+        public string EffectText { get; set; }
+        public int DeathSavePenalty { get; set; }
+
+        public string TooltipText => $"{Description}\n\nЭФФЕКТ РАНЕНИЯ:\n{EffectText}\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nПервая помощь: {QuickFix}\nЛечение: {Treatment}";
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
     public class CyberwareBlockItem : INotifyPropertyChanged
     {
         private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
@@ -59,6 +76,8 @@ namespace CyberpunkRED_Generator
         private int _baseValue; public int BaseValue { get => _baseValue; set { _baseValue = value; UpdateCurrentValue(); } }
         private int _armorPenalty; public int ArmorPenalty { get => _armorPenalty; set { _armorPenalty = value; UpdateCurrentValue(); } }
         private int _implantModifier; public int ImplantModifier { get => _implantModifier; set { _implantModifier = value; UpdateCurrentValue(); } }
+        private int _woundPenalty; public int WoundPenalty { get => _woundPenalty; set { _woundPenalty = value; UpdateCurrentValue(); } }
+
         public int Value { get => CurrentValue; set => CurrentValue = value; }
 
         private int _currentValue;
@@ -72,10 +91,16 @@ namespace CyberpunkRED_Generator
         public bool IsReadOnly { get; set; }
         public string TooltipText => GenerateTooltip();
 
-        private void UpdateCurrentValue()
+        public void UpdateCurrentValue()
         {
             if (Name == "УДЧ" || Name == "LUCK" || Name == "ЭМП" || Name == "EMP") return;
-            CurrentValue = BaseValue - ArmorPenalty + ImplantModifier;
+
+            int val = BaseValue - ArmorPenalty + ImplantModifier + WoundPenalty;
+
+            // СКО (MOVE) не может опуститься ниже 1 из-за ранений/брони
+            if ((Name == "СКО" || Name == "MOVE") && val < 1) val = 1;
+
+            CurrentValue = val;
         }
 
         private string GenerateTooltip()
@@ -87,6 +112,8 @@ namespace CyberpunkRED_Generator
             if (ArmorPenalty > 0) parts.Add($"-{ArmorPenalty} штраф за броню");
             if (ImplantModifier > 0) parts.Add($"+{ImplantModifier} имплант");
             else if (ImplantModifier < 0) parts.Add($"{ImplantModifier} имплант");
+            if (WoundPenalty < 0) parts.Add($"{WoundPenalty} крит. ранение/травма");
+
             return string.Join("\n", parts);
         }
 
@@ -100,8 +127,24 @@ namespace CyberpunkRED_Generator
         public string StatName { get; set; }
         private int _statValue; public int StatValue { get => _statValue; set { _statValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
         private int _level; public int Level { get => _level; set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
-        private int _modifier; public int Modifier { get => _modifier; set { _modifier = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
-        public int Base => StatValue + Level + Modifier;
+
+        private int _modifier;
+        public int Modifier { get => _modifier; set { _modifier = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(Base)); } }
+
+        private int _woundPenalty;
+        public int WoundPenalty { get => _woundPenalty; set { _woundPenalty = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(Base)); } }
+
+        public int DisplayModifier
+        {
+            get => Modifier + WoundPenalty;
+            set
+            {
+                int newMod = value - WoundPenalty;
+                if (Modifier != newMod) Modifier = newMod;
+            }
+        }
+
+        public int Base => StatValue + Level + DisplayModifier;
 
         public string Description { get; set; }
         public bool CanAddMultiple { get; set; }
@@ -137,7 +180,19 @@ namespace CyberpunkRED_Generator
         private int _currentHumanity; public int CurrentHumanity { get => _currentHumanity; set { _currentHumanity = value; OnPropertyChanged(); UpdateEmp(); } }
         private int _maxHumanity; public int MaxHumanity { get => _maxHumanity; set { _maxHumanity = value; OnPropertyChanged(); } }
 
-        // ЗАМЕТКИ И НОВОЕ ПОЛЕ СПОСОБНОСТИ
+        // --- СВОЙСТВА ЗДОРОВЬЯ И ТРАВМ ---
+        private int _currentHP; public int CurrentHP { get => _currentHP; set { _currentHP = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private int _maxHP; public int MaxHP { get => _maxHP; set { _maxHP = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private int _baseDeathSave; public int BaseDeathSave { get => _baseDeathSave; set { _baseDeathSave = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private int _currentDeathSave; public int CurrentDeathSave { get => _currentDeathSave; set { _currentDeathSave = value; OnPropertyChanged(); } }
+        private string _woundStateText; public string WoundStateText { get => _woundStateText; set { _woundStateText = value; OnPropertyChanged(); } }
+        private string _woundTooltipText; public string WoundTooltipText { get => _woundTooltipText; set { _woundTooltipText = value; OnPropertyChanged(); } }
+
+        public ObservableCollection<CriticalInjuryItem> CriticalInjuriesList { get; set; }
+        public List<string> AvailableInjuries => CoreDataBase.CriticalInjuries.Select(x => x.Name).ToList();
+        private string _selectedInjuryToAdd; public string SelectedInjuryToAdd { get => _selectedInjuryToAdd; set { _selectedInjuryToAdd = value; OnPropertyChanged(); } }
+        private string _addictions; public string Addictions { get => _addictions; set { _addictions = value; OnPropertyChanged(); } }
+
         private string _notes; public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
         private string _roleAbilityNotes; public string RoleAbilityNotes { get => _roleAbilityNotes; set { _roleAbilityNotes = value; OnPropertyChanged(); } }
 
@@ -220,6 +275,67 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        public void RecalculatePenalties()
+        {
+            if (HexStats == null || CenterSkillCategories == null) return;
+
+            int threshold = (int)Math.Ceiling(MaxHP / 2.0);
+            int woundSkillPenalty = 0;
+            int woundMovePenalty = 0;
+            int dsPenalty = 0;
+
+            if (CurrentHP >= MaxHP)
+            {
+                WoundStateText = "НЕТ";
+                WoundTooltipText = "ЭФФЕКТ РАНЕНИЯ:\nПерсонаж полностью здоров.\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nНе требуется.";
+            }
+            else if (CurrentHP > threshold)
+            {
+                WoundStateText = "ЛЕГКОЕ";
+                WoundTooltipText = "ЭФФЕКТ РАНЕНИЯ:\nНет штрафов к характеристикам.\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nСложность 10.";
+            }
+            else if (CurrentHP > 0)
+            {
+                WoundStateText = "ТЯЖЕЛОЕ";
+                woundSkillPenalty += 2;
+                WoundTooltipText = "ЭФФЕКТ РАНЕНИЯ:\n-2 ко всем действиям.\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nСложность 13.";
+            }
+            else
+            {
+                WoundStateText = "СМЕРТЕЛЬНОЕ";
+                woundSkillPenalty += 4;
+                woundMovePenalty += 6; // В SheetStat сработает ограничение "минимум 1"
+                WoundTooltipText = "ЭФФЕКТ РАНЕНИЯ:\n-4 ко всем действиям. СКО снижено на 6 (минимум 1).\nКаждый ход необходимо проходить ИСПЫТАНИЕ СМЕРТИ.\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nСложность 15.";
+            }
+
+            if (CriticalInjuriesList != null)
+            {
+                foreach (var inj in CriticalInjuriesList)
+                {
+                    woundSkillPenalty += inj.AllActionsPenalty;
+                    woundMovePenalty += inj.MovePenalty;
+                    dsPenalty += inj.DeathSavePenalty;
+                }
+            }
+
+            var allCats = new List<SheetSkillCategory>();
+            allCats.AddRange(CenterSkillCategories);
+            if (RightSkillCategories1 != null) allCats.AddRange(RightSkillCategories1);
+            if (RightSkillCategories2 != null) allCats.AddRange(RightSkillCategories2);
+
+            foreach (var cat in allCats)
+                foreach (var skill in cat.Skills)
+                    skill.WoundPenalty = -woundSkillPenalty;
+
+            var moveStat = HexStats.FirstOrDefault(s => s.Name == "СКО" || s.Name == "MOVE");
+            if (moveStat != null)
+            {
+                moveStat.WoundPenalty = -woundMovePenalty;
+                ApplyStatPenalty("СКО", "MOVE", moveStat.ArmorPenalty);
+            }
+            CurrentDeathSave = Math.Max(0, BaseDeathSave - dsPenalty);
+        }
+
         private void UpdateEmp()
         {
             if (HexStats == null) return;
@@ -237,13 +353,6 @@ namespace CyberpunkRED_Generator
                         if (skill.StatName == "EMP" || skill.StatName == "ЭМП") skill.StatValue = empStat.CurrentValue;
             }
         }
-
-        private string _criticalInjuries;
-        public string CriticalInjuries { get => _criticalInjuries; set { _criticalInjuries = value; OnPropertyChanged(); } }
-
-        private string _addictions;
-        public string Addictions { get => _addictions; set { _addictions = value; OnPropertyChanged(); } }
-
     }
 
     public partial class CharacterSheetWindow : Window
@@ -280,7 +389,7 @@ namespace CyberpunkRED_Generator
                         Enemies = _originalData.Enemies,
                         TragicLoves = _originalData.TragicLoves,
                         Notes = _originalData.Notes ?? "",
-                        RoleAbilityNotes = _originalData.RoleAbilityNotes ?? "", // Загрузка нового поля
+                        RoleAbilityNotes = _originalData.RoleAbilityNotes ?? "",
 
                         StyleNotes = _originalData.StyleNotes ?? "",
                         Housing = _originalData.Housing ?? "",
@@ -294,9 +403,36 @@ namespace CyberpunkRED_Generator
                         RightSkillCategories1 = new List<SheetSkillCategory>(),
                         RightSkillCategories2 = new List<SheetSkillCategory>(),
 
-                        CriticalInjuries = _originalData.CriticalInjuries ?? "",
-                        Addictions = _originalData.Addictions ?? "",
+                        Addictions = _originalData.Addictions ?? ""
                     };
+
+                    viewModel.MaxHP = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("HP") ? _originalData.SystemStats["HP"] : 40;
+                    viewModel.CurrentHP = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("CurrentHP") ? _originalData.SystemStats["CurrentHP"] : viewModel.MaxHP;
+                    viewModel.BaseDeathSave = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("DeathSave") ? _originalData.SystemStats["DeathSave"] : 0;
+
+                    viewModel.CriticalInjuriesList = new ObservableCollection<CriticalInjuryItem>();
+                    if (_originalData.CriticalInjuriesList != null)
+                    {
+                        foreach (var injName in _originalData.CriticalInjuriesList)
+                        {
+                            var def = CoreDataBase.CriticalInjuries.FirstOrDefault(x => x.Name == injName);
+                            if (def != null)
+                            {
+                                viewModel.CriticalInjuriesList.Add(new CriticalInjuryItem
+                                {
+                                    Name = def.Name,
+                                    Description = def.Description,
+                                    QuickFix = def.QuickFix,
+                                    Treatment = def.Treatment,
+                                    AllActionsPenalty = def.AllActionsPenalty,
+                                    MovePenalty = def.MovePenalty,
+                                    DeathSavePenalty = def.DeathSavePenalty,
+                                    EffectText = def.EffectText
+                                });
+                            }
+                        }
+                    }
+                    if (viewModel.AvailableInjuries.Count > 0) viewModel.SelectedInjuryToAdd = viewModel.AvailableInjuries[0];
 
                     viewModel.GearItems = new ObservableCollection<GearRowItem>();
                     if (_originalData.GearItems != null) foreach (var item in _originalData.GearItems) viewModel.GearItems.Add(item);
@@ -380,6 +516,9 @@ namespace CyberpunkRED_Generator
                     while (viewModel.Weapons.Count < 5) viewModel.Weapons.Add(new WeaponData());
 
                     viewModel.Armor = _originalData.Armor ?? new ArmorData();
+
+                    viewModel.RecalculatePenalties();
+
                     this.DataContext = viewModel;
                 }
             }
@@ -509,6 +648,42 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        private void BtnAddInjury_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if (vm != null && !string.IsNullOrEmpty(vm.SelectedInjuryToAdd))
+            {
+                var def = CoreDataBase.CriticalInjuries.FirstOrDefault(x => x.Name == vm.SelectedInjuryToAdd);
+                if (def != null)
+                {
+                    vm.CriticalInjuriesList.Add(new CriticalInjuryItem
+                    {
+                        Name = def.Name,
+                        Description = def.Description,
+                        QuickFix = def.QuickFix,
+                        Treatment = def.Treatment,
+                        AllActionsPenalty = def.AllActionsPenalty,
+                        MovePenalty = def.MovePenalty,
+                        DeathSavePenalty = def.DeathSavePenalty,
+                        EffectText = def.EffectText
+                    });
+                    vm.RecalculatePenalties();
+                }
+            }
+        }
+
+        private void BtnRemoveInjury_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as System.Windows.Controls.Button;
+            var injury = btn?.DataContext as CriticalInjuryItem;
+            var vm = this.DataContext as SheetViewModel;
+            if (injury != null && vm != null)
+            {
+                vm.CriticalInjuriesList.Remove(injury);
+                vm.RecalculatePenalties();
+            }
+        }
+
         private void BtnSaveChanges_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -520,12 +695,15 @@ namespace CyberpunkRED_Generator
                     if (_originalData.SystemStats == null) _originalData.SystemStats = new Dictionary<string, int>();
                     _originalData.SystemStats["CurrentHumanity"] = vm.CurrentHumanity;
                     _originalData.SystemStats["MaxHumanity"] = vm.MaxHumanity;
+                    _originalData.SystemStats["HP"] = vm.MaxHP;
+                    _originalData.SystemStats["CurrentHP"] = vm.CurrentHP;
+                    _originalData.SystemStats["DeathSave"] = vm.BaseDeathSave;
 
                     var luckStat = vm.HexStats.FirstOrDefault(s => s.Name == "УДЧ" || s.Name == "LUCK");
                     if (luckStat != null) _originalData.SystemStats["CurrentLuck"] = luckStat.CurrentValue;
 
                     _originalData.Notes = vm.Notes;
-                    _originalData.RoleAbilityNotes = vm.RoleAbilityNotes; // Сохранение новой заметки
+                    _originalData.RoleAbilityNotes = vm.RoleAbilityNotes;
                     _originalData.Armor = vm.Armor;
                     _originalData.Weapons = vm.Weapons.ToList();
 
@@ -539,7 +717,7 @@ namespace CyberpunkRED_Generator
 
                     _originalData.CyberwareBlocks = vm.CyberwareBlocks.ToList();
 
-                    _originalData.CriticalInjuries = vm.CriticalInjuries;
+                    _originalData.CriticalInjuriesList = vm.CriticalInjuriesList.Select(x => x.Name).ToList();
                     _originalData.Addictions = vm.Addictions;
 
                     _originalData.Skills.Clear();
