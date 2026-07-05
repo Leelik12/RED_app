@@ -1,0 +1,406 @@
+﻿{
+  "Name": "ТЕСТИК",
+  "Role": "Корпорат",
+  "RoleAbilityNotes": "",
+  "Stats": {
+    "INT": 7,
+    "REF": 7,
+    "DEX": 5,
+    "TECH": 7,
+    "COOL": 8,
+    "WILL": 4,
+    "LUCK": 3,
+    "MOVE": 6,
+    "BODY": 6,
+    "EMP": 8
+  },
+  "SystemStats": {
+    "HP": 35,
+    "WoundedThreshold": 18,
+    "DeathSave": 6,
+    "Humanity": 80,
+    "CurrentHumanity": 80,
+    "MaxHumanity": 80,
+    "CurrentHP": 35,
+    "CurrentLuck": 3
+  },
+  "Lifepath": {
+    "Культурное происхождение": "Южная Азия",
+    "Личность": "Бунтарь, антисоциальный, жестокий",
+    "Стиль одежды": "Asia Pop",
+    "Прическа": "Полосатые",
+    "Ценность": "Честность",
+    "Отношение к людям": "Стереть их всех с лица земли. Пусть выживут тараканы",
+    "Самый ценный человек": "Общественный деятель",
+    "Самая ценная вещь": "Фотография",
+    "Семейное происхождение": "Руководители корпорации",
+    "Окружение детства": "В стае кочевников, постоянно переезжая из города в город.",
+    "Родители": "Погибли в результате несчастного случая",
+    "Трагедия в семье": "Семья была убита, ты единственный выживший.",
+    "Цель в жизни": "Выследить виновных в твоей жалкой жизни и заставить их заплатить."
+  },
+  "RoleLifepath": {
+    "Чем занимается корпа в которой ты работаешь?": "Финансы",
+    "В каком отделе ты работаешь?": "Закупки",
+    "Насколько хороша/плоха твоя корпа?": "Всегда работаем на благо, полностью следуем этическим нормам.",
+    "Какого размера твоя корпа?": "Один город",
+    "Кто охотится за тобой?": "Конкуренты в той же отрасли",
+    "Отношения с твоим боссом": "Босс наставляет тебя, но остерегайся его врагов"
+  },
+  "Friends": [],
+  "Enemies": [
+    {
+      "Who": "Член корпорации",
+      "Cause": "Один из вас обвинил другого в трусости или недостатке",
+      "Hate": "Они ненавидят тебя",
+      "Action": "Будут нападать словесно"
+    },
+    {
+      "Who": "Враг детства",
+      "Cause": "Один из вас лишил другого статуса или лица",
+      "Hate": "Ты ненавидишь их",
+      "Action": "Подставят тебя"
+    }
+  ],
+  "TragicLoves": [
+    "Возлюбленный таинственно исчез",
+    "Соперник увел твоего возлюбленного",
+    "Возлюбленный погиб в несчастном случае"
+  ],
+  "Skills": [
+    {
+      "Name": "Концентрация",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Атлетика",
+      "Level": 2,
+      "Total": 7
+    },
+    {
+      "Name": "Скрытность",
+      "Level": 2,
+      "Total": 7
+    },
+    {
+      "Name": "Образование",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Язык (Уличный Сленг)",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Язык (Родной)",
+      "Level": 4,
+      "Total": 11
+    },
+    {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Рукопашный бой",
+      "Level": 2,
+      "Total": 7
+    },
+    {
+      "Name": "Уклонение",
+      "Level": 2,
+      "Total": 7
+    },
+    {
+      "Name": "Общение",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Проницательность",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Убеждение",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Первая помощь",
+      "Level": 2,
+      "Total": 9
+    }
+  ],
+  "Notes": "",
+  "Armor": {
+    "HeadSp": null,
+    "HeadPenalty": null,
+    "BodySp": null,
+    "BodyPenalty": null,
+    "ShieldSp": null,
+    "ShieldPenalty": null
+  },
+  "Weapons": [
+    {
+      "Name": "",
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    }
+  ],
+  "StyleNotes": "",
+  "Housing": "",
+  "Rent": "",
+  "Lifestyle": "",
+  "AmmoValue": "",
+  "CashValue": "",
+  "GearItems": [
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    }
+  ],
+  "CustomCyberwareList": [],
+  "CyberwareBlocks": [
+    {
+      "Name": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+      "IsInstalled": true,
+      "UsedSlots": 1,
+      "MaxSlots": 5,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/5",
+      "InstalledItems": [
+        {
+          "Name": "Нейроинтерфейс",
+          "Category": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+          "Description": "Базовый имплант для подключения других нейро-опций.",
+          "HumanityLoss": "2d6 (7)",
+          "Slots": 0,
+          "IsCustom": false,
+          "IsFoundation": true,
+          "Requires": "",
+          "SkillModifiers": [],
+          "TooltipText": "Базовый имплант для подключения других нейро-опций.\n\nПЧ: 2d6 (7) | Слотов: 0"
+        },
+        {
+          "Name": "Сандевистан",
+          "Category": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+          "Description": "При активации добавляет +3 к броскам Инициативы на 1 минуту.",
+          "HumanityLoss": "2d6 (7)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "Requires": "Нейроинтерфейс",
+          "SkillModifiers": [],
+          "TooltipText": "При активации добавляет +3 к броскам Инициативы на 1 минуту.\n\nПЧ: 2d6 (7) | Слотов: 1\nТРЕБУЕТ: Нейроинтерфейс"
+        }
+      ]
+    },
+    {
+      "Name": "КИБЕРАУДИО (CYBERAUDIO)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "БОРГИРОВАНИЕ (BORGWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    }
+  ],
+  "CriticalInjuries": null,
+  "Addictions": "",
+  "CriticalInjuriesList": [
+    "Оторванное Ухо",
+    "Повреждение Глаза"
+  ]
+}

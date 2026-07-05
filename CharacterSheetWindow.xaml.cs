@@ -7,9 +7,18 @@ using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace CyberpunkRED_Generator
 {
+    // Новый класс для хранения любых баффов и дебаффов навыков
+    public class SkillModifierDef
+    {
+        public string SkillName { get; set; } // Какому навыку даем бонус (или "Все")
+        public int Value { get; set; }        // Значение (+1, -4 и т.д.)
+        public string ModType { get; set; } = "Normal"; // "Normal", "Visual", "Audio"
+    }
+
     public class CriticalInjuryItem : INotifyPropertyChanged
     {
         public string Name { get; set; }
@@ -21,24 +30,73 @@ namespace CyberpunkRED_Generator
         public string EffectText { get; set; }
         public int DeathSavePenalty { get; set; }
 
+        // ДОБАВЛЕНО: Список модификаторов для UI-класса
+        public List<SkillModifierDef> SkillModifiers { get; set; } = new List<SkillModifierDef>();
+
         public string TooltipText => $"{Description}\n\nЭФФЕКТ РАНЕНИЯ:\n{EffectText}\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nПервая помощь: {QuickFix}\nЛечение: {Treatment}";
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+    public class CyberwareDef : INotifyPropertyChanged
+    {
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string Description { get; set; }
+        public string HumanityLoss { get; set; }
+        public int Slots { get; set; } = 1;
 
+        public bool IsCustom { get; set; } = false;
+        public bool IsFoundation { get; set; } = false;
+        public string Requires { get; set; } = "";
+
+        public List<SkillModifierDef> SkillModifiers { get; set; } = new List<SkillModifierDef>();
+
+        public string TooltipText => $"{Description}\n\nПЧ: {HumanityLoss} | Слотов: {Slots}" +
+                                     (string.IsNullOrEmpty(Requires) ? "" : $"\nТРЕБУЕТ: {Requires}");
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
     public class CyberwareBlockItem : INotifyPropertyChanged
     {
         private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
-        private bool _isInstalled; public bool IsInstalled { get => _isInstalled; set { _isInstalled = value; OnPropertyChanged(); } }
+
+        // Автоматически проверяет, есть ли в установленных имплантах "База"
+        public bool IsInstalled => InstalledItems.Any(i => i.IsFoundation);
+
         private int _usedSlots; public int UsedSlots { get => _usedSlots; set { _usedSlots = value; OnPropertyChanged(); OnPropertyChanged(nameof(SlotsText)); } }
         private int _maxSlots; public int MaxSlots { get => _maxSlots; set { _maxSlots = value; OnPropertyChanged(); OnPropertyChanged(nameof(SlotsText)); } }
         private string _optionsText; public string OptionsText { get => _optionsText; set { _optionsText = value; OnPropertyChanged(); } }
         public string SlotsText => $"свободно {MaxSlots - UsedSlots}/{MaxSlots}";
+
+        private ObservableCollection<CyberwareDef> _installedItems;
+        public ObservableCollection<CyberwareDef> InstalledItems
+        {
+            get => _installedItems;
+            set
+            {
+                if (_installedItems != null) _installedItems.CollectionChanged -= InstalledItems_CollectionChanged;
+                _installedItems = value;
+                if (_installedItems != null) _installedItems.CollectionChanged += InstalledItems_CollectionChanged;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsInstalled));
+            }
+        }
+
+        public CyberwareBlockItem()
+        {
+            InstalledItems = new ObservableCollection<CyberwareDef>();
+        }
+
+        private void InstalledItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(IsInstalled)); // Зажигает чекбокс при добавлении базы
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
     public class GearRowItem : INotifyPropertyChanged
     {
         private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
@@ -46,7 +104,6 @@ namespace CyberpunkRED_Generator
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
     public class ArmorData : INotifyPropertyChanged
     {
         private string _headSp; public string HeadSp { get => _headSp; set { _headSp = value; OnPropertyChanged(); } }
@@ -58,7 +115,6 @@ namespace CyberpunkRED_Generator
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
     public class WeaponData : INotifyPropertyChanged
     {
         private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
@@ -69,7 +125,6 @@ namespace CyberpunkRED_Generator
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
     public class SheetStat : INotifyPropertyChanged
     {
         public string Name { get; set; }
@@ -120,31 +175,61 @@ namespace CyberpunkRED_Generator
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
     public class SheetSkill : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public string StatName { get; set; }
-        private int _statValue; public int StatValue { get => _statValue; set { _statValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
-        private int _level; public int Level { get => _level; set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); } }
 
-        private int _modifier;
-        public int Modifier { get => _modifier; set { _modifier = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(Base)); } }
+        private int _statValue;
+        public int StatValue { get => _statValue; set { _statValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
+
+        private int _level;
+        public int Level { get => _level; set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
 
         private int _woundPenalty;
-        public int WoundPenalty { get => _woundPenalty; set { _woundPenalty = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(Base)); } }
+        public int WoundPenalty { get => _woundPenalty; set { _woundPenalty = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
 
-        public int DisplayModifier
+        private int _equipmentMod;
+        public int EquipmentMod { get => _equipmentMod; set { _equipmentMod = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
+
+        private int _visualMod;
+        public int VisualMod { get => _visualMod; set { _visualMod = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
+
+        private int _audioMod;
+        public int AudioMod { get => _audioMod; set { _audioMod = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
+
+        // Общий численный модификатор (Травмы + Броня + Обычные импланты)
+        public int GeneralMod => WoundPenalty + EquipmentMod;
+
+        // Строка для колонки "ДОП" (Только для чтения интерфейсом)
+        public string DisplayModifier
         {
-            get => Modifier + WoundPenalty;
-            set
+            get
             {
-                int newMod = value - WoundPenalty;
-                if (Modifier != newMod) Modifier = newMod;
+                int vis = GeneralMod + VisualMod;
+                int aud = GeneralMod + AudioMod;
+
+                if (vis == aud) return vis.ToString();
+                return $"{vis}в/{aud}а";
             }
         }
 
-        public int Base => StatValue + Level + DisplayModifier;
+        // Общая база в виде числа (используется для сохранения в JSON)
+        public int Base => StatValue + Level + GeneralMod;
+
+        // Строка для колонки "СУМ" (УР + СТАТ + ДОП)
+        public string DisplayBase
+        {
+            get
+            {
+                int baseVal = Base;
+                int vis = baseVal + VisualMod;
+                int aud = baseVal + AudioMod;
+
+                if (vis == aud) return vis.ToString();
+                return $"{vis}в/{aud}а";
+            }
+        }
 
         public string Description { get; set; }
         public bool CanAddMultiple { get; set; }
@@ -161,7 +246,6 @@ namespace CyberpunkRED_Generator
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
     public class SheetSkillCategory
     {
         public string Name { get; set; }
@@ -205,6 +289,20 @@ namespace CyberpunkRED_Generator
         private string _housing; public string Housing { get => _housing; set { _housing = value; OnPropertyChanged(); } }
         private string _rent; public string Rent { get => _rent; set { _rent = value; OnPropertyChanged(); } }
         private string _lifestyle; public string Lifestyle { get => _lifestyle; set { _lifestyle = value; OnPropertyChanged(); } }
+
+        // Новые свойства для привязки к интерфейсу
+        private int _regeneration; public int Regeneration { get => _regeneration; set { _regeneration = value; OnPropertyChanged(); } }
+        private int _initiative; public int Initiative { get => _initiative; set { _initiative = value; OnPropertyChanged(); } }
+
+        // Метод автоматического обновления на основе текущего состояния статов
+        public void UpdateDerivedCombatStats()
+        {
+            var refStat = HexStats?.FirstOrDefault(s => s.Name == "РЕА" || s.Name == "REF");
+            var bodyStat = HexStats?.FirstOrDefault(s => s.Name == "ТЕЛ" || s.Name == "BODY");
+
+            if (refStat != null) Initiative = refStat.CurrentValue;
+            if (bodyStat != null) Regeneration = bodyStat.CurrentValue;
+        }
 
         private ArmorData _armor;
         public ArmorData Armor
@@ -284,6 +382,9 @@ namespace CyberpunkRED_Generator
             int woundMovePenalty = 0;
             int dsPenalty = 0;
 
+            int visualPenalty = 0;
+            int audioPenalty = 0;
+
             if (CurrentHP >= MaxHP)
             {
                 WoundStateText = "НЕТ";
@@ -323,9 +424,55 @@ namespace CyberpunkRED_Generator
             if (RightSkillCategories1 != null) allCats.AddRange(RightSkillCategories1);
             if (RightSkillCategories2 != null) allCats.AddRange(RightSkillCategories2);
 
+            // 1. Сначала сбрасываем специфические моды и применяем штраф за состояние здоровья
             foreach (var cat in allCats)
+            {
                 foreach (var skill in cat.Skills)
+                {
                     skill.WoundPenalty = -woundSkillPenalty;
+                    skill.EquipmentMod = 0;
+                    skill.VisualMod = 0;
+                    skill.AudioMod = 0;
+                }
+            }
+
+            // 2. Собираем ВСЕ модификаторы из травм и имплантов в единый список
+            var activeModifiers = new List<SkillModifierDef>();
+
+            if (CriticalInjuriesList != null)
+            {
+                foreach (var inj in CriticalInjuriesList)
+                    activeModifiers.AddRange(inj.SkillModifiers);
+            }
+
+            if (CyberwareBlocks != null)
+            {
+                foreach (var block in CyberwareBlocks)
+                {
+                    if (block.InstalledItems != null)
+                    {
+                        foreach (var cw in block.InstalledItems)
+                            activeModifiers.AddRange(cw.SkillModifiers);
+                    }
+                }
+            }
+
+            // 3. Автоматически распределяем их по навыкам
+            foreach (var mod in activeModifiers)
+            {
+                foreach (var cat in allCats)
+                {
+                    foreach (var skill in cat.Skills)
+                    {
+                        if (skill.Name == mod.SkillName)
+                        {
+                            if (mod.ModType == "Visual") skill.VisualMod += mod.Value;
+                            else if (mod.ModType == "Audio") skill.AudioMod += mod.Value;
+                            else skill.EquipmentMod += mod.Value; // Обычные баффы от имплантов
+                        }
+                    }
+                }
+            }
 
             var moveStat = HexStats.FirstOrDefault(s => s.Name == "СКО" || s.Name == "MOVE");
             if (moveStat != null)
@@ -335,6 +482,21 @@ namespace CyberpunkRED_Generator
             }
             CurrentDeathSave = Math.Max(0, BaseDeathSave - dsPenalty);
         }
+
+        private string _overlayTitle; public string OverlayTitle { get => _overlayTitle; set { _overlayTitle = value; OnPropertyChanged(); } }
+        public ObservableCollection<CyberwareDef> AvailableCyberware { get; set; } = new ObservableCollection<CyberwareDef>();
+
+        // ВОТ ЭТО ИСПРАВЛЯЕТ БАГ С ПУСТЫМ МЕНЮ:
+        private CyberwareBlockItem _currentCyberBlock;
+        public CyberwareBlockItem CurrentCyberBlock { get => _currentCyberBlock; set { _currentCyberBlock = value; OnPropertyChanged(); } }
+
+        // Поля формы кастома
+        private string _newCyberName; public string NewCyberName { get => _newCyberName; set { _newCyberName = value; OnPropertyChanged(); } }
+        private string _newCyberDesc; public string NewCyberDesc { get => _newCyberDesc; set { _newCyberDesc = value; OnPropertyChanged(); } }
+        private string _newCyberHL; public string NewCyberHL { get => _newCyberHL; set { _newCyberHL = value; OnPropertyChanged(); } }
+        private string _newCyberSlots = "1"; public string NewCyberSlots { get => _newCyberSlots; set { _newCyberSlots = value; OnPropertyChanged(); } }
+        private bool _newCyberIsFoundation; public bool NewCyberIsFoundation { get => _newCyberIsFoundation; set { _newCyberIsFoundation = value; OnPropertyChanged(); } }
+        private string _newCyberRequires; public string NewCyberRequires { get => _newCyberRequires; set { _newCyberRequires = value; OnPropertyChanged(); } }
 
         private void UpdateEmp()
         {
@@ -427,7 +589,8 @@ namespace CyberpunkRED_Generator
                                     AllActionsPenalty = def.AllActionsPenalty,
                                     MovePenalty = def.MovePenalty,
                                     DeathSavePenalty = def.DeathSavePenalty,
-                                    EffectText = def.EffectText
+                                    EffectText = def.EffectText,
+                                    SkillModifiers = def.SkillModifiers // ДОБАВЛЕНО ЗДЕСЬ
                                 });
                             }
                         }
@@ -445,9 +608,17 @@ namespace CyberpunkRED_Generator
                     }
                     else
                     {
-                        string[] names = { "НЕЙРОИМПЛАНТЫ (NEURALWARE)", "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)", "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)", "КИБЕРАУДИО (CYBERAUDIO)", "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)", "ПРАВАЯ КИБЕРРУКА (CYBERARM R)", "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)", "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)", "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)", "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)" };
-                        int[] slots = { 5, 3, 3, 3, 4, 4, 3, 3, 7, 7 };
-                        for (int i = 0; i < names.Length; i++) viewModel.CyberwareBlocks.Add(new CyberwareBlockItem { Name = names[i], MaxSlots = slots[i], UsedSlots = 0, IsInstalled = false, OptionsText = "" });
+                        // Строгий порядок: 3 колонки, 4 строки (слева-направо, сверху-вниз)
+                        string[] names = {
+                            "НЕЙРОИНТЕРФЕЙС (NEURALWARE)", "КИБЕРАУДИО (CYBERAUDIO)", "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+                            "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)", "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)", "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+                            "ПРАВАЯ КИБЕРРУКА (CYBERARM R)", "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)", "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+                            "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)", "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)", "БОРГИРОВАНИЕ (BORGWARE)"
+                        };
+                        int[] slots = { 5, 3, 7, 3, 3, 7, 4, 4, 7, 3, 3, 7 };
+
+                        for (int i = 0; i < names.Length; i++)
+                            viewModel.CyberwareBlocks.Add(new CyberwareBlockItem { Name = names[i], MaxSlots = slots[i], UsedSlots = 0, OptionsText = "" });
                     }
 
                     string[] statOrder = { "ИНТ", "РЕА", "ЛВК", "ТЕХ", "ХАР", "ВОЛЯ", "УДЧ", "СКО", "ТЕЛ", "ЭМП" };
@@ -470,6 +641,15 @@ namespace CyberpunkRED_Generator
 
                         int val = _originalData.Stats.ContainsKey(key) ? _originalData.Stats[key] : (_originalData.Stats.ContainsKey(s) ? _originalData.Stats[s] : 5);
                         var stat = new SheetStat { Name = s, BaseValue = val, CurrentValue = val, Value = val };
+
+                        // ДОБАВЛЕНО ЗДЕСЬ: Слушаем изменения статов (включая штрафы от брони/ран)
+                        stat.PropertyChanged += (sender, args) =>
+                        {
+                            if (args.PropertyName == nameof(SheetStat.CurrentValue))
+                            {
+                                viewModel.UpdateDerivedCombatStats();
+                            }
+                        };
 
                         if (s == "УДЧ" || key == "LUCK")
                         {
@@ -518,6 +698,9 @@ namespace CyberpunkRED_Generator
                     viewModel.Armor = _originalData.Armor ?? new ArmorData();
 
                     viewModel.RecalculatePenalties();
+
+                    // ДОБАВЛЕНО ЗДЕСЬ: Первичный расчет при загрузке файла персонажа
+                    viewModel.UpdateDerivedCombatStats();
 
                     this.DataContext = viewModel;
                 }
@@ -665,7 +848,8 @@ namespace CyberpunkRED_Generator
                         AllActionsPenalty = def.AllActionsPenalty,
                         MovePenalty = def.MovePenalty,
                         DeathSavePenalty = def.DeathSavePenalty,
-                        EffectText = def.EffectText
+                        EffectText = def.EffectText,
+                        SkillModifiers = def.SkillModifiers // ДОБАВЛЕНО ЗДЕСЬ
                     });
                     vm.RecalculatePenalties();
                 }
@@ -748,6 +932,102 @@ namespace CyberpunkRED_Generator
             {
                 MessageBox.Show($"Системная ошибка при сохранении: {ex.Message}", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private CyberwareBlockItem _currentCyberBlock;
+
+        private void BtnOpenCyberwareManager_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is CyberwareBlockItem block)
+            {
+                var vm = this.DataContext as SheetViewModel;
+                vm.CurrentCyberBlock = block; // Жесткая привязка для UI (исправляет баг)
+                vm.OverlayTitle = $"УПРАВЛЕНИЕ: {block.Name}";
+                vm.AvailableCyberware.Clear();
+
+                foreach (var def in CoreDataBase.AllCyberware.Where(c => c.Category == block.Name))
+                    vm.AvailableCyberware.Add(def);
+
+                if (_originalData.CustomCyberwareList != null)
+                {
+                    foreach (var def in _originalData.CustomCyberwareList.Where(c => c.Category == block.Name))
+                        vm.AvailableCyberware.Add(def);
+                }
+
+                CyberwareOverlay.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void BtnCloseCyberwareManager_Click(object sender, RoutedEventArgs e) => CyberwareOverlay.Visibility = Visibility.Collapsed;
+
+        private void BtnInstallCyber_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if (vm.CurrentCyberBlock == null) return;
+
+            if ((sender as Button)?.Tag is CyberwareDef def)
+            {
+                // Проверка зависимостей!
+                if (!string.IsNullOrWhiteSpace(def.Requires) && !vm.CurrentCyberBlock.InstalledItems.Any(i => i.Name == def.Requires))
+                {
+                    MessageBox.Show($"Для установки этого импланта сначала требуется установить: {def.Requires}!", "ОШИБКА СОВМЕСТИМОСТИ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (vm.CurrentCyberBlock.UsedSlots + def.Slots > vm.CurrentCyberBlock.MaxSlots)
+                {
+                    MessageBox.Show("В этом блоке не осталось свободных слотов!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                vm.CurrentCyberBlock.InstalledItems.Add(def);
+                vm.CurrentCyberBlock.UsedSlots += def.Slots;
+            }
+        }
+
+        private void BtnUninstallCyber_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if ((sender as Button)?.Tag is CyberwareDef def)
+            {
+                // Удаление с главной страницы или из меню
+                foreach (var block in vm.CyberwareBlocks)
+                {
+                    if (block.InstalledItems.Contains(def))
+                    {
+                        if (def.IsFoundation) MessageBox.Show("Внимание: Вы удаляете базовый имплант. Проверьте слоты зависимых опций!", "СИСТЕМНОЕ УВЕДОМЛЕНИЕ", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        block.InstalledItems.Remove(def);
+                        block.UsedSlots -= def.Slots;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void BtnCreateCustomCyber_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if (string.IsNullOrWhiteSpace(vm.NewCyberName) || vm.CurrentCyberBlock == null) return;
+
+            var newItem = new CyberwareDef
+            {
+                Name = vm.NewCyberName,
+                Category = vm.CurrentCyberBlock.Name,
+                Description = vm.NewCyberDesc ?? "",
+                HumanityLoss = vm.NewCyberHL ?? "0",
+                Slots = int.TryParse(vm.NewCyberSlots, out int s) ? s : 1,
+                IsFoundation = vm.NewCyberIsFoundation,
+                Requires = vm.NewCyberRequires ?? "",
+                IsCustom = true
+            };
+
+            if (_originalData.CustomCyberwareList == null) _originalData.CustomCyberwareList = new List<CyberwareDef>();
+            _originalData.CustomCyberwareList.Add(newItem);
+            vm.AvailableCyberware.Add(newItem);
+
+            // Очищаем форму
+            vm.NewCyberName = ""; vm.NewCyberDesc = ""; vm.NewCyberHL = ""; vm.NewCyberSlots = "1"; vm.NewCyberIsFoundation = false; vm.NewCyberRequires = "";
         }
 
         private void BtnBackToMenu_Click(object sender, RoutedEventArgs e) => this.Close();

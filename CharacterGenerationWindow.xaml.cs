@@ -39,6 +39,7 @@ namespace CyberpunkRED_Generator
         public string AmmoValue { get; set; }
         public string CashValue { get; set; }
         public List<CyberpunkRED_Generator.GearRowItem> GearItems { get; set; } = new List<CyberpunkRED_Generator.GearRowItem>();
+        public List<CyberwareDef> CustomCyberwareList { get; set; } = new List<CyberwareDef>();
         public List<CyberpunkRED_Generator.CyberwareBlockItem> CyberwareBlocks { get; set; } = new List<CyberpunkRED_Generator.CyberwareBlockItem>();
         public string CriticalInjuries { get; set; }
         public string Addictions { get; set; }

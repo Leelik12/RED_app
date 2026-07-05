@@ -4,6 +4,24 @@
         Title="ЛИСТ ПЕРСОНАЖА (ОФИЦИАЛЬНЫЙ ФОРМАТ)" Height="1000" Width="1450" Background="#050505" WindowState="Maximized" WindowStartupLocation="CenterScreen" FontFamily="Consolas">
 
     <Window.Resources>
+        <Style x:Key="NeonCheckBox" TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Background="Transparent">
+                            <Border x:Name="Border" Width="16" Height="16" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A"/>
+                            <Path x:Name="CheckMark" Data="M 3 8 L 6 12 L 13 3" Stroke="#00FFCC" StrokeThickness="3" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#00FFCC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="TabControl">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -158,7 +176,7 @@
                         <ColumnDefinition Width="12"/>
                         <ColumnDefinition Width="70"/>
                         <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="2.0*"/>
+                        <ColumnDefinition Width="2.2*"/>
                         <ColumnDefinition Width="12"/>
                         <ColumnDefinition Width="3.2*"/>
                         <ColumnDefinition Width="12"/>
@@ -176,7 +194,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0.6*"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
@@ -258,7 +277,7 @@
                             </Border>
                         </Grid>
 
-                        <Grid Grid.Row="6" Margin="0,0,0,0">
+                        <Grid Grid.Row="6" Margin="0,0,0,6">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -297,6 +316,31 @@
                                         <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="4,0"/>
                                         <TextBlock Text="{Binding BaseDeathSave}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
                                     </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="7" Margin="0,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" BorderBrush="#FF3333" BorderThickness="2,2,1,2" Background="#0A0A0A" Margin="0,0,2,0">
+                                <StackPanel>
+                                    <Border Background="#FF3333">
+                                        <TextBlock Text="РЕГЕНЕРАЦИЯ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding Regeneration}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="1,2,2,2" Background="#0A0A0A" Margin="2,0,0,0">
+                                <StackPanel>
+                                    <Border Background="#FF3333">
+                                        <TextBlock Text="ИНИЦИАТИВА" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding Initiative}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -351,7 +395,7 @@
                                                 <ColumnDefinition Width="28"/>
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="36"/>
+                                                <ColumnDefinition Width="62"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
@@ -366,8 +410,8 @@
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="28"/>
                                                             <ColumnDefinition Width="30"/>
-                                                            <ColumnDefinition Width="30"/>
-                                                            <ColumnDefinition Width="36"/>
+                                                            <ColumnDefinition Width="32"/>
+                                                            <ColumnDefinition Width="62"/>
                                                         </Grid.ColumnDefinitions>
                                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                             <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
@@ -383,10 +427,10 @@
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
                                                         </Border>
                                                         <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding DisplayModifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBlock Text="{Binding DisplayModifier}" Foreground="#999999" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
-                                                            <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding DisplayBase}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                                                         </Border>
                                                     </Grid>
                                                 </DataTemplate>
@@ -412,7 +456,7 @@
                                                 <ColumnDefinition Width="28"/>
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="36"/>
+                                                <ColumnDefinition Width="62"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
@@ -428,7 +472,7 @@
                                                             <ColumnDefinition Width="28"/>
                                                             <ColumnDefinition Width="30"/>
                                                             <ColumnDefinition Width="30"/>
-                                                            <ColumnDefinition Width="36"/>
+                                                            <ColumnDefinition Width="62"/>
                                                         </Grid.ColumnDefinitions>
                                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                             <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
@@ -444,10 +488,10 @@
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
                                                         </Border>
                                                         <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding DisplayModifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBlock Text="{Binding DisplayModifier}" Foreground="#999999" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
-                                                            <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding DisplayBase}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                                                         </Border>
                                                     </Grid>
                                                 </DataTemplate>
@@ -473,7 +517,7 @@
                                                 <ColumnDefinition Width="28"/>
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition Width="36"/>
+                                                <ColumnDefinition Width="62"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="1" Text="УР" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="2" Text="СТАТ" Foreground="#777777" FontSize="11" TextAlignment="Center" FontWeight="Bold"/>
@@ -489,7 +533,7 @@
                                                             <ColumnDefinition Width="28"/>
                                                             <ColumnDefinition Width="30"/>
                                                             <ColumnDefinition Width="30"/>
-                                                            <ColumnDefinition Width="36"/>
+                                                            <ColumnDefinition Width="62"/>
                                                         </Grid.ColumnDefinitions>
                                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                             <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
@@ -505,10 +549,10 @@
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
                                                         </Border>
                                                         <Border Grid.Column="3" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding DisplayModifier, UpdateSourceTrigger=PropertyChanged}" Foreground="#999999" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBlock Text="{Binding DisplayModifier}" Foreground="#999999" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="4" Background="#050505" BorderBrush="#FF3333" BorderThickness="1" Margin="1,0">
-                                                            <TextBlock Text="{Binding Base}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding DisplayBase}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                                                         </Border>
                                                     </Grid>
                                                 </DataTemplate>
@@ -954,52 +998,73 @@
 
             <TabItem Header="СТР. 3: КИБЕРИМПЛАНТЫ">
                 <Grid Margin="0,10,0,0">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding CyberwareBlocks}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="2" VerticalAlignment="Top"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="5" Height="150">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="30"/>
-                                                <RowDefinition Height="*"/>
-                                            </Grid.RowDefinitions>
+                    <ItemsControl ItemsSource="{Binding CyberwareBlocks}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="3" Rows="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Margin="4">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
 
-                                            <Border Grid.Row="0" Background="#FF3333" Padding="8,0">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
+                                        <Border Grid.Row="0" Background="#FF3333" Padding="6,4">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                                                    <CheckBox IsChecked="{Binding IsInstalled}" VerticalAlignment="Center" Margin="0,0,8,0" Cursor="Hand"/>
+                                                <CheckBox Grid.Column="0" IsChecked="{Binding IsInstalled, Mode=OneWay}" IsHitTestVisible="False" Style="{StaticResource NeonCheckBox}" VerticalAlignment="Center" Margin="0,0,8,0"/>
 
-                                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="#050505" FontWeight="Heavy" FontSize="12" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="#050505" FontWeight="Heavy" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Center" LineHeight="14"/>
 
-                                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                                        <TextBlock Text="ЗАНЯТО: " Foreground="#050505" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                                                        <TextBox Text="{Binding UsedSlots, UpdateSourceTrigger=PropertyChanged}" Width="24" Height="20" Background="#050505" Foreground="#00FFCC" BorderThickness="0" TextAlignment="Center" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC"/>
-                                                        <TextBlock Text="{Binding SlotsText, StringFormat=' ({0})'}" Foreground="#050505" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Border>
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,0,0">
+                                                    <TextBlock Text="ЗАНЯТО:" Foreground="#050505" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
+                                                    <TextBox Text="{Binding UsedSlots, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="20" Height="18" Background="#050505" Foreground="#00FFCC" BorderThickness="0" TextAlignment="Center" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC" Padding="0"/>
+                                                    <TextBlock Text="{Binding SlotsText, StringFormat='({0})'}" Foreground="#050505" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
 
-                                            <TextBox Grid.Row="1" Text="{Binding OptionsText, UpdateSourceTrigger=PropertyChanged}" 
-                                                     Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" 
-                                                     AcceptsReturn="True" TextWrapping="Wrap" Margin="6" CaretBrush="#00FFCC" 
-                                                     VerticalScrollBarVisibility="Auto"/>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="4">
+                                            <StackPanel>
+                                                <TextBox Text="{Binding OptionsText}" Foreground="#777777" FontSize="12" Background="Transparent" BorderThickness="0" AcceptsReturn="True" TextWrapping="Wrap" CaretBrush="#777777" Margin="0,0,0,5" ToolTip="Ручные заметки"/>
+
+                                                <ItemsControl ItemsSource="{Binding InstalledItems}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="#111111" BorderBrush="#333333" BorderThickness="1" Margin="0,0,0,4" Padding="4">
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#00FFCC" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Center" ToolTip="{Binding TooltipText}" ToolTipService.InitialShowDelay="150" Cursor="Help"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding Slots, StringFormat='Слотов: {0}'}" Foreground="#777777" FontSize="11" Margin="6,0" VerticalAlignment="Center"/>
+                                                                    <Button Grid.Column="2" Content="X" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Cursor="Hand" FontWeight="Bold" Tag="{Binding}" Click="BtnUninstallCyber_Click" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                                                                </Grid>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </ScrollViewer>
+
+                                        <Button Grid.Row="2" Content="УПРАВЛЕНИЕ ИМПЛАНТАМИ" Background="#111111" Foreground="#FF3333" BorderBrush="#FF3333" BorderThickness="1" Margin="6,2,6,6" Padding="0,4" Cursor="Hand" FontWeight="Bold" FontSize="11" Tag="{Binding}" Click="BtnOpenCyberwareManager_Click"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -1024,5 +1089,138 @@
                 </Button.Template>
             </Button>
         </StackPanel>
+        <Border x:Name="CyberwareOverlay" Background="#E5050505" Visibility="Collapsed" Panel.ZIndex="100" Margin="-15,-10,-15,-5">
+            <Border Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="2" Width="950" Height="700" CornerRadius="4" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#FF3333" Padding="15,0">
+                        <Grid>
+                            <TextBlock Text="{Binding OverlayTitle}" Foreground="#050505" FontWeight="Heavy" FontSize="16" VerticalAlignment="Center"/>
+                            <Button Content="X" Foreground="#050505" Background="Transparent" BorderThickness="0" FontWeight="Bold" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Center" Cursor="Hand" Click="BtnCloseCyberwareManager_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="1" Margin="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" BorderBrush="#444444" BorderThickness="1" Padding="10">
+                                <StackPanel>
+                                    <TextBlock Text="ДОСТУПНЫЕ ИМПЛАНТЫ" Foreground="#00FFCC" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="330">
+                                        <ItemsControl ItemsSource="{Binding AvailableCyberware}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="#111111" BorderBrush="#333333" BorderThickness="1" Margin="0,0,0,5" Padding="5" ToolTip="{Binding TooltipText}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="{Binding Name}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="13" TextWrapping="Wrap"/>
+                                                                <TextBlock Text="{Binding HumanityLoss, StringFormat='ПЧ: {0}'}" Foreground="#FF3333" FontSize="11"/>
+                                                                <TextBlock Text="{Binding Slots, StringFormat='Слотов: {0}'}" Foreground="#999999" FontSize="11"/>
+                                                            </StackPanel>
+                                                            <Button Grid.Column="1" Content="УСТАНОВИТЬ" Foreground="#00FFCC" Background="#1A1A1A" BorderBrush="#00FFCC" BorderThickness="1" Padding="10,5" Cursor="Hand" Tag="{Binding}" Click="BtnInstallCyber_Click" VerticalAlignment="Center"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="1" BorderBrush="#FF3333" BorderThickness="1" Background="#111111" Padding="10" Margin="0,15,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="СОЗДАТЬ СВОЙ ИМПЛАНТ" Foreground="#FF3333" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+
+                                    <Grid Margin="0,0,0,5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="Название" Foreground="#999999" FontSize="11"/>
+                                            <TextBox Text="{Binding NewCyberName, UpdateSourceTrigger=PropertyChanged}" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" Padding="2"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Зависимость (Напр. Киберглаз)" Foreground="#999999" FontSize="11"/>
+                                            <TextBox Text="{Binding NewCyberRequires, UpdateSourceTrigger=PropertyChanged}" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" Padding="2"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <TextBlock Text="Эффект / Описание" Foreground="#999999" FontSize="11"/>
+                                    <TextBox Text="{Binding NewCyberDesc, UpdateSourceTrigger=PropertyChanged}" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" Margin="0,0,0,5" Height="40" AcceptsReturn="True" TextWrapping="Wrap" Padding="2"/>
+
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="1.5*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="ПЧ (Напр. 2d6)" Foreground="#999999" FontSize="11"/>
+                                            <TextBox Text="{Binding NewCyberHL, UpdateSourceTrigger=PropertyChanged}" Background="#050505" Foreground="#FF3333" BorderBrush="#444444" BorderThickness="1" Padding="2"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Занимает слотов" Foreground="#999999" FontSize="11"/>
+                                            <TextBox Text="{Binding NewCyberSlots, UpdateSourceTrigger=PropertyChanged}" Background="#050505" Foreground="#00FFCC" BorderBrush="#444444" BorderThickness="1" Padding="2"/>
+                                        </StackPanel>
+                                        <CheckBox Grid.Column="4" IsChecked="{Binding NewCyberIsFoundation}" Content="Это Базовый имплант" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Bottom" Margin="0,0,0,3" Style="{StaticResource NeonCheckBox}"/>
+                                    </Grid>
+
+                                    <Button Content="ДОБАВИТЬ В БАЗУ" Background="#FF3333" Foreground="#050505" FontWeight="Bold" FontSize="14" Padding="5" Cursor="Hand" Click="BtnCreateCustomCyber_Click"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Padding="10">
+                            <StackPanel>
+                                <TextBlock Text="УСТАНОВЛЕНО В БЛОК" Foreground="#00FFCC" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding CurrentCyberBlock.InstalledItems}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#1A1A1A" BorderBrush="#00FFCC" BorderThickness="1" Margin="0,0,0,5" Padding="5">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock Text="{Binding Name}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="13" TextWrapping="Wrap"/>
+                                                            <TextBlock Text="{Binding Slots, StringFormat='Слотов: {0}'}" Foreground="#00FFCC" FontSize="11"/>
+                                                        </StackPanel>
+                                                        <Button Grid.Column="1" Content="УДАЛИТЬ" Foreground="#FF3333" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="1" Padding="10,5" Cursor="Hand" Tag="{Binding}" Click="BtnUninstallCyber_Click" VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Border>
     </Grid>
 </Window>
