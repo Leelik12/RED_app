@@ -223,13 +223,13 @@ namespace CyberpunkRED_Generator
                 charData.Lifepath["Личность"] = CbPersonality.SelectedItem?.ToString();
                 charData.Lifepath["Стиль одежды"] = CbClothing.SelectedItem?.ToString();
                 charData.Lifepath["Прическа"] = CbHair.SelectedItem?.ToString();
+                charData.Lifepath["Отличительная черта"] = CbFeature.SelectedItem?.ToString();
                 charData.Lifepath["Ценность"] = CbValue.SelectedItem?.ToString();
                 charData.Lifepath["Отношение к людям"] = CbPeople.SelectedItem?.ToString();
                 charData.Lifepath["Самый ценный человек"] = CbPerson.SelectedItem?.ToString();
                 charData.Lifepath["Самая ценная вещь"] = CbPossession.SelectedItem?.ToString();
                 charData.Lifepath["Семейное происхождение"] = CbFamilyBackground.SelectedItem?.ToString();
                 charData.Lifepath["Окружение детства"] = CbChildhood.SelectedItem?.ToString();
-                charData.Lifepath["Родители"] = CbParents.SelectedItem?.ToString();
                 charData.Lifepath["Трагедия в семье"] = CbFamilyCrisis.SelectedItem?.ToString();
                 charData.Lifepath["Цель в жизни"] = CbLifeGoal.SelectedItem?.ToString();
 
@@ -419,15 +419,16 @@ namespace CyberpunkRED_Generator
         {
             CbOrigin.ItemsSource = CoreDataBase.Origins; CbPersonality.ItemsSource = CoreDataBase.Personalities;
             CbClothing.ItemsSource = CoreDataBase.Clothing; CbHair.ItemsSource = CoreDataBase.Hair;
+            CbFeature.ItemsSource = CoreDataBase.Features;
             CbValue.ItemsSource = CoreDataBase.Values; CbPeople.ItemsSource = CoreDataBase.People;
             CbPerson.ItemsSource = CoreDataBase.Persons; CbPossession.ItemsSource = CoreDataBase.Possessions;
             CbFamilyBackground.ItemsSource = CoreDataBase.FamilyBackground; CbChildhood.ItemsSource = CoreDataBase.ChildhoodEnvironment;
-            CbParents.ItemsSource = CoreDataBase.Parents; CbFamilyCrisis.ItemsSource = CoreDataBase.FamilyCrisis;
+            CbFamilyCrisis.ItemsSource = CoreDataBase.FamilyCrisis;
             CbLifeGoal.ItemsSource = CoreDataBase.LifeGoals;
 
             CbOrigin.SelectedIndex = 0; CbPersonality.SelectedIndex = 0; CbClothing.SelectedIndex = 0; CbHair.SelectedIndex = 0;
-            CbValue.SelectedIndex = 0; CbPeople.SelectedIndex = 0; CbPerson.SelectedIndex = 0; CbPossession.SelectedIndex = 0;
-            CbFamilyBackground.SelectedIndex = 0; CbChildhood.SelectedIndex = 0; CbParents.SelectedIndex = 0;
+            CbFeature.SelectedIndex = 0; CbValue.SelectedIndex = 0; CbPeople.SelectedIndex = 0; CbPerson.SelectedIndex = 0;
+            CbPossession.SelectedIndex = 0; CbFamilyBackground.SelectedIndex = 0; CbChildhood.SelectedIndex = 0;
             CbFamilyCrisis.SelectedIndex = 0; CbLifeGoal.SelectedIndex = 0;
         }
 
@@ -435,10 +436,11 @@ namespace CyberpunkRED_Generator
         {
             CbOrigin.SelectedIndex = _rnd.Next(0, 10); CbPersonality.SelectedIndex = _rnd.Next(0, 10);
             CbClothing.SelectedIndex = _rnd.Next(0, 10); CbHair.SelectedIndex = _rnd.Next(0, 10);
+            CbFeature.SelectedIndex = _rnd.Next(0, 10);
             CbValue.SelectedIndex = _rnd.Next(0, 10); CbPeople.SelectedIndex = _rnd.Next(0, 10);
             CbPerson.SelectedIndex = _rnd.Next(0, 10); CbPossession.SelectedIndex = _rnd.Next(0, 10);
             CbFamilyBackground.SelectedIndex = _rnd.Next(0, 10); CbChildhood.SelectedIndex = _rnd.Next(0, 10);
-            CbParents.SelectedIndex = _rnd.Next(0, 10); CbFamilyCrisis.SelectedIndex = _rnd.Next(0, 10);
+            CbFamilyCrisis.SelectedIndex = _rnd.Next(0, 10);
             CbLifeGoal.SelectedIndex = _rnd.Next(0, 10);
         }
 
@@ -448,9 +450,9 @@ namespace CyberpunkRED_Generator
 
             string familyDesc = CoreDataBase.FamilyBackgroundDesc[CbFamilyBackground.SelectedIndex];
             TxtLifepathLog.Text = $"> АНАЛИЗ БИОМЕТРИИ И ИСТОРИИ...\n\n" +
-                                  $"> ПРОИСХОЖДЕНИЕ И СЕМЬЯ:\n  - Корни: {CbOrigin.SelectedItem}\n  - Семья: {CbFamilyBackground.SelectedItem}\n  - Описание: {familyDesc}\n  - Родители: {CbParents.SelectedItem}\n  - Детство: {CbChildhood.SelectedItem}\n  - Трагедия: {CbFamilyCrisis.SelectedItem}\n\n" +
+                                  $"> ПРОИСХОЖДЕНИЕ И СЕМЬЯ:\n  - Корни: {CbOrigin.SelectedItem}\n  - Семья: {CbFamilyBackground.SelectedItem}\n  - Описание: {familyDesc}\n  - Детство: {CbChildhood.SelectedItem}\n  - Трагедия: {CbFamilyCrisis.SelectedItem}\n\n" +
                                   $"> ХАРАКТЕР: {CbPersonality.SelectedItem}\n\n" +
-                                  $"> ВНЕШНИЙ ВИД:\n  - Стиль одежды: {CbClothing.SelectedItem}\n  - Прическа: {CbHair.SelectedItem}\n\n" +
+                                  $"> ВНЕШНИЙ ВИД:\n  - Стиль одежды: {CbClothing.SelectedItem}\n  - Прическа: {CbHair.SelectedItem}\n  - Особенность: {CbFeature.SelectedItem}\n\n" + // <--- ДОБАВЛЕНО
                                   $"> ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ:\n  - Отношение к людям: {CbPeople.SelectedItem}\n  - Ценность: {CbValue.SelectedItem}\n  - Важный человек: {CbPerson.SelectedItem}\n  - Важная вещь: {CbPossession.SelectedItem}\n\n" +
                                   $"> ЦЕЛЬ В ЖИЗНИ: {CbLifeGoal.SelectedItem}\n\n> СТАТУС: ФОРМИРОВАНИЕ ЗАВЕРШЕНО.";
         }
@@ -724,6 +726,91 @@ namespace CyberpunkRED_Generator
         private void UpdatePointsCounter()
         {
             if (TxtSkillPoints != null) TxtSkillPoints.Text = (MAX_SKILL_POINTS - GetSpentPoints()).ToString();
+        }
+        // ==========================================
+        // РЕЖИМ ЛЕНТЯЯ (ГЕНЕРАЦИЯ ПРОМПТА ДЛЯ ИИ)
+        // ==========================================
+        // ==========================================
+        // РЕЖИМ ЛЕНТЯЯ (ГЕНЕРАЦИЯ ПРОМПТА ДЛЯ ИИ)
+        // ==========================================
+        private void BtnLazyMode_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder prompt = new StringBuilder();
+
+            // Жесткие инструкции для нейросети (Системный промпт)
+            prompt.AppendLine("Сгенерируй детальную, глубокую и атмосферную предысторию (квенту) для моего персонажа в мире настольной ролевой игры Cyberpunk RED.\n");
+            prompt.AppendLine("ОБЯЗАТЕЛЬНЫЕ УСЛОВИЯ:");
+            prompt.AppendLine("1. Повествование СТРОГО от первого лица («Я вырос...», «Моя семья...»).");
+            prompt.AppendLine("2. Объем должен быть большим и детальным (около 6-8 объемных абзацев, в 2 раза больше стандартного ответа). Опиши эмоции, мотивацию и покажи тяжелый путь от прошлого к жизни наемника (эджраннера) в Найт-Сити.");
+            prompt.AppendLine("3. Максимально точно следуй предоставленным фактам из блока «ЖИЗНЕННЫЙ ПУТЬ». Не искажай их, а гармонично вплетай в повествование, объясняя причины и следствия.");
+            prompt.AppendLine("4. Придумай подходящие киберпанк-имена или прозвища АБСОЛЮТНО ВСЕМ упомянутым людям (друзьям, врагам, бывшим, напарникам, родителям), если они фигурируют в истории.\n");
+
+            prompt.AppendLine($"Имя моего персонажа: {(string.IsNullOrWhiteSpace(TxtCharName.Text) ? "Неизвестно (придумай крутое имя/прозвище)" : TxtCharName.Text.Trim())}");
+            prompt.AppendLine($"Роль (Класс): {CbRole.SelectedItem}\n");
+
+            prompt.AppendLine("=== ХАРАКТЕРИСТИКИ ===");
+            prompt.AppendLine($"ИНТ: {GetStat(TxtInt)}, РЕА: {GetStat(TxtRef)}, ЛВК: {GetStat(TxtDex)}, ТЕХ: {GetStat(TxtTech)}, ХАР: {GetStat(TxtCool)}, ВОЛЯ: {GetStat(TxtWill)}, УДЧ: {GetStat(TxtLuck)}, СКО: {GetStat(TxtMove)}, ТЕЛ: {GetStat(TxtBody)}, ЭМП: {GetStat(TxtEmp)}\n");
+
+            prompt.AppendLine("=== ЖИЗНЕННЫЙ ПУТЬ ===");
+            prompt.AppendLine($"- Культурное происхождение: {CbOrigin.SelectedItem}");
+            prompt.AppendLine($"- Личность: {CbPersonality.SelectedItem}");
+            prompt.AppendLine($"- Стиль одежды: {CbClothing.SelectedItem}");
+            prompt.AppendLine($"- Прическа: {CbHair.SelectedItem}");
+            prompt.AppendLine($"- Особенность: {CbFeature.SelectedItem}");
+            prompt.AppendLine($"- Что ценит больше всего: {CbValue.SelectedItem}");
+            prompt.AppendLine($"- Отношение к людям: {CbPeople.SelectedItem}");
+            prompt.AppendLine($"- Самый ценный человек: {CbPerson.SelectedItem}");
+            prompt.AppendLine($"- Самая ценная вещь: {CbPossession.SelectedItem}");
+            prompt.AppendLine($"- Семейное происхождение: {CbFamilyBackground.SelectedItem}");
+            prompt.AppendLine($"- Окружение детства: {CbChildhood.SelectedItem}");
+            prompt.AppendLine($"- Трагедия в семье: {CbFamilyCrisis.SelectedItem}");
+            prompt.AppendLine($"- Цель в жизни: {CbLifeGoal.SelectedItem}\n");
+
+            prompt.AppendLine("=== РОЛЕВОЙ ЖИЗНЕННЫЙ ПУТЬ ===");
+            foreach (var cb in _dynamicRoleComboBoxes)
+            {
+                if (cb.SelectedItem != null) prompt.AppendLine($"- {cb.Tag}: {cb.SelectedItem}");
+            }
+            prompt.AppendLine();
+
+            prompt.AppendLine("=== СОЦИАЛЬНЫЕ СВЯЗИ ===");
+            if (CbCountFriends.SelectedIndex > 0)
+            {
+                prompt.AppendLine("Друзья:");
+                if (CbCountFriends.SelectedIndex >= 1) prompt.AppendLine($"  1. {CbF1.SelectedItem}");
+                if (CbCountFriends.SelectedIndex >= 2) prompt.AppendLine($"  2. {CbF2.SelectedItem}");
+                if (CbCountFriends.SelectedIndex >= 3) prompt.AppendLine($"  3. {CbF3.SelectedItem}");
+            }
+
+            if (CbCountEnemies.SelectedIndex > 0)
+            {
+                prompt.AppendLine("Враги:");
+                if (CbCountEnemies.SelectedIndex >= 1) prompt.AppendLine($"  1. {CbE1Who.SelectedItem}. Причина: {CbE1Cause.SelectedItem}. Намерения: {CbE1Action.SelectedItem}");
+                if (CbCountEnemies.SelectedIndex >= 2) prompt.AppendLine($"  2. {CbE2Who.SelectedItem}. Причина: {CbE2Cause.SelectedItem}. Намерения: {CbE2Action.SelectedItem}");
+                if (CbCountEnemies.SelectedIndex >= 3) prompt.AppendLine($"  3. {CbE3Who.SelectedItem}. Причина: {CbE3Cause.SelectedItem}. Намерения: {CbE3Action.SelectedItem}");
+            }
+
+            if (CbCountLove.SelectedIndex > 0)
+            {
+                prompt.AppendLine("Трагические романы:");
+                if (CbCountLove.SelectedIndex >= 1) prompt.AppendLine($"  1. {CbL1.SelectedItem}");
+                if (CbCountLove.SelectedIndex >= 2) prompt.AppendLine($"  2. {CbL2.SelectedItem}");
+                if (CbCountLove.SelectedIndex >= 3) prompt.AppendLine($"  3. {CbL3.SelectedItem}");
+            }
+
+            TxtLazyPrompt.Text = prompt.ToString();
+            LazyModeOverlay.Visibility = Visibility.Visible;
+        }
+
+        private void BtnCloseLazy_Click(object sender, RoutedEventArgs e)
+        {
+            LazyModeOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnCopyLazy_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(TxtLazyPrompt.Text);
+            MessageBox.Show("Промпт успешно скопирован в буфер обмена!\n\nПросто откройте любимую нейросеть (ChatGPT, Claude, YandexGPT) и вставьте текст (Ctrl+V).", "СКОПИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

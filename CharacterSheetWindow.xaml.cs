@@ -12,14 +12,6 @@ using System.Windows.Media;
 
 namespace CyberpunkRED_Generator
 {
-    // Новый класс для хранения любых баффов и дебаффов навыков
-    public class SkillModifierDef
-    {
-        public string SkillName { get; set; } // Какому навыку даем бонус (или "Все")
-        public int Value { get; set; }        // Значение (+1, -4 и т.д.)
-        public string ModType { get; set; } = "Normal"; // "Normal", "Visual", "Audio"
-    }
-
     public class CriticalInjuryItem : INotifyPropertyChanged
     {
         public string Name { get; set; }

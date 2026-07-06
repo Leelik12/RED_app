@@ -336,6 +336,8 @@
                                     <ComboBox x:Name="CbClothing" SelectionChanged="UpdateLifepathLog"/>
                                     <TextBlock Text="Прическа:" Foreground="#999999" Margin="0,0,0,5"/>
                                     <ComboBox x:Name="CbHair" SelectionChanged="UpdateLifepathLog"/>
+                                    <TextBlock Text="Особенность:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="CbFeature" SelectionChanged="UpdateLifepathLog"/>
                                     <TextBlock Text="Что ты ценишь больше всего:" Foreground="#999999" Margin="0,0,0,5"/>
                                     <ComboBox x:Name="CbValue" SelectionChanged="UpdateLifepathLog"/>
                                     <TextBlock Text="Как ты относишься к людям:" Foreground="#999999" Margin="0,0,0,5"/>
@@ -348,8 +350,6 @@
                                     <ComboBox x:Name="CbFamilyBackground" SelectionChanged="UpdateLifepathLog"/>
                                     <TextBlock Text="Окружение детства:" Foreground="#999999" Margin="0,0,0,5"/>
                                     <ComboBox x:Name="CbChildhood" SelectionChanged="UpdateLifepathLog"/>
-                                    <TextBlock Text="Что случилось с родителями:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbParents" SelectionChanged="UpdateLifepathLog"/>
                                     <TextBlock Text="Трагедия в семье:" Foreground="#999999" Margin="0,0,0,5"/>
                                     <ComboBox x:Name="CbFamilyCrisis" SelectionChanged="UpdateLifepathLog"/>
                                     <TextBlock Text="Твоя цель в жизни:" Foreground="#999999" Margin="0,0,0,5"/>
@@ -507,7 +507,7 @@
                                             <ComboBox x:Name="CbE1Who" SelectionChanged="UpdateRelationsLog"/>
                                             <TextBlock Text="Причина вражды:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE1Cause" SelectionChanged="UpdateRelationsLog"/>
-                                            <TextBlock Text="Кто кого ненавидит:" Foreground="#999999"/>
+                                            <TextBlock Text="Как он нападёт:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE1Hate" SelectionChanged="UpdateRelationsLog"/>
                                             <TextBlock Text="Что они сделают:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE1Action" SelectionChanged="UpdateRelationsLog"/>
@@ -518,7 +518,7 @@
                                             <ComboBox x:Name="CbE2Who" SelectionChanged="UpdateRelationsLog"/>
                                             <TextBlock Text="Причина вражды:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE2Cause" SelectionChanged="UpdateRelationsLog"/>
-                                            <TextBlock Text="Кто кого ненавидит:" Foreground="#999999"/>
+                                            <TextBlock Text="Как он нападёт:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE2Hate" SelectionChanged="UpdateRelationsLog"/>
                                             <TextBlock Text="Что они сделают:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE2Action" SelectionChanged="UpdateRelationsLog"/>
@@ -529,7 +529,7 @@
                                             <ComboBox x:Name="CbE3Who" SelectionChanged="UpdateRelationsLog"/>
                                             <TextBlock Text="Причина вражды:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE3Cause" SelectionChanged="UpdateRelationsLog"/>
-                                            <TextBlock Text="Кто кого ненавидит:" Foreground="#999999"/>
+                                            <TextBlock Text="Как он нападёт:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE3Hate" SelectionChanged="UpdateRelationsLog"/>
                                             <TextBlock Text="Что они сделают:" Foreground="#999999"/>
                                             <ComboBox x:Name="CbE3Action" SelectionChanged="UpdateRelationsLog"/>
@@ -701,11 +701,33 @@
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
                         <Button Content="НАЗАД" Style="{StaticResource CyberButton}" Click="BtnPrevStep_Click" Margin="0,0,10,0"/>
+                        <Button Content="РЕЖИМ ЛЕНТЯЯ (ПРОМПТ ДЛЯ ИИ)" Background="#00D4B2" Foreground="#000000" FontWeight="Bold" FontSize="16" BorderThickness="0" Padding="15,10" Cursor="Hand" Click="BtnLazyMode_Click" Margin="0,0,10,0"/>
                         <Button Content="ЗАВЕРШИТЬ СОЗДАНИЕ" Style="{StaticResource CyberButton}" Click="BtnFinish_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
 
         </TabControl>
+        <Border x:Name="LazyModeOverlay" Background="#E5050505" Visibility="Collapsed" Panel.ZIndex="100">
+            <Border Background="#000000" BorderBrush="#00D4B2" BorderThickness="2" Width="850" Height="650" CornerRadius="4" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="РЕЖИМ ЛЕНТЯЯ: СГЕНЕРИРОВАТЬ ИСТОРИЮ ЧЕРЕЗ ИИ" Foreground="#00D4B2" FontSize="20" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="Скопируй этот текст и отправь в ChatGPT, Claude или любую другую нейросеть." Foreground="#999999" FontSize="14" Margin="0,0,0,15" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Padding="0,25,0,0"/>
+
+                    <TextBox x:Name="TxtLazyPrompt" Grid.Row="1" Background="#1A1A1A" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14" Padding="10" IsReadOnly="True" FontFamily="Consolas"/>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                        <Button Content="ЗАКРЫТЬ" Style="{StaticResource CyberButton}" Click="BtnCloseLazy_Click" Margin="0,0,10,0"/>
+                        <Button Content="СКОПИРОВАТЬ ТЕКСТ" Background="#00D4B2" Foreground="#000000" FontWeight="Bold" FontSize="16" BorderThickness="0" Padding="15,10" Cursor="Hand" Click="BtnCopyLazy_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
     </Grid>
 </Window>
