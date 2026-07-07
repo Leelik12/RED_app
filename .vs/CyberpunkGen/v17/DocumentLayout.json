@@ -3,32 +3,8 @@
   "WorkspaceRootPath": "G:\\GitRepos\\RED_app\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|g:\\gitrepos\\red_app\\gmscreenwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:gmscreenwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\gmscreenwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|g:\\gitrepos\\red_app\\gmscreenwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:gmscreenwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactersheetwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactersheetwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactersheetwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactersheetwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\coredatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:coredatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactergenerationwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
-      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactergenerationwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactergenerationwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactergenerationwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,6 +13,30 @@
     {
       "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactergenerationwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactergenerationwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactersheetwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactersheetwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\gmscreenwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:gmscreenwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactersheetwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactersheetwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\charactergenerationwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:charactergenerationwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|G:\\GitRepos\\RED_app\\coredatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{05195DF0-174C-4B26-82D6-421E482ACF76}|CyberpunkGen.csproj|solutionrelative:coredatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,20 +46,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "CoreDataBase.cs",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\CoreDataBase.cs",
               "RelativeDocumentMoniker": "CoreDataBase.cs",
               "ToolTip": "G:\\GitRepos\\RED_app\\CoreDataBase.cs",
               "RelativeToolTip": "CoreDataBase.cs",
-              "ViewState": "AQIAABIBAAAAAAAAAAAQwLkFAAABAAAA",
+              "ViewState": "AQIAABcBAAAAAAAAAAAYwCQEAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-19T16:04:39.877Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -67,7 +68,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "GMScreenWindow.xaml",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\GMScreenWindow.xaml",
               "RelativeDocumentMoniker": "GMScreenWindow.xaml",
@@ -79,20 +80,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "GMScreenWindow.xaml.cs",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\GMScreenWindow.xaml.cs",
               "RelativeDocumentMoniker": "GMScreenWindow.xaml.cs",
               "ToolTip": "G:\\GitRepos\\RED_app\\GMScreenWindow.xaml.cs",
               "RelativeToolTip": "GMScreenWindow.xaml.cs",
-              "ViewState": "AQIAAN0BAAAAAAAAAAAgwAMCAAAJAAAA",
+              "ViewState": "AQIAAGkCAAAAAAAAAAAQwI4CAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-06T13:41:13.52Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "CharacterSheetWindow.xaml",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\CharacterSheetWindow.xaml",
               "RelativeDocumentMoniker": "CharacterSheetWindow.xaml",
@@ -104,32 +105,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "CharacterSheetWindow.xaml.cs",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\CharacterSheetWindow.xaml.cs",
               "RelativeDocumentMoniker": "CharacterSheetWindow.xaml.cs",
               "ToolTip": "G:\\GitRepos\\RED_app\\CharacterSheetWindow.xaml.cs",
               "RelativeToolTip": "CharacterSheetWindow.xaml.cs",
-              "ViewState": "AQIAAPwDAAAAAAAAAAAwwE0FAAABAAAA",
+              "ViewState": "AQIAAKQDAAAAAAAAAAA4wDYFAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-22T16:06:22.083Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "CharacterGenerationWindow.xaml.cs",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\CharacterGenerationWindow.xaml.cs",
               "RelativeDocumentMoniker": "CharacterGenerationWindow.xaml.cs",
               "ToolTip": "G:\\GitRepos\\RED_app\\CharacterGenerationWindow.xaml.cs",
               "RelativeToolTip": "CharacterGenerationWindow.xaml.cs",
-              "ViewState": "AQIAANQCAAAAAAAAAADwv/wCAABSAAAA",
+              "ViewState": "AQIAALgAAAAAAAAAAAAywBcDAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-19T14:08:02.067Z"
+              "WhenOpened": "2026-06-19T14:08:02.067Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "CharacterGenerationWindow.xaml",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\CharacterGenerationWindow.xaml",
               "RelativeDocumentMoniker": "CharacterGenerationWindow.xaml",
@@ -141,26 +143,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "G:\\GitRepos\\RED_app\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAADwvy8AAAAJAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC8AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-19T14:00:40.722Z"
+              "WhenOpened": "2026-06-19T14:00:40.722Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 2,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "G:\\GitRepos\\RED_app\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
               "ToolTip": "G:\\GitRepos\\RED_app\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-06-19T13:45:45.163Z"
+              "WhenOpened": "2026-06-19T13:45:45.163Z",
+              "EditorCaption": ""
             }
           ]
         }

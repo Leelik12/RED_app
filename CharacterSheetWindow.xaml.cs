@@ -23,7 +23,6 @@ namespace CyberpunkRED_Generator
         public string EffectText { get; set; }
         public int DeathSavePenalty { get; set; }
 
-        // ДОБАВЛЕНО: Список модификаторов для UI-класса
         public List<SkillModifierDef> SkillModifiers { get; set; } = new List<SkillModifierDef>();
 
         public string TooltipText => $"{Description}\n\nЭФФЕКТ РАНЕНИЯ:\n{EffectText}\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nПервая помощь: {QuickFix}\nЛечение: {Treatment}";
@@ -41,7 +40,7 @@ namespace CyberpunkRED_Generator
 
         public bool IsCustom { get; set; } = false;
         public bool IsFoundation { get; set; } = false;
-        public bool IsPaired { get; set; } = false; // ДОБАВЛЕНО: Сопряженный имплант
+        public bool IsPaired { get; set; } = false;
         public string Requires { get; set; } = "";
 
         public List<SkillModifierDef> SkillModifiers { get; set; } = new List<SkillModifierDef>();
@@ -57,7 +56,6 @@ namespace CyberpunkRED_Generator
     {
         private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
 
-        // Автоматически проверяет, есть ли в установленных имплантах "База"
         public bool IsInstalled => InstalledItems.Any(i => i.IsFoundation);
 
         private int _usedSlots; public int UsedSlots { get => _usedSlots; set { _usedSlots = value; OnPropertyChanged(); OnPropertyChanged(nameof(SlotsText)); } }
@@ -86,7 +84,7 @@ namespace CyberpunkRED_Generator
 
         private void InstalledItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(IsInstalled)); // Зажигает чекбокс при добавлении базы
+            OnPropertyChanged(nameof(IsInstalled)); // чекбоксик если ставим типа нейралинка или киберруки
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -147,7 +145,7 @@ namespace CyberpunkRED_Generator
 
             int val = BaseValue - ArmorPenalty + ImplantModifier + WoundPenalty;
 
-            // СКО (MOVE) не может опуститься ниже 1 из-за ранений/брони
+            // ско не может опуститься ниже 1 из-за ранений/брони
             if ((Name == "СКО" || Name == "MOVE") && val < 1) val = 1;
 
             CurrentValue = val;
@@ -193,10 +191,10 @@ namespace CyberpunkRED_Generator
         private int _audioMod;
         public int AudioMod { get => _audioMod; set { _audioMod = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
 
-        // Общий численный модификатор (Травмы + Броня + Обычные импланты)
+        // общий численный модификатор травмы + броня + импланты
         public int GeneralMod => WoundPenalty + EquipmentMod;
 
-        // Строка для колонки "ДОП" (Только для чтения интерфейсом)
+        // строка для колонки "ДОП"
         public string DisplayModifier
         {
             get
@@ -209,10 +207,10 @@ namespace CyberpunkRED_Generator
             }
         }
 
-        // Общая база в виде числа (используется для сохранения в JSON)
+        // число используется для сохранения в json
         public int Base => StatValue + Level + GeneralMod;
 
-        // Строка для колонки "СУМ" (УР + СТАТ + ДОП)
+        // cтрока для колонки сумм ур+стат+доп
         public string DisplayBase
         {
             get
@@ -259,7 +257,7 @@ namespace CyberpunkRED_Generator
         private int _currentHumanity; public int CurrentHumanity { get => _currentHumanity; set { _currentHumanity = value; OnPropertyChanged(); UpdateEmp(); } }
         private int _maxHumanity; public int MaxHumanity { get => _maxHumanity; set { _maxHumanity = value; OnPropertyChanged(); } }
 
-        // --- СВОЙСТВА ЗДОРОВЬЯ И ТРАВМ ---
+        // здоровье и травмы
         private int _currentHP;
         public int CurrentHP { get => _currentHP; set { if (_currentHP == value) return; _currentHP = value; OnPropertyChanged(); RecalculatePenalties(); } }
 
@@ -292,7 +290,6 @@ namespace CyberpunkRED_Generator
         private string _lifestyle; public string Lifestyle { get => _lifestyle; set { _lifestyle = value; OnPropertyChanged(); } }
 
         private int _regeneration; public int Regeneration { get => _regeneration; set { _regeneration = value; OnPropertyChanged(); } }
-        // 1. Меняем тип Инициативы на string
         private string _initiative; public string Initiative { get => _initiative; set { _initiative = value; OnPropertyChanged(); } }
         public void UpdateDerivedCombatStats()
         {
@@ -311,16 +308,14 @@ namespace CyberpunkRED_Generator
                 bool hasKerenzikov = CyberwareBlocks?.Any(b => b.InstalledItems.Any(i => i.Name == "Керензиков")) == true;
                 bool hasSandevistan = CyberwareBlocks?.Any(b => b.InstalledItems.Any(i => i.Name == "Сандевистан")) == true;
 
-                if (hasKerenzikov) baseInit += 2; // Пассивно добавляем Керензиков
+                if (hasKerenzikov) baseInit += 2;
 
                 if (hasSandevistan)
                 {
-                    // Если есть Сандевистан, показываем "База / База+3 акт"
-                    Initiative = $"{baseInit} / {baseInit + 3}акт";
+                    Initiative = $"{baseInit} / {baseInit + 3} акт";
                 }
                 else
                 {
-                    // Иначе просто базовое значение (с Керензиковым или без)
                     Initiative = baseInit.ToString();
                 }
             }
@@ -425,7 +420,6 @@ namespace CyberpunkRED_Generator
                 BaseDeathSave = effectiveBody;
             }
 
-            // --- РАСЧЕТ МАКСИМАЛЬНОЙ ЧЕЛОВЕЧНОСТИ --- [ИСПРАВЛЕНИЕ 6]
             int baseEmp = Stats != null && Stats.ContainsKey("EMP") ? Stats["EMP"] : (Stats != null && Stats.ContainsKey("ЭМП") ? Stats["ЭМП"] : 5);
             int maxHum = baseEmp * 10;
 
@@ -439,7 +433,6 @@ namespace CyberpunkRED_Generator
             MaxHumanity = maxHum;
             if (CurrentHumanity > MaxHumanity) CurrentHumanity = MaxHumanity;
 
-            // --- СЕНСОРНЫЙ МАССИВ (СЛОТЫ КИБЕРАУДИО) --- [ИСПРАВЛЕНИЕ 7]
             var audioBlock = CyberwareBlocks?.FirstOrDefault(b => b.Name == "КИБЕРАУДИО (CYBERAUDIO)");
             if (audioBlock != null)
             {
@@ -496,7 +489,6 @@ namespace CyberpunkRED_Generator
                 }
             }
 
-            // Устранение дубликатов для имплантов
             var appliedCyberwareMods = new HashSet<string>();
             foreach (var cw in installedCyberware)
             {
@@ -540,14 +532,14 @@ namespace CyberpunkRED_Generator
             UpdateDerivedCombatStats();
         }
 
-        // --- УПРАВЛЕНИЕ ИМПЛАНТАМИ ---
+        // управление имплантами
         private string _overlayTitle; public string OverlayTitle { get => _overlayTitle; set { _overlayTitle = value; OnPropertyChanged(); } }
         public ObservableCollection<CyberwareDef> AvailableCyberware { get; set; } = new ObservableCollection<CyberwareDef>();
 
         private CyberwareBlockItem _currentCyberBlock;
         public CyberwareBlockItem CurrentCyberBlock { get => _currentCyberBlock; set { _currentCyberBlock = value; OnPropertyChanged(); } }
 
-        // --- ДАННЫЕ ДЛЯ ФОРМЫ КАСТОМА --- [ИСПРАВЛЕНИЯ 3 и 4]
+        // кастомка имплантов
         public List<string> AllSkillNames => CoreDataBase.AllSkills.Select(s => s.Name).OrderBy(n => n).ToList();
         public List<string> AllModTypes => new List<string> { "Обычный (Normal)", "Зрение (Visual)", "Слух (Audio)" };
         public List<string> AvailableRequires => CoreDataBase.AllCyberware.Where(c => c.IsFoundation).Select(c => c.Name).Distinct().ToList();
@@ -560,7 +552,7 @@ namespace CyberpunkRED_Generator
         private bool _newCyberIsPaired; public bool NewCyberIsPaired { get => _newCyberIsPaired; set { _newCyberIsPaired = value; OnPropertyChanged(); } }
         private string _newCyberRequires; public string NewCyberRequires { get => _newCyberRequires; set { _newCyberRequires = value; OnPropertyChanged(); } }
 
-        // --- МОДИФИКАТОРЫ ДЛЯ КАСТОМА ---
+        // модификаторы для имплантов
         public ObservableCollection<SkillModifierDef> NewCyberModifiers { get; set; } = new ObservableCollection<SkillModifierDef>();
 
         private string _selectedSkillForMod; public string SelectedSkillForMod { get => _selectedSkillForMod; set { _selectedSkillForMod = value; OnPropertyChanged(); } }
@@ -660,7 +652,7 @@ namespace CyberpunkRED_Generator
                                     MovePenalty = def.MovePenalty,
                                     DeathSavePenalty = def.DeathSavePenalty,
                                     EffectText = def.EffectText,
-                                    SkillModifiers = def.SkillModifiers // ДОБАВЛЕНО ЗДЕСЬ
+                                    SkillModifiers = def.SkillModifiers
                                 });
                             }
                         }
@@ -678,7 +670,6 @@ namespace CyberpunkRED_Generator
                     }
                     else
                     {
-                        // Строгий порядок: 3 колонки, 4 строки (слева-направо, сверху-вниз)
                         string[] names = {
                             "НЕЙРОИНТЕРФЕЙС (NEURALWARE)", "КИБЕРАУДИО (CYBERAUDIO)", "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
                             "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)", "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)", "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
@@ -712,7 +703,6 @@ namespace CyberpunkRED_Generator
                         int val = _originalData.Stats.ContainsKey(key) ? _originalData.Stats[key] : (_originalData.Stats.ContainsKey(s) ? _originalData.Stats[s] : 5);
                         var stat = new SheetStat { Name = s, BaseValue = val, CurrentValue = val, Value = val };
 
-                        // ДОБАВЛЕНО ЗДЕСЬ: Слушаем изменения статов (включая штрафы от брони/ран)
                         stat.PropertyChanged += (sender, args) =>
                         {
                             if (args.PropertyName == nameof(SheetStat.CurrentValue))
@@ -769,7 +759,7 @@ namespace CyberpunkRED_Generator
 
                     viewModel.RecalculatePenalties();
 
-                    // ДОБАВЛЕНО ЗДЕСЬ: Первичный расчет при загрузке файла персонажа
+                    // первичный расчет при загрузке файла персонажа
                     viewModel.UpdateDerivedCombatStats();
 
                     this.DataContext = viewModel;
@@ -887,7 +877,6 @@ namespace CyberpunkRED_Generator
                     };
                     category.Skills.Insert(index + 1, newVariant);
 
-                    // ДОБАВЛЕНО ЗДЕСЬ: Принудительный пересчет, чтобы новый навык (например, Гитара) получил бафф от АудиоВокс!
                     vm.RecalculatePenalties();
                 }
             }
@@ -922,7 +911,7 @@ namespace CyberpunkRED_Generator
                         MovePenalty = def.MovePenalty,
                         DeathSavePenalty = def.DeathSavePenalty,
                         EffectText = def.EffectText,
-                        SkillModifiers = def.SkillModifiers // ДОБАВЛЕНО ЗДЕСЬ
+                        SkillModifiers = def.SkillModifiers 
                     });
                     vm.RecalculatePenalties();
                 }
@@ -1017,9 +1006,6 @@ namespace CyberpunkRED_Generator
             }
         }
 
-        // ==========================================
-        // БЕЗОПАСНОЕ ЗАКРЫТИЕ И ВОЗВРАТ В МЕНЮ
-        // ==========================================
         private bool _isConfirmedClose = false;
 
         protected override void OnClosing(CancelEventArgs e)
@@ -1030,7 +1016,7 @@ namespace CyberpunkRED_Generator
 
                 if (res == MessageBoxResult.Cancel)
                 {
-                    e.Cancel = true; // Игрок передумал выходить, отменяем закрытие
+                    e.Cancel = true; // передумал
                     return;
                 }
 
@@ -1038,13 +1024,11 @@ namespace CyberpunkRED_Generator
                 {
                     if (!SaveData())
                     {
-                        e.Cancel = true; // Ошибка при сохранении, отменяем выход
+                        e.Cancel = true; // ошибка отменяем выход
                         return;
                     }
                 }
 
-                // Игрок ответил "Нет" или "Да" (и успешно сохранился)
-                // Открываем главное меню, а текущее окно закроется само
                 _isConfirmedClose = true;
                 MainWindow mainMenu = new MainWindow();
                 mainMenu.Show();
@@ -1055,10 +1039,8 @@ namespace CyberpunkRED_Generator
 
         private void BtnBackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            // Метод Close() автоматически вызовет событие OnClosing, описанное выше
             this.Close();
         }
-
 
         private CyberwareBlockItem _currentCyberBlock;
 
@@ -1067,7 +1049,7 @@ namespace CyberpunkRED_Generator
             if ((sender as Button)?.Tag is CyberwareBlockItem block)
             {
                 var vm = this.DataContext as SheetViewModel;
-                vm.CurrentCyberBlock = block; // Жесткая привязка для UI (исправляет баг)
+                vm.CurrentCyberBlock = block;
                 vm.OverlayTitle = $"УПРАВЛЕНИЕ: {block.Name}";
                 vm.AvailableCyberware.Clear();
 
@@ -1085,7 +1067,7 @@ namespace CyberpunkRED_Generator
         }
 
         private void BtnCloseCyberwareManager_Click(object sender, RoutedEventArgs e) => CyberwareOverlay.Visibility = Visibility.Collapsed;
-        // Вспомогательный метод для поиска парной конечности
+
         private string GetTwinCategory(string cat)
         {
             if (cat.Contains("ПРАВЫЙ КИБЕРГЛАЗ")) return "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)";
@@ -1103,7 +1085,6 @@ namespace CyberpunkRED_Generator
 
             if ((sender as Button)?.Tag is CyberwareDef def)
             {
-                // --- НОВАЯ ПРОВЕРКА: ИМПЛАНТЫ-УСКОРИТЕЛИ ---
                 if (def.Name == "Сандевистан" || def.Name == "Керензиков")
                 {
                     bool hasSpeedware = vm.CyberwareBlocks.Any(b => b.InstalledItems.Any(i => i.Name == "Сандевистан" || i.Name == "Керензиков"));
@@ -1113,7 +1094,7 @@ namespace CyberpunkRED_Generator
                         return;
                     }
                 }
-                // 1. Умная проверка зависимостей (ищет по всему телу!)
+                // ищем по всему телу зависимости
                 if (!string.IsNullOrWhiteSpace(def.Requires))
                 {
                     bool hasRequirement = vm.CyberwareBlocks.Any(b => b.InstalledItems.Any(i => i.Name == def.Requires));
@@ -1124,7 +1105,7 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
-                // Уникальные требования
+                // уникальные требования
                 if (def.Name == "Подкожный захват" && !vm.CyberwareBlocks.Any(b => b.InstalledItems.Any(i => i.Name == "Нейролинк")))
                 {
                     MessageBox.Show("Для Подкожного захвата дополнительно требуется установленный Нейролинк!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -1143,7 +1124,7 @@ namespace CyberpunkRED_Generator
 
                 CyberwareBlockItem twinBlock = null;
 
-                // 2. Проверка сопряжения (для парных имплантов)
+                // проверка сопряжения (для парных имплантов)
                 if (def.IsPaired)
                 {
                     string twinName = GetTwinCategory(vm.CurrentCyberBlock.Name);
@@ -1163,14 +1144,14 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
-                // 3. Установка в основной слот
+                // установка в основной слот
                 if (vm.CurrentCyberBlock.UsedSlots + def.Slots > vm.CurrentCyberBlock.MaxSlots)
                 {
                     MessageBox.Show("В этом блоке не осталось свободных слотов!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                // ВСПЛЫВАЮЩЕЕ ОКНО: Запрос Потери Человечности
+                // запрос ПЧ
                 int parsedHL = 0;
                 if (def.HumanityLoss != "0" && def.HumanityLoss != "0 (—)")
                 {
@@ -1212,7 +1193,7 @@ namespace CyberpunkRED_Generator
                     prompt.Content = grid;
 
                     bool? result = prompt.ShowDialog();
-                    if (result != true) return; // Пользователь закрыл окно, отменяем установку
+                    if (result != true) return; // пользователь закрыл окно, отменяем установку
 
                     vm.CurrentHumanity -= parsedHL;
                 }
@@ -1220,7 +1201,7 @@ namespace CyberpunkRED_Generator
                 vm.CurrentCyberBlock.InstalledItems.Add(def);
                 vm.CurrentCyberBlock.UsedSlots += def.Slots;
 
-                // 4. Установка копии в парную конечность
+                // установка копии в парную конечность
                 if (def.IsPaired && twinBlock != null)
                 {
                     if (!twinBlock.InstalledItems.Any(i => i.Name == def.Name))
@@ -1239,18 +1220,16 @@ namespace CyberpunkRED_Generator
             var vm = this.DataContext as SheetViewModel;
             if ((sender as Button)?.Tag is CyberwareDef def)
             {
-                // Удаление с главной страницы или из меню
                 foreach (var block in vm.CyberwareBlocks)
                 {
                     if (block.InstalledItems.Contains(def))
                     {
                         if (def.IsFoundation) MessageBox.Show("Внимание: Вы удаляете базовый имплант. Зависимые опции могут перестать работать корректно!", "СИСТЕМНОЕ УВЕДОМЛЕНИЕ", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                        // Удаляем из текущего блока
                         block.InstalledItems.Remove(def);
                         block.UsedSlots -= def.Slots;
 
-                        // Если он был сопряженным, ищем и удаляем его в парной конечности
+                        // если он был сопряженным, ищем и удаляем его в парной конечности
                         if (def.IsPaired)
                         {
                             string twinName = GetTwinCategory(block.Name);
@@ -1273,7 +1252,6 @@ namespace CyberpunkRED_Generator
             }
         }
 
-        // --- ДОБАВЛЕНИЕ МОДИФИКАТОРОВ В ФОРМЕ ---
         private void BtnAddCustomMod_Click(object sender, RoutedEventArgs e)
         {
             var vm = this.DataContext as SheetViewModel;
@@ -1291,7 +1269,6 @@ namespace CyberpunkRED_Generator
             });
         }
 
-        // --- УДАЛЕНИЕ КАСТОМНОГО ИМПЛАНТА ---
         private void BtnDeleteCustomCyber_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.Tag is CyberwareDef def)
@@ -1300,7 +1277,7 @@ namespace CyberpunkRED_Generator
                 var res = MessageBox.Show($"Удалить кастомный имплант '{def.Name}' из базы?", "УДАЛЕНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (res == MessageBoxResult.Yes)
                 {
-                    // Удаляем со всех конечностей (даже парных), если он там уже установлен
+                    // удаляем со всех конечностей (даже парных), если он там уже установлен
                     foreach (var block in vm.CyberwareBlocks)
                     {
                         var installedItemsToRemove = block.InstalledItems.Where(i => i.Name == def.Name && i.IsCustom).ToList();
@@ -1343,14 +1320,14 @@ namespace CyberpunkRED_Generator
                 IsPaired = vm.NewCyberIsPaired,
                 Requires = vm.NewCyberRequires ?? "",
                 IsCustom = true,
-                SkillModifiers = vm.NewCyberModifiers.ToList() // Копируем список модификаторов
+                SkillModifiers = vm.NewCyberModifiers.ToList()
             };
 
             if (_originalData.CustomCyberwareList == null) _originalData.CustomCyberwareList = new List<CyberwareDef>();
             _originalData.CustomCyberwareList.Add(newItem);
             vm.AvailableCyberware.Add(newItem);
 
-            // Очищаем форму
+            // очищаем форму
             vm.NewCyberName = ""; vm.NewCyberDesc = ""; vm.NewCyberHL = ""; vm.NewCyberSlots = "1"; vm.NewCyberIsFoundation = false; vm.NewCyberIsPaired = false; vm.NewCyberRequires = "";
             vm.NewCyberModifiers.Clear();
         }

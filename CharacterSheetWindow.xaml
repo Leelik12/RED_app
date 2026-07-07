@@ -1,7 +1,7 @@
 ﻿<Window x:Class="CyberpunkRED_Generator.CharacterSheetWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ЛИСТ ПЕРСОНАЖА (ОФИЦИАЛЬНЫЙ ФОРМАТ)" Height="1000" Width="1450" Background="#050505" WindowState="Maximized" WindowStartupLocation="CenterScreen" FontFamily="Consolas">
+        Title="ТЕРМИНАЛ ПЕРСОНАЖА" Height="1000" Width="1450" Background="#050505" WindowState="Maximized" WindowStartupLocation="CenterScreen" FontFamily="Consolas">
 
     <Window.Resources>
         <Style x:Key="NeonCheckBox" TargetType="CheckBox">

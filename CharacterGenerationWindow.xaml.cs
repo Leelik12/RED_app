@@ -13,9 +13,6 @@ using System.Collections.ObjectModel;
 
 namespace CyberpunkRED_Generator
 {
-    // ==========================================
-    // КЛАССЫ ДЛЯ СОХРАНЕНИЯ В JSON
-    // ==========================================
     public class CharacterSaveData
     {
         public string Name { get; set; }
@@ -62,17 +59,15 @@ namespace CyberpunkRED_Generator
         public int Total { get; set; }
     }
 
-    // ==========================================
-    // ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ ДЛЯ НАВЫКОВ
-    // ==========================================
+
+    // вспомогательные классы для навыков
+
     public class SkillRow : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public string StatName { get; set; }
         public bool IsBasic { get; set; }
         public bool IsX2 { get; set; }
-
-        //
         public string Category { get; set; }
         public bool CanAddMultiple { get; set; }
         public bool IsVariant { get; set; }
@@ -123,9 +118,6 @@ namespace CyberpunkRED_Generator
         public ObservableCollection<SkillRow> Skills { get; set; }
     }
 
-    // ==========================================
-    // ГЛАВНЫЙ КЛАСС ОКНА
-    // ==========================================
     public partial class CharacterGenerationWindow : Window
     {
         private Random _rnd = new Random();
@@ -147,18 +139,18 @@ namespace CyberpunkRED_Generator
 
             _isLoaded = true;
 
-            // Принудительно отрисовываем стартовые значения
+            // стартовые значения
             UpdateLifepathLog(null, null);
             if (CbRole.SelectedItem != null) GenerateQuestions(CbRole.SelectedItem.ToString());
             UpdateRelationsLog(null, null);
 
-            // Связываем статы из Этапа 1 с Этапом 5 (Навыки)
+            // связываем статы из этапа 1 с этапом 5 навыки
             UpdateAllSkillTotals();
         }
 
-        // ==========================================
-        // НАВИГАЦИЯ И СОХРАНЕНИЕ
-        // ==========================================
+
+        // навигация и сохранение
+
         private void BtnNextStep_Click(object sender, RoutedEventArgs e)
         {
             if (WizardTabControl.SelectedIndex < WizardTabControl.Items.Count - 1)
@@ -195,12 +187,11 @@ namespace CyberpunkRED_Generator
             try
             {
                 var charData = new CharacterSaveData();
-                // ДОБАВЛЕНО: Проверяем, вписал ли игрок имя, если нет — даем дефолтное
                 charData.Name = string.IsNullOrWhiteSpace(TxtCharName.Text) ? "Без_имени" : TxtCharName.Text.Trim();
 
                 charData.Role = CbRole.SelectedItem?.ToString() ?? "Неизвестно";
 
-                // 1. Статы
+                // статы
                 charData.Stats["INT"] = GetStat(TxtInt);
                 charData.Stats["REF"] = GetStat(TxtRef);
                 charData.Stats["DEX"] = GetStat(TxtDex);
@@ -212,13 +203,13 @@ namespace CyberpunkRED_Generator
                 charData.Stats["BODY"] = GetStat(TxtBody);
                 charData.Stats["EMP"] = GetStat(TxtEmp);
 
-                // 2. Системные показатели
+                // системные показатели
                 charData.SystemStats["HP"] = int.Parse(TxtHp.Text);
                 charData.SystemStats["WoundedThreshold"] = int.Parse(TxtWounded.Text);
                 charData.SystemStats["DeathSave"] = int.Parse(TxtDeathSave.Text);
                 charData.SystemStats["Humanity"] = int.Parse(TxtHumanity.Text);
 
-                // 3. Жизненный путь
+                // жизненный путь
                 charData.Lifepath["Культурное происхождение"] = CbOrigin.SelectedItem?.ToString();
                 charData.Lifepath["Личность"] = CbPersonality.SelectedItem?.ToString();
                 charData.Lifepath["Стиль одежды"] = CbClothing.SelectedItem?.ToString();
@@ -233,7 +224,7 @@ namespace CyberpunkRED_Generator
                 charData.Lifepath["Трагедия в семье"] = CbFamilyCrisis.SelectedItem?.ToString();
                 charData.Lifepath["Цель в жизни"] = CbLifeGoal.SelectedItem?.ToString();
 
-                // 4. Ролевой путь
+                // ролевой путь
                 foreach (var cb in _dynamicRoleComboBoxes)
                 {
                     if (cb.SelectedItem != null && cb.Tag != null)
@@ -242,7 +233,7 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
-                // 5. Связи
+                // связи
                 int friends = CbCountFriends.SelectedIndex;
                 if (friends >= 1) charData.Friends.Add(CbF1.SelectedItem?.ToString());
                 if (friends >= 2) charData.Friends.Add(CbF2.SelectedItem?.ToString());
@@ -258,12 +249,12 @@ namespace CyberpunkRED_Generator
                 if (love >= 2) charData.TragicLoves.Add(CbL2.SelectedItem?.ToString());
                 if (love >= 3) charData.TragicLoves.Add(CbL3.SelectedItem?.ToString());
 
-                // 6. Навыки (сохраняем только вкачанные навыки > 0)
+                // навыки сохраняем только вкачанные навыки > 0
                 foreach (var cat in _categories)
                 {
                     foreach (var skill in cat.Skills)
                     {
-                        // Не сохраняем "пустые" базовые плашки-кнопки (CanAddMultiple)
+                        // не сохраняем пустые базовые плашки-кнопки
                         if (skill.Level > 0 && !skill.CanAddMultiple)
                         {
                             string exportName = skill.IsVariant && !string.IsNullOrWhiteSpace(skill.SubName)
@@ -280,7 +271,7 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
-                // ================== СОЗДАНИЕ ПАПКИ И JSON ==================
+                // создание папки и джисона
                 string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Characters");
                 if (!Directory.Exists(folderPath))
                 {
@@ -289,11 +280,10 @@ namespace CyberpunkRED_Generator
 
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
-                // ИСПРАВЛЕНО: Теперь в названии файла фигурирует имя персонажа
                 string fileName = $"Character_{charData.Name}_{charData.Role}_{timestamp}.json";
                 string filePath = Path.Combine(folderPath, fileName);
 
-                // Настройки JSON для правильного отображения русского языка и красивых отступов
+                // настройки json для правильного отображения русского языка и красивых отступов
                 var options = new JsonSerializerOptions
                 {
                     WriteIndented = true,
@@ -314,9 +304,9 @@ namespace CyberpunkRED_Generator
             }
         }
 
-        // ==========================================
-        // ЭТАП 1: ЛОГИКА ХАРАКТЕРИСТИК (СТАТОВ)
-        // ==========================================
+
+        // логика АНТИХАЙПА (статов)
+
         private void ModeChanged(object sender, RoutedEventArgs e)
         {
             if (PanelCalc == null || PanelRandom == null) return;
@@ -348,7 +338,7 @@ namespace CyberpunkRED_Generator
                     tb.Text = newVal.ToString();
                     UpdatePointsLeft();
                     CalculateDerivedStats();
-                    UpdateAllSkillTotals(); // Обновляем навыки при ручном клике
+                    UpdateAllSkillTotals();
                 }
             }
         }
@@ -362,7 +352,7 @@ namespace CyberpunkRED_Generator
             TxtBody.Text = RollStat().ToString(); TxtEmp.Text = RollStat().ToString();
             UpdatePointsLeft();
             CalculateDerivedStats();
-            UpdateAllSkillTotals(); // Обновляем навыки при рандоме
+            UpdateAllSkillTotals();
         }
 
         private int RollStat() => new List<int> { _rnd.Next(1, 5), _rnd.Next(1, 5), _rnd.Next(1, 5) }.OrderByDescending(x => x).Take(2).Sum();
@@ -388,7 +378,7 @@ namespace CyberpunkRED_Generator
             TxtHumanity.Text = (emp * 10).ToString();
         }
 
-        // Связь Характеристик и Навыков
+        // связь характеристик и навыков
         private void UpdateAllSkillTotals()
         {
             if (_categories == null) return;
@@ -412,9 +402,7 @@ namespace CyberpunkRED_Generator
             }
         }
 
-        // ==========================================
-        // ЭТАП 2: ЛОГИКА ЖИЗНЕННОГО ПУТИ
-        // ==========================================
+        // логика жизненного пути
         private void LoadLifepathData()
         {
             CbOrigin.ItemsSource = CoreDataBase.Origins; CbPersonality.ItemsSource = CoreDataBase.Personalities;
@@ -457,9 +445,8 @@ namespace CyberpunkRED_Generator
                                   $"> ЦЕЛЬ В ЖИЗНИ: {CbLifeGoal.SelectedItem}\n\n> СТАТУС: ФОРМИРОВАНИЕ ЗАВЕРШЕНО.";
         }
 
-        // ==========================================
-        // ЭТАП 3: ЛОГИКА РОЛЕВОГО ПУТИ
-        // ==========================================
+
+        // логика ролевого пути
         private void LoadRoleLifepathData()
         {
             CbRole.ItemsSource = CoreDataBase.Roles;
@@ -511,9 +498,7 @@ namespace CyberpunkRED_Generator
             TxtRoleLog.Text = log.ToString();
         }
 
-        // ==========================================
-        // ЭТАП 4: ЛОГИКА СВЯЗЕЙ
-        // ==========================================
+        // логика связей
         private void LoadRelationsData()
         {
             CbF1.ItemsSource = CoreDataBase.Friends; CbF2.ItemsSource = CoreDataBase.Friends; CbF3.ItemsSource = CoreDataBase.Friends;
@@ -595,9 +580,6 @@ namespace CyberpunkRED_Generator
             TxtRelationsLog.Text = log.ToString();
         }
 
-        // ==========================================
-        // ЭТАП 5: ЛОГИКА НАВЫКОВ
-        // ==========================================
         private void LoadSkillsData()
         {
             _categories = new List<SkillCategory>();
@@ -727,17 +709,11 @@ namespace CyberpunkRED_Generator
         {
             if (TxtSkillPoints != null) TxtSkillPoints.Text = (MAX_SKILL_POINTS - GetSpentPoints()).ToString();
         }
-        // ==========================================
-        // РЕЖИМ ЛЕНТЯЯ (ГЕНЕРАЦИЯ ПРОМПТА ДЛЯ ИИ)
-        // ==========================================
-        // ==========================================
-        // РЕЖИМ ЛЕНТЯЯ (ГЕНЕРАЦИЯ ПРОМПТА ДЛЯ ИИ)
-        // ==========================================
+
         private void BtnLazyMode_Click(object sender, RoutedEventArgs e)
         {
             StringBuilder prompt = new StringBuilder();
 
-            // Жесткие инструкции для нейросети (Системный промпт)
             prompt.AppendLine("Сгенерируй детальную, глубокую и атмосферную предысторию (квенту) для моего персонажа в мире настольной ролевой игры Cyberpunk RED.\n");
             prompt.AppendLine("ОБЯЗАТЕЛЬНЫЕ УСЛОВИЯ:");
             prompt.AppendLine("1. Повествование СТРОГО от первого лица («Я вырос...», «Моя семья...»).");

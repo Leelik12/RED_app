@@ -2,7 +2,7 @@
 
 namespace CyberpunkRED_Generator
 {
-    // Структура для инициализации навыка из базы
+    // структура для инициализации навыка из базы
     public class SkillDef
     {
         public string Category { get; set; }
@@ -16,18 +16,18 @@ namespace CyberpunkRED_Generator
     }
     public class SkillModifierDef
     {
-        public string SkillName { get; set; } // Какому навыку даем бонус (или "Все")
-        public int Value { get; set; }        // Значение (+1, -4 и т.д.)
+        public string SkillName { get; set; } // какому навыку даем бонус (или "Все")
+        public int Value { get; set; }        // значение (+1, -4 и т.д.)
         public string ModType { get; set; } = "Normal"; // "Normal", "Visual", "Audio"
     }
-    // Вспомогательный класс для таблиц ролевого пути
+    // вспомогательный класс для таблиц ролевого пути
     public class RoleLifepathTable
     {
         public string Title { get; set; }
         public string[] Options { get; set; }
     }
 
-    // Структура для инициализации травм из базы
+    // структура для инициализации травм из базы
     public class CriticalInjuryDef
     {
         public string Name { get; set; }
@@ -44,9 +44,6 @@ namespace CyberpunkRED_Generator
 
     public static class CoreDataBase
     {
-        // ==========================================
-        // ЭТАП 2: ЖИЗНЕННЫЙ ПУТЬ
-        // ==========================================
         public static readonly string[] Origins = {
             "Северная Америка",
             "Южная / Центральная Америка",
@@ -217,7 +214,7 @@ namespace CyberpunkRED_Generator
             "Добиться славы и признания.",
             "Внушать страх и уважение." };
 
-        // СВЯЗИ (Стр. 52-53)
+        // связи 52-53
         public static readonly string[] Friends = {
             "Как старший брат/сестра",
             "Как младший брат/сестра",
@@ -290,9 +287,7 @@ namespace CyberpunkRED_Generator
             "Соперник выбил вас из игры",
             "Вашего партнёра (-шу) посадили в тюрьму" };
 
-        // ==========================================
-        // ЭТАП 2.75: РОЛЕВОЙ ЖИЗНЕННЫЙ ПУТЬ (Стр. 55-70)
-        // ==========================================
+        // ролевой 55-70
 
         // СПАРШЕНО!!!!!!!!!!
         public static readonly Dictionary<string, RoleLifepathTable[]> RoleLifepaths = new Dictionary<string, RoleLifepathTable[]>

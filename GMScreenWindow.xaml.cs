@@ -12,9 +12,7 @@ using System.Windows.Data;
 
 namespace CyberpunkRED_Generator
 {
-    // ===================================
-    // МОДЕЛИ ДАННЫХ ДЛЯ ВРАГОВ
-    // ===================================
+    //модели данных для врагов
     public class EnemySaveData
     {
         public string Name { get; set; }
@@ -38,7 +36,7 @@ namespace CyberpunkRED_Generator
         public Visibility IsFullVis => !IsCNMode ? Visibility.Visible : Visibility.Collapsed;
     }
 
-    // Класс для красивого отображения травм
+    // класс для красивого отображения травм
     public class GMCriticalInjuryItem
     {
         public string Name { get; set; }
@@ -53,16 +51,13 @@ namespace CyberpunkRED_Generator
         public string TooltipText => $"{Description}\n\nЭФФЕКТ РАНЕНИЯ:\n{EffectText}\n\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ:\nПервая помощь: {QuickFix}\nЛечение: {Treatment}";
     }
 
-    // Класс для красивого отображения импланта
+    // класс для отображения импланта
     public class CyberwareItemViewModel
     {
         public string Name { get; set; }
         public string TooltipText { get; set; }
     }
 
-    // ===================================
-    // МОДЕЛЬ БОЙЦА В ИНИЦИАТИВЕ
-    // ===================================
     public class CombatantViewModel : INotifyPropertyChanged
     {
         private bool _isActiveTurn;
@@ -89,11 +84,10 @@ namespace CyberpunkRED_Generator
         public int BodyArmor { get => _bodyArmor; set { _bodyArmor = Math.Max(0, value); OnPropertyChanged(); } }
 
         public string CombatStatsDisplay { get; set; }
+        public ObservableCollection<string> DisplaySkills { get; set; } = new ObservableCollection<string>();
 
         private string _weapons; public string Weapons { get => _weapons; set { _weapons = value; OnPropertyChanged(); } }
         private string _gear; public string Gear { get => _gear; set { _gear = value; OnPropertyChanged(); } }
-
-        // Список имплантов для красивого отображения
         public ObservableCollection<CyberwareItemViewModel> ParsedCyberware { get; set; } = new ObservableCollection<CyberwareItemViewModel>();
 
         private string _cyberware;
@@ -104,11 +98,10 @@ namespace CyberpunkRED_Generator
             {
                 _cyberware = value;
                 OnPropertyChanged();
-                ParseCyberware(); // Автоматически парсим строку в блоки
+                ParseCyberware(); // автоматически парсим строку в блоки
             }
         }
 
-        // --- ДИНАМИЧЕСКИЕ СТАТЫ ---
         public int BaseMove { get; set; }
         public int BaseDeathSave { get; set; }
 
@@ -148,34 +141,100 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        public EnemySaveData OriginalData { get; set; }
+
         public void Recalculate()
         {
             OnPropertyChanged(nameof(CurrentMove));
             OnPropertyChanged(nameof(CurrentDeathSave));
             OnPropertyChanged(nameof(ActionPenalty));
             OnPropertyChanged(nameof(PenaltyVis));
+
+            RebuildStatsDisplay();
+        }
+
+        public void RebuildStatsDisplay()
+        {
+            if (OriginalData == null || IsPlayer) return;
+
+            int penalty = ActionPenalty;
+
+            if (OriginalData.IsCNMode)
+            {
+                int currentCN = Math.Max(0, OriginalData.CombatNumber - penalty);
+                CombatStatsDisplay = $"Боевой Номер (БН): {currentCN}";
+            }
+            else
+            {
+                var stList = new List<string>();
+                foreach (var kvp in OriginalData.Stats)
+                {
+                    int val = kvp.Value;
+                    if (kvp.Key != "LUCK" && kvp.Key != "УДЧ" && kvp.Key != "EMP" && kvp.Key != "ЭМП" && kvp.Key != "BODY" && kvp.Key != "ТЕЛ" && kvp.Key != "MOVE" && kvp.Key != "СКО")
+                    {
+                        val -= penalty;
+                    }
+                    stList.Add($"{kvp.Key}:{val}");
+                }
+                CombatStatsDisplay = string.Join(" ", stList);
+
+                var skillDisplays = new ObservableCollection<string>();
+                foreach (var kvp in OriginalData.Skills)
+                {
+                    int total = kvp.Value;
+                    var def = CoreDataBase.AllSkills.FirstOrDefault(s => s.Name == kvp.Key);
+                    if (def != null)
+                    {
+                        string statKey = def.Stat;
+                        switch (statKey)
+                        {
+                            case "ИНТ": statKey = "INT"; break;
+                            case "РЕА": statKey = "REF"; break;
+                            case "ЛВК": statKey = "DEX"; break;
+                            case "ТЕХ": statKey = "TECH"; break;
+                            case "ХАР": statKey = "COOL"; break;
+                            case "ВОЛЯ": statKey = "WILL"; break;
+                            case "УДЧ": statKey = "LUCK"; break;
+                            case "СКО": statKey = "MOVE"; break;
+                            case "ТЕЛ": statKey = "BODY"; break;
+                            case "ЭМП": statKey = "EMP"; break;
+                        }
+                        if (OriginalData.Stats.ContainsKey(statKey))
+                        {
+                            total += OriginalData.Stats[statKey];
+                        }
+                    }
+
+                    total -= penalty;
+                    if (total < 0) total = 0;
+
+                    skillDisplays.Add($"{kvp.Key} [{total}]");
+                }
+                DisplaySkills = skillDisplays;
+            }
+
+            OnPropertyChanged(nameof(CombatStatsDisplay));
+            OnPropertyChanged(nameof(DisplaySkills));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    // Вспомогательный конвертер для кнопки удаления травмы
     public class MultiParamConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture) => values.Clone();
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture) => throw new NotImplementedException();
     }
 
-    // ===================================
-    // ЛОГИКА ОКНА ГЕЙМ-МАСТЕРА
-    // ===================================
+    // логика АНТИХАЙПА (окна гма)
+
     public partial class GMScreenWindow : Window
     {
         public ObservableCollection<CombatantViewModel> Combatants { get; set; } = new ObservableCollection<CombatantViewModel>();
         public ObservableCollection<EnemySaveData> AvailableEnemies { get; set; } = new ObservableCollection<EnemySaveData>();
 
-        // Для создания врагов
+        // для создания врагов
         public List<string> AllSkillNames => CoreDataBase.AllSkills.Select(s => s.Name).OrderBy(n => n).ToList();
         public ObservableCollection<SkillSaveData> NewEnemySkills { get; set; } = new ObservableCollection<SkillSaveData>();
 
@@ -191,7 +250,6 @@ namespace CyberpunkRED_Generator
             this.DataContext = this;
         }
 
-        // --- УПРАВЛЕНИЕ ХОДОМ ---
         private void BtnNextTurn_Click(object sender, RoutedEventArgs e)
         {
             if (Combatants.Count == 0) return;
@@ -230,7 +288,7 @@ namespace CyberpunkRED_Generator
             MessageBox.Show("Инициатива отсортирована. Бой начался!", "ИНФО", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // --- КАРТОЧКА БОЙЦА (ЗДОРОВЬЕ, БРОНЯ, ТРАВМЫ) ---
+        // карточка воина
         private void BtnAblateHead_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c && c.HeadArmor > 0) c.HeadArmor--; }
         private void BtnAblateBody_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c && c.BodyArmor > 0) c.BodyArmor--; }
         private void BtnDamage_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c) c.CurrentHP--; }
@@ -310,7 +368,7 @@ namespace CyberpunkRED_Generator
             });
         }
 
-        // --- ГЕНЕРАТОР ВРАГОВ И ОВЕРЛЕЙ ---
+        // генератор и оверлей
         private void BtnOpenEnemyManager_Click(object sender, RoutedEventArgs e)
         {
             LoadEnemiesFromFolder();
@@ -335,12 +393,115 @@ namespace CyberpunkRED_Generator
 
         private void BtnAddGenSkill_Click(object sender, RoutedEventArgs e)
         {
-            if (CbGenSkills.SelectedItem != null && int.TryParse(TxtGenSkillLevel.Text, out int lvl))
+            if (CbGenSkills.SelectedItem != null && int.TryParse(TxtGenSkillLevel.Text, out int inputValue))
             {
-                NewEnemySkills.Add(new SkillSaveData { Name = CbGenSkills.SelectedItem.ToString(), Total = lvl });
+                string skillName = CbGenSkills.SelectedItem.ToString();
+                int skillLevel = inputValue;
+
+                // если галочка стоит значит ввели финалку (Навык + СТАТ) из корника. 
+                // нам нужно вычесть СТАТ, чтобы сохранить в базу чистый уровень навыка.
+                if (ChkSkillIsTotal.IsChecked == true)
+                {
+                    var def = CoreDataBase.AllSkills.FirstOrDefault(s => s.Name == skillName);
+                    if (def != null)
+                    {
+                        string statKey = def.Stat;
+                        switch (statKey)
+                        {
+                            case "ИНТ": statKey = "INT"; break;
+                            case "РЕА": statKey = "REF"; break;
+                            case "ЛВК": statKey = "DEX"; break;
+                            case "ТЕХ": statKey = "TECH"; break;
+                            case "ХАР": statKey = "COOL"; break;
+                            case "ВОЛЯ": statKey = "WILL"; break;
+                            case "УДЧ": statKey = "LUCK"; break;
+                            case "СКО": statKey = "MOVE"; break;
+                            case "ТЕЛ": statKey = "BODY"; break;
+                            case "ЭМП": statKey = "EMP"; break;
+                        }
+
+                        int statValue = 5; // базовое на всякий
+                        switch (statKey)
+                        {
+                            case "INT": int.TryParse(StINT.Text, out statValue); break;
+                            case "REF": int.TryParse(StREF.Text, out statValue); break;
+                            case "DEX": int.TryParse(StDEX.Text, out statValue); break;
+                            case "TECH": int.TryParse(StTECH.Text, out statValue); break;
+                            case "COOL": int.TryParse(StCOOL.Text, out statValue); break;
+                            case "WILL": int.TryParse(StWILL.Text, out statValue); break;
+                            case "LUCK": int.TryParse(StLUCK.Text, out statValue); break;
+                            case "MOVE": int.TryParse(StMOVE.Text, out statValue); break;
+                            case "BODY": int.TryParse(StBODY.Text, out statValue); break;
+                            case "EMP": int.TryParse(StEMP.Text, out statValue); break;
+                        }
+
+                        skillLevel = inputValue - statValue;
+
+                        if (skillLevel < 0) skillLevel = 0;
+                    }
+                }
+
+                NewEnemySkills.Add(new SkillSaveData { Name = skillName, Total = skillLevel });
             }
         }
 
+        private void BtnEditEnemyPreset_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is EnemySaveData enemyData)
+            {
+                TxtGenName.Text = enemyData.Name;
+                TxtGenHP.Text = enemyData.HP.ToString();
+                TxtGenHead.Text = enemyData.HeadArmor.ToString();
+                TxtGenBody.Text = enemyData.BodyArmor.ToString();
+                TxtGenWeapons.Text = enemyData.Weapons;
+                TxtGenGear.Text = enemyData.Gear;
+
+                if (enemyData.IsCNMode)
+                {
+                    RbGenCN.IsChecked = true;
+                    TxtGenCN.Text = enemyData.CombatNumber.ToString();
+                    TxtGenDeathSaveCN.Text = enemyData.BaseDeathSave.ToString();
+                    TxtGenMove.Text = enemyData.BaseMove.ToString();
+                }
+                else
+                {
+                    RbGenFull.IsChecked = true;
+                    StINT.Text = enemyData.Stats.ContainsKey("INT") ? enemyData.Stats["INT"].ToString() : "5";
+                    StREF.Text = enemyData.Stats.ContainsKey("REF") ? enemyData.Stats["REF"].ToString() : "5";
+                    StDEX.Text = enemyData.Stats.ContainsKey("DEX") ? enemyData.Stats["DEX"].ToString() : "5";
+                    StTECH.Text = enemyData.Stats.ContainsKey("TECH") ? enemyData.Stats["TECH"].ToString() : "5";
+                    StCOOL.Text = enemyData.Stats.ContainsKey("COOL") ? enemyData.Stats["COOL"].ToString() : "5";
+                    StWILL.Text = enemyData.Stats.ContainsKey("WILL") ? enemyData.Stats["WILL"].ToString() : "5";
+                    StLUCK.Text = enemyData.Stats.ContainsKey("LUCK") ? enemyData.Stats["LUCK"].ToString() : "5";
+                    StMOVE.Text = enemyData.Stats.ContainsKey("MOVE") ? enemyData.Stats["MOVE"].ToString() : "5";
+                    StBODY.Text = enemyData.Stats.ContainsKey("BODY") ? enemyData.Stats["BODY"].ToString() : "5";
+                    StEMP.Text = enemyData.Stats.ContainsKey("EMP") ? enemyData.Stats["EMP"].ToString() : "5";
+
+                    NewEnemySkills.Clear();
+                    if (enemyData.Skills != null)
+                    {
+                        foreach (var kvp in enemyData.Skills)
+                        {
+                            NewEnemySkills.Add(new SkillSaveData { Name = kvp.Key, Total = kvp.Value });
+                        }
+                    }
+                }
+
+                NewEnemyCyberware.Clear();
+                if (!string.IsNullOrWhiteSpace(enemyData.Cyberware))
+                {
+                    var parts = enemyData.Cyberware.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var part in parts)
+                    {
+                        string cleanName = part.Trim();
+                        if (!string.IsNullOrWhiteSpace(cleanName))
+                        {
+                            NewEnemyCyberware.Add(cleanName);
+                        }
+                    }
+                }
+            }
+        }
         private void BtnRemoveGenSkill_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.Tag is SkillSaveData s) NewEnemySkills.Remove(s);
@@ -364,49 +525,9 @@ namespace CyberpunkRED_Generator
         {
             if ((sender as Button)?.Tag is EnemySaveData enemyData)
             {
-                string statsText = "";
-                if (enemyData.IsCNMode)
+                var combatant = new CombatantViewModel
                 {
-                    statsText = $"Боевой Номер (БН): {enemyData.CombatNumber}";
-                }
-                else
-                {
-                    var st = string.Join(" ", enemyData.Stats.Select(x => $"{x.Key}:{x.Value}"));
-
-                    var skillDisplays = new List<string>();
-                    foreach (var kvp in enemyData.Skills)
-                    {
-                        int total = kvp.Value;
-                        var def = CoreDataBase.AllSkills.FirstOrDefault(s => s.Name == kvp.Key);
-                        if (def != null)
-                        {
-                            string statKey = def.Stat;
-                            switch (statKey) // Конвертируем русские ключи статов в английские ключи сохранения
-                            {
-                                case "ИНТ": statKey = "INT"; break;
-                                case "РЕА": statKey = "REF"; break;
-                                case "ЛВК": statKey = "DEX"; break;
-                                case "ТЕХ": statKey = "TECH"; break;
-                                case "ХАР": statKey = "COOL"; break;
-                                case "ВОЛЯ": statKey = "WILL"; break;
-                                case "УДЧ": statKey = "LUCK"; break;
-                                case "СКО": statKey = "MOVE"; break;
-                                case "ТЕЛ": statKey = "BODY"; break;
-                                case "ЭМП": statKey = "EMP"; break;
-                            }
-                            if (enemyData.Stats.ContainsKey(statKey))
-                            {
-                                total += enemyData.Stats[statKey]; // Прибавляем значение характеристики к навыку
-                            }
-                        }
-                        skillDisplays.Add($"{kvp.Key} [{total}]");
-                    }
-                    var sk = string.Join(", ", skillDisplays);
-                    statsText = $"{st}\nНАВЫКИ: {sk}";
-                }
-
-                Combatants.Add(new CombatantViewModel
-                {
+                    OriginalData = enemyData,
                     Name = enemyData.Name,
                     IsPlayer = false,
                     Initiative = 0,
@@ -416,11 +537,13 @@ namespace CyberpunkRED_Generator
                     BodyArmor = enemyData.BodyArmor,
                     BaseMove = enemyData.BaseMove,
                     BaseDeathSave = enemyData.BaseDeathSave,
-                    CombatStatsDisplay = statsText,
                     Weapons = enemyData.Weapons,
                     Gear = enemyData.Gear,
                     Cyberware = enemyData.Cyberware
-                });
+                };
+
+                combatant.RebuildStatsDisplay();
+                Combatants.Add(combatant);
 
                 MessageBox.Show($"{enemyData.Name} добавлен в трекер инициативы!", "УСПЕХ", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -479,6 +602,11 @@ namespace CyberpunkRED_Generator
             var options = new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
             File.WriteAllText(filePath, JsonSerializer.Serialize(enemy, options), System.Text.Encoding.UTF8);
 
+            var existingItem = AvailableEnemies.FirstOrDefault(x => x.Name.Equals(enemy.Name, StringComparison.OrdinalIgnoreCase));
+            if (existingItem != null)
+            {
+                AvailableEnemies.Remove(existingItem);
+            }
             AvailableEnemies.Add(enemy);
             TxtGenName.Text = ""; TxtGenWeapons.Text = ""; TxtGenGear.Text = ""; CbGenCyber.Text = ""; NewEnemySkills.Clear(); NewEnemyCyberware.Clear();
 
@@ -492,7 +620,6 @@ namespace CyberpunkRED_Generator
                 var res = MessageBox.Show($"Удалить пресет '{enemyData.Name}' из базы навсегда?", "ПОДТВЕРДИТЕ УДАЛЕНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (res == MessageBoxResult.Yes)
                 {
-                    // Находим файл и удаляем его
                     string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
                     string fileName = $"Enemy_{enemyData.Name.Replace(" ", "_")}.json";
                     string filePath = Path.Combine(folderPath, fileName);
@@ -509,7 +636,6 @@ namespace CyberpunkRED_Generator
                         }
                     }
 
-                    // Убираем из коллекции, чтобы интерфейс обновился мгновенно
                     AvailableEnemies.Remove(enemyData);
                 }
             }
