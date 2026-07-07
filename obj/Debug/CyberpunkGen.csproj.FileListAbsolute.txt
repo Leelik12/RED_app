@@ -59,3 +59,7 @@ G:\GitRepos\RED_app\bin\Debug\System.Threading.Tasks.Extensions.xml
 G:\GitRepos\RED_app\obj\Debug\Cyberpun.5568DDEF.Up2Date
 G:\GitRepos\RED_app\obj\Debug\CharacterSheetWindow.baml
 G:\GitRepos\RED_app\obj\Debug\CharacterSheetWindow.g.cs
+G:\GitRepos\RED_app\obj\Debug\GMScreenWindow.baml
+G:\GitRepos\RED_app\obj\Debug\GMScreenWindow.g.cs
+G:\GitRepos\RED_app\obj\Debug\GeneratedInternalTypeHelper.g.cs
+G:\GitRepos\RED_app\obj\Debug\CyberpunkGen_MarkupCompile.lref

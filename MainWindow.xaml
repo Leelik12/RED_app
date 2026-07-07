@@ -7,6 +7,6 @@
 
         <Button Content="1. Генерация персонажа" Height="40" Margin="0,5" Background="Red" Foreground="White" FontWeight="Bold" Click="BtnGenerate_Click"/>
         <Button Content="2. Лист персонажа" Height="40" Margin="0,5" Background="Red" Foreground="White" FontWeight="Bold" Click="BtnLoadCharacter_Click"/>
-        <Button Content="3. Экран Гейм-мастера (Заглушка)" Height="40" Margin="0,5" Background="#333" Foreground="Gray" IsEnabled="False"/>
+        <Button Content="3. Экран Гейм-мастера" Height="40" Margin="0,5" Background="Red" Foreground="White" FontWeight="Bold" Click="BtnOpenGMScreen_Click"/>
     </StackPanel>
 </Window>

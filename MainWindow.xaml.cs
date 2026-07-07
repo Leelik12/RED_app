@@ -39,5 +39,12 @@ namespace CyberpunkRED_Generator
                 this.Close();
             }
         }
+
+        private void BtnOpenGMScreen_Click(object sender, RoutedEventArgs e)
+        {
+            GMScreenWindow gmWindow = new GMScreenWindow();
+            gmWindow.Show();
+            this.Close();
+        }
     }
 }
