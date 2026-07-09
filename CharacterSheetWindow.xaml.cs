@@ -658,6 +658,23 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        private void NumberLimitFromMinus777To777_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
+            {
+                if (val > 777)
+                {
+                    tb.Text = "777";
+                    tb.SelectionStart = tb.Text.Length;
+                }
+                else if (val < -777)
+                {
+                    tb.Text = "-777";
+                    tb.SelectionStart = tb.Text.Length;
+                }
+            }
+        }
+
         private void CurrentHumanity_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
@@ -1180,13 +1197,25 @@ namespace CyberpunkRED_Generator
                 vm.OverlayTitle = $"УПРАВЛЕНИЕ: {block.Name}";
                 vm.AvailableCyberware.Clear();
 
-                foreach (var def in CoreDataBase.AllCyberware.Where(c => c.Category == block.Name))
-                    vm.AvailableCyberware.Add(def);
+                // "Алиасы" для боргирования. Если это дополнительная конечность, ищем в базе стандартную
+                string searchCat = block.Name;
+                if (searchCat.Contains("ДОП. ПРАВАЯ КИБЕРРУКА")) searchCat = "ПРАВАЯ КИБЕРРУКА (CYBERARM R)";
+                else if (searchCat.Contains("ДОП. ЛЕВАЯ КИБЕРРУКА")) searchCat = "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)";
+                else if (searchCat.Contains("ДОП. КИБЕРГЛАЗ")) searchCat = "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)"; // Список опций для левого и правого глаза одинаков
 
+                // Загружаем стандартные импланты по нашему алиасу
+                foreach (var def in CoreDataBase.AllCyberware.Where(c => c.Category == searchCat))
+                {
+                    vm.AvailableCyberware.Add(def);
+                }
+
+                // Загружаем кастомные импланты (как созданные для базы, так и созданные конкретно в этом доп. блоке)
                 if (_originalData.CustomCyberwareList != null)
                 {
-                    foreach (var def in _originalData.CustomCyberwareList.Where(c => c.Category == block.Name))
+                    foreach (var def in _originalData.CustomCyberwareList.Where(c => c.Category == block.Name || c.Category == searchCat))
+                    {
                         vm.AvailableCyberware.Add(def);
+                    }
                 }
 
                 CyberwareOverlay.Visibility = Visibility.Visible;
@@ -1197,12 +1226,23 @@ namespace CyberpunkRED_Generator
 
         private string GetTwinCategory(string cat)
         {
+            // Обычные парные
             if (cat.Contains("ПРАВЫЙ КИБЕРГЛАЗ")) return "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)";
             if (cat.Contains("ЛЕВЫЙ КИБЕРГЛАЗ")) return "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)";
             if (cat.Contains("ПРАВАЯ КИБЕРРУКА")) return "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)";
             if (cat.Contains("ЛЕВАЯ КИБЕРРУКА")) return "ПРАВАЯ КИБЕРРУКА (CYBERARM R)";
             if (cat.Contains("ПРАВАЯ КИБЕРНОГА")) return "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)";
             if (cat.Contains("ЛЕВАЯ КИБЕРНОГА")) return "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)";
+
+            // Борговские дополнительные парные руки
+            if (cat.Contains("ДОП. ПРАВАЯ КИБЕРРУКА")) return "ДОП. ЛЕВАЯ КИБЕРРУКА (EXTRA ARM L)";
+            if (cat.Contains("ДОП. ЛЕВАЯ КИБЕРРУКА")) return "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)";
+
+            // Борговские дополнительные глаза (линкуем 1-ый со 2-ым)
+            if (cat.Contains("ДОП. КИБЕРГЛАЗ 1")) return "ДОП. КИБЕРГЛАЗ 2 (EXTRA OPTIC 2)";
+            if (cat.Contains("ДОП. КИБЕРГЛАЗ 2")) return "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)";
+            if (cat.Contains("ДОП. КИБЕРГЛАЗ 3")) return "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)";
+
             return "";
         }
         private void BtnInstallCyber_Click(object sender, RoutedEventArgs e)
@@ -1212,6 +1252,7 @@ namespace CyberpunkRED_Generator
 
             if ((sender as Button)?.Tag is CyberwareDef def)
             {
+                // Проверка на ускорители
                 if (def.Name == "Сандевистан" || def.Name == "Керензиков")
                 {
                     bool hasSpeedware = vm.CyberwareBlocks.Any(b => b.InstalledItems.Any(i => i.Name == "Сандевистан" || i.Name == "Керензиков"));
@@ -1221,7 +1262,19 @@ namespace CyberpunkRED_Generator
                         return;
                     }
                 }
-                // ищем по всему телу зависимости
+
+                // ЗАЩИТА: Базовые импланты (Foundation) можно ставить только 1 раз в один блок
+                if (def.IsFoundation)
+                {
+                    bool alreadyHasFoundation = vm.CurrentCyberBlock.InstalledItems.Any(i => i.IsFoundation && i.Name == def.Name);
+                    if (alreadyHasFoundation)
+                    {
+                        MessageBox.Show($"Базовый имплант '{def.Name}' уже установлен в этом блоке! Вы не можете установить его дважды.", "ОШИБКА УСТАНОВКИ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+
+                // Поиск зависимостей по всему телу
                 if (!string.IsNullOrWhiteSpace(def.Requires))
                 {
                     bool hasRequirement = vm.CyberwareBlocks.Any(b => b.InstalledItems.Any(i => i.Name == def.Requires));
@@ -1232,7 +1285,7 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
-                // уникальные требования
+                // Уникальные требования
                 if (def.Name == "Подкожный захват" && !vm.CyberwareBlocks.Any(b => b.InstalledItems.Any(i => i.Name == "Нейролинк")))
                 {
                     MessageBox.Show("Для Подкожного захвата дополнительно требуется установленный Нейролинк!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -1251,7 +1304,7 @@ namespace CyberpunkRED_Generator
 
                 CyberwareBlockItem twinBlock = null;
 
-                // проверка сопряжения (для парных имплантов)
+                // Проверка сопряжения (для парных имплантов)
                 if (def.IsPaired)
                 {
                     string twinName = GetTwinCategory(vm.CurrentCyberBlock.Name);
@@ -1271,14 +1324,15 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
-                // установка в основной слот
+                // Установка в основной слот
                 if (vm.CurrentCyberBlock.UsedSlots + def.Slots > vm.CurrentCyberBlock.MaxSlots)
                 {
                     MessageBox.Show("В этом блоке не осталось свободных слотов!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                // запрос ПЧ
+                // Запрос ПЧ
+                // Запрос ПЧ
                 int parsedHL = 0;
                 if (def.HumanityLoss != "0" && def.HumanityLoss != "0 (—)")
                 {
@@ -1288,7 +1342,7 @@ namespace CyberpunkRED_Generator
                     {
                         Title = "ПОТЕРЯ ЧЕЛОВЕЧНОСТИ",
                         Width = 350,
-                        Height = 200,
+                        SizeToContent = SizeToContent.Height, // <-- Вот она, магия гибкой высоты
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         ResizeMode = ResizeMode.NoResize,
                         WindowStyle = WindowStyle.ToolWindow,
@@ -1320,7 +1374,7 @@ namespace CyberpunkRED_Generator
                     prompt.Content = grid;
 
                     bool? result = prompt.ShowDialog();
-                    if (result != true) return; // пользователь закрыл окно, отменяем установку
+                    if (result != true) return;
 
                     vm.CurrentHumanity -= parsedHL;
                 }
@@ -1328,13 +1382,33 @@ namespace CyberpunkRED_Generator
                 vm.CurrentCyberBlock.InstalledItems.Add(def);
                 vm.CurrentCyberBlock.UsedSlots += def.Slots;
 
-                // установка копии в парную конечность
                 if (def.IsPaired && twinBlock != null)
                 {
                     if (!twinBlock.InstalledItems.Any(i => i.Name == def.Name))
                     {
                         twinBlock.InstalledItems.Add(def);
                         twinBlock.UsedSlots += def.Slots;
+                    }
+                }
+
+                // ЛОГИКА БОРГИРОВАНИЯ (Добавление новых конечностей)
+                if (def.Name == "Искусственное плечевое крепление")
+                {
+                    if (!vm.CyberwareBlocks.Any(b => b.Name == "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)"))
+                    {
+                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)", MaxSlots = 4, UsedSlots = 0, OptionsText = "" });
+                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. ЛЕВАЯ КИБЕРРУКА (EXTRA ARM L)", MaxSlots = 4, UsedSlots = 0, OptionsText = "" });
+                        MessageBox.Show("Плечевое крепление установлено! В ваш лист добавлены слоты для дополнительных киберрук.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else if (def.Name == "Фасеточное крепление")
+                {
+                    if (!vm.CyberwareBlocks.Any(b => b.Name == "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)"))
+                    {
+                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 2 (EXTRA OPTIC 2)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 3 (EXTRA OPTIC 3)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                        MessageBox.Show("Фасеточное крепление установлено! В ваш лист добавлены слоты для дополнительных киберглаз.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
 
