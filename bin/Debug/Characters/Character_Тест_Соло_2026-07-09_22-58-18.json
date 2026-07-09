@@ -1,0 +1,386 @@
+﻿{
+  "Name": "Тест",
+  "Role": "Соло",
+  "RoleAbilityNotes": "",
+  "Stats": {
+    "INT": 6,
+    "REF": 5,
+    "DEX": 7,
+    "TECH": 7,
+    "COOL": 8,
+    "WILL": 6,
+    "LUCK": 8,
+    "MOVE": 6,
+    "BODY": 8,
+    "EMP": 5
+  },
+  "SystemStats": {
+    "HP": 45,
+    "WoundedThreshold": 23,
+    "DeathSave": 8,
+    "Humanity": 50,
+    "CurrentHumanity": 50,
+    "MaxHumanity": 50,
+    "CurrentHP": 45,
+    "RoleRank": 4,
+    "SoloThreat": 0,
+    "SoloAwareness": 0,
+    "SoloDeflection": 0,
+    "SoloFumble": 0,
+    "SoloInitiative": 4,
+    "SoloPrecision": 0,
+    "TechField": 0,
+    "TechUpgrade": 0,
+    "TechFab": 0,
+    "TechInvent": 0,
+    "MedSurgery": 0,
+    "MedPharma": 0,
+    "MedCryo": 0,
+    "CurrentLuck": 8
+  },
+  "Lifepath": {
+    "Культурное происхождение": "Южная Азия",
+    "Личность": "Уравновешенный и серьезный",
+    "Стиль одежды": "Asia Pop (яркий, маскарадный, молодёжный)",
+    "Прическа": "Длинные и прямые",
+    "Отличительная черта": "Сапоги или туфли с шипами",
+    "Ценность": "Дружбу",
+    "Отношение к людям": "Каждый человек — ценная личность",
+    "Самый ценный человек": "Брат или сестра",
+    "Самая ценная вещь": "Музыкальный инструмент",
+    "Семейное происхождение": "Восстановители",
+    "Окружение детства": "В роскошном корпоративном небоскрёбе, возвышающемся над шумной толпой.",
+    "Трагедия в семье": "Твоя семья потеряла всё из-за плохого управления.",
+    "Цель в жизни": "Если возможно, спасти тех, кто был вовлечён в твою историю, например, возлюбленного или члена семьи."
+  },
+  "RoleLifepath": {
+    "Какой ты Соло?": "Уличный боец по найму",
+    "Твой моральный кодекс": "Настоящее зло. Всё время занимаешься незаконной и неэтичной работой. И тебе это нравится",
+    "Где ты обычно работаешь": "Территория конкретной корпорации",
+    "Кто за тобой охотится?": "Соло из другой корпы"
+  },
+  "Friends": [],
+  "Enemies": [
+    {
+      "Who": "Государственный чиновник",
+      "Cause": "Один из вас был романтическим соперником",
+      "Hate": "Местные корпы или законники",
+      "Action": "Устроить вербальную перепалку"
+    },
+    {
+      "Who": "Бывший возлюбленный",
+      "Cause": "Бросил или предал другого",
+      "Hate": "Он и несколько (1d6/2) друзей",
+      "Action": "Подставить за преступление или другое деяние, которое оппонент не совершал"
+    }
+  ],
+  "TragicLoves": [],
+  "Skills": [
+    {
+      "Name": "Концентрация",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Атлетика",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Скрытность",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Образование",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Язык (Уличный Сленг)",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Язык (Родной)",
+      "Level": 4,
+      "Total": 10
+    },
+    {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Рукопашный бой",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Уклонение",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Общение",
+      "Level": 2,
+      "Total": 7
+    },
+    {
+      "Name": "Проницательность",
+      "Level": 2,
+      "Total": 7
+    },
+    {
+      "Name": "Убеждение",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Первая помощь",
+      "Level": 2,
+      "Total": 9
+    }
+  ],
+  "Notes": "",
+  "Armor": {
+    "HeadSp": null,
+    "HeadPenalty": null,
+    "BodySp": null,
+    "BodyPenalty": null,
+    "ShieldSp": null,
+    "ShieldPenalty": null
+  },
+  "Weapons": [
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    }
+  ],
+  "StyleNotes": "",
+  "Housing": "",
+  "Rent": "",
+  "Lifestyle": "",
+  "AmmoValue": "",
+  "CashValue": "",
+  "GearItems": [
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    }
+  ],
+  "CustomCyberwareList": [],
+  "CyberwareBlocks": [
+    {
+      "Name": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 5,
+      "OptionsText": "",
+      "SlotsText": "свободно 5/5",
+      "InstalledItems": []
+    },
+    {
+      "Name": "КИБЕРАУДИО (CYBERAUDIO)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "БОРГИРОВАНИЕ (BORGWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    }
+  ],
+  "CriticalInjuries": null,
+  "Addictions": "",
+  "CriticalInjuriesList": []
+}

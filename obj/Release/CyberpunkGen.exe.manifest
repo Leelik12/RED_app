@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CyberpunkGen.exe" size="860144">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CyberpunkGen.exe" size="893936">
       <assemblyIdentity name="CyberpunkGen" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>vPJXh76OBwSPsR/XoIqtGHrw9tNcFsajPtJzyVrqtF4=</dsig:DigestValue>
+        <dsig:DigestValue>OXwrBynCQAts1++yRco8ZM9GVB333aF1TVhbU0G8tU4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

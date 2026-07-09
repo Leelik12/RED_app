@@ -1,0 +1,395 @@
+﻿{
+  "Name": "Тест",
+  "Role": "Фиксер",
+  "RoleAbilityNotes": "",
+  "Stats": {
+    "INT": 7,
+    "REF": 7,
+    "DEX": 8,
+    "TECH": 5,
+    "COOL": 6,
+    "WILL": 6,
+    "LUCK": 5,
+    "MOVE": 6,
+    "BODY": 7,
+    "EMP": 3
+  },
+  "SystemStats": {
+    "HP": 45,
+    "WoundedThreshold": 23,
+    "DeathSave": 7,
+    "Humanity": 30,
+    "CurrentHumanity": 30,
+    "MaxHumanity": 30,
+    "CurrentHP": 45,
+    "RoleRank": 4,
+    "SoloThreat": 0,
+    "SoloAwareness": 0,
+    "SoloDeflection": 0,
+    "SoloFumble": 0,
+    "SoloInitiative": 0,
+    "SoloPrecision": 0,
+    "TechField": 0,
+    "TechUpgrade": 0,
+    "TechFab": 0,
+    "TechInvent": 0,
+    "MedSurgery": 0,
+    "MedPharma": 0,
+    "MedCryo": 0,
+    "CurrentLuck": 5
+  },
+  "Lifepath": {
+    "Культурное происхождение": "Южная Азия",
+    "Личность": "Придирчивый, суетливый и нервный",
+    "Стиль одежды": "Leisurewear (комфорт, ловкость, спортивный) ",
+    "Прическа": "Яркие цвета",
+    "Отличительная черта": "Необычные контактные линзы",
+    "Ценность": "Власть",
+    "Отношение к людям": "Уничтожь всех и пусть тараканы захватят мир",
+    "Самый ценный человек": "Публичная личность",
+    "Самая ценная вещь": "Ювелирное изделие",
+    "Семейное происхождение": "Руководители корпорации",
+    "Окружение детства": "В руинах заброшенного города или посёлка, захваченного реконструкторами.",
+    "Трагедия в семье": "Твоя семья заключена в тюрьму, а ты один сумел сбежать.",
+    "Цель в жизни": "Причинить боль и страдания каждому, кто встанет у тебя на пути."
+  },
+  "RoleLifepath": {
+    "Какой ты Фиксер?": "Поставляешь материалы для техников и медтехов",
+    "Есть партнёр? Кто?": "Работаешь один",
+    "Какой у тебя офис?": "Все сообщения через Дата Пулы и анонимные тайники",
+    "Кто твои остальные клиенты?": "Политики или Корпораты, добывающие через тебя информацию",
+    "Кто охотится за тобой?": "Старый клиент, думающий, что ты его обманул"
+  },
+  "Friends": [
+    "Как старший брат/сестра"
+  ],
+  "Enemies": [
+    {
+      "Who": "Корпоративный менеджер",
+      "Cause": "Причинил крупное публичное унижение",
+      "Hate": "Целая банда (1d10+5)",
+      "Action": "Нанести подлый удар в спину. Не обязательно в прямом смысле"
+    },
+    {
+      "Who": "Дальний родственник",
+      "Cause": "Обвинил другого в трусости или другом крупном личном недостатке",
+      "Hate": "Целая банда (1d10+5)",
+      "Action": "Войти в убийственную ярость и вырвать врагу лицо"
+    },
+    {
+      "Who": "Партнёр или коллега",
+      "Cause": "Один из вас подставил другого за преступление, которого тот не совершал",
+      "Hate": "Целый город, правительство или агентство.",
+      "Action": "Избегать накала"
+    }
+  ],
+  "TragicLoves": [],
+  "Skills": [
+    {
+      "Name": "Концентрация",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Атлетика",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Скрытность",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Образование",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Язык (Уличный Сленг)",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Язык (Родной)",
+      "Level": 4,
+      "Total": 11
+    },
+    {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Рукопашный бой",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Уклонение",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Общение",
+      "Level": 2,
+      "Total": 5
+    },
+    {
+      "Name": "Проницательность",
+      "Level": 2,
+      "Total": 5
+    },
+    {
+      "Name": "Убеждение",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Первая помощь",
+      "Level": 2,
+      "Total": 7
+    }
+  ],
+  "Notes": "",
+  "Armor": {
+    "HeadSp": null,
+    "HeadPenalty": null,
+    "BodySp": null,
+    "BodyPenalty": null,
+    "ShieldSp": null,
+    "ShieldPenalty": null
+  },
+  "Weapons": [
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "Ammo": null,
+      "Rof": null,
+      "Notes": null
+    }
+  ],
+  "StyleNotes": "",
+  "Housing": "",
+  "Rent": "",
+  "Lifestyle": "",
+  "AmmoValue": "",
+  "CashValue": "",
+  "GearItems": [
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    }
+  ],
+  "CustomCyberwareList": [],
+  "CyberwareBlocks": [
+    {
+      "Name": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 5,
+      "OptionsText": "",
+      "SlotsText": "свободно 5/5",
+      "InstalledItems": []
+    },
+    {
+      "Name": "КИБЕРАУДИО (CYBERAUDIO)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "БОРГИРОВАНИЕ (BORGWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    }
+  ],
+  "CriticalInjuries": null,
+  "Addictions": "",
+  "CriticalInjuriesList": []
+}

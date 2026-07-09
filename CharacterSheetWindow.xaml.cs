@@ -204,8 +204,12 @@ namespace CyberpunkRED_Generator
         private int _audioMod;
         public int AudioMod { get => _audioMod; set { _audioMod = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
 
+        // ДОБАВЛЯЕМ ЭТО:
+        private int _roleMod;
+        public int RoleMod { get => _roleMod; set { _roleMod = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
+
         // общий численный модификатор травмы + броня + импланты
-        public int GeneralMod => WoundPenalty + EquipmentMod;
+        public int GeneralMod => WoundPenalty + EquipmentMod + RoleMod;
 
         // строка для колонки "ДОП"
         public string DisplayModifier
@@ -262,6 +266,102 @@ namespace CyberpunkRED_Generator
     {
         public string Name { get; set; }
         public string Role { get; set; }
+
+        public string RoleDescription
+        {
+            get
+            {
+                switch (Role)
+                {
+                    case "Рокербой": return "ХАРИЗМАТИЧЕСКОЕ ВЛИЯНИЕ\nВлияй на окружающих силой личности. Превращай людей в фанатов (Бросок: СЛ8 — 1 чел, СЛ10 — до 6 чел, СЛ12 — толпа).\n\nРанги 1-2 (Местные клубы): Убедить фаната на мелкую услугу (купить еду, подвезти).\nРанги 3-4 (Известные клубы): Фанат окажет крупную услугу. Группа будет тусоваться с тобой.\nРанги 5-6 (Крупные клубы): Фанат совершит мелкое преступление (кража, драка). Группа станет личной свитой.\nРанги 7-8 (Концертные залы): Фанат рискнёт жизнью. Группа пойдёт на мелкое преступление.\nРанг 9 (ТВ/Крупные залы): Фанат пойдёт на тяжкое преступление (избиение, грабеж). Группа устроит беспорядки.\nРанг 10 (Стадионы): Фанаты пожертвуют собой без вопросов. Группа рискует жизнями как твоя охрана. Частная армия.";
+                    case "Нетраннер": return "ИНТЕРФЕЙС\nПозволяет заниматься нетраннингом, определяет количество сетевых действий в ход и даёт доступ к программам.\n\nСЕТЕВЫЕ ДЕЙСТВИЯ ЗА ХОД:\nРанг 1–3: 2 действия\nРанг 4–6: 3 действия\nРанг 7–9: 4 действия\nРанг 10: 5 действий";
+                    case "Медиа": return "АВТОРИТЕТНОСТЬ\nДоступ к источникам и убеждение аудитории. Ты пассивно подхватываешь слухи (СЛ 7-13).\n\nУбедительность: Шанс того, что тебе поверят (бросок 1d10 <= Убедительность). Твердые доказательства дают +1/2.\nРанги 1-2: Местные связи. Убедительность 2/10. Влияние на мелких злодеев.\nРанги 3-4: Городские лидеры. Убедительность 3/10. Торжество локальной справедливости.\nРанги 5-6: Крупные игроки. Убедительность 4/10. Влияние на весь город.\nРанги 7-8: Президенты корп. Убедительность 5/10. Влияние на штат.\nРанг 9: Политики штата. Убедительность 6/10. Влияние на страну.\nРанг 10: Мировые лидеры. Убедительность 7/10. Свержение мегакорпораций и мировых правительств.";
+                    case "Законник": return "ПОДКРЕПЛЕНИЕ\nПризыв сослуживцев. Брось 1d10 <= ранга. При успехе брось 1d6 на раунды до прибытия (выпадет 6 — прибудет отряд выше рангом).\n\nРанги 1-2: 4 наемных копа (ОС 7, ПЗ 20).\nРанги 3-4: 4 патрульных на авто (ОС 7, ПЗ 25).\nРанги 5-7: 2 шерифа/штурмовика в тяж. броне (ОС 13, ПЗ 35).\nРанг 8: Маршал Зоны на супербайке (ОС 15, ПЗ 50, гранатомёт).\nРанг 9: C-SWAT/Психоотряд на AV-4 (ОС 18, ПЗ 35, ракетницы).\nРанг 10: Агенты ФБР/Интерпола на AV-4. Остаются помогать в расследовании дела.";
+                    case "Корпорат": return "КОМАНДНАЯ РАБОТА\nКорпоративные блага и команда подчиненных (проверка лояльности подчиненных 1d6 <= их лояльности).\n\nРанг 1: Комплект элитной одежды.\nРанг 2: Бесплатный корпоративный конапт.\nРанг 3: 1 член команды (подчинённый).\nРанг 5: 2 члена команды.\nРанг 6: Медстраховка Trauma Team Silver.\nРанг 7: Улучшение жилья до дома в бивервилле.\nРанг 8: Медстраховка Trauma Team Executive.\nРанг 9: 3 члена команды.\nРанг 10: Люксовый пентхаус или роскошный особняк.";
+                    case "Фиксер": return "ДЕЛОВАЯ ХВАТКА\nСвязи, сделки и культурная гибкость.\n\nОХВАТ РЫНКА (доступ к скрытым товарам):\nРанги 1-2: Повседневные вещи.\nРанги 3-4: Дорогие предметы.\nРанги 5-6: Очень дорогие + организация Ночного Рынка.\nРанги 7-8: Роскошь.\nРанг 9: Супер роскошь + тайный рынок для боссов криминала.\nРанг 10: Уникальные товары.\n\nТОРГ: Наценки/скидки (10-20%), бонусный предмет при покупке 5-и одинаковых.\nГИБКОСТЬ: Автоматическое знание языков и культур местных банд/элит.";
+                    case "Кочевник": return "МОТО\nСемья на колёсах. Добавляет ранг Мото к проверкам: Вождение, Пилотирование, Судовождение, Авиатехника, Автомеханика, Судоремонт.\n\nСЕМЕЙНЫЙ АВТОПАРК:\nКаждый раз повышая ранг, выбери одно:\n1) Добавить 1 стандартный транспорт (ранга Мото или ниже) в свой пул.\n2) Установить 1 улучшение (броню, оружие, NOS и т.д.) на уже доступный транспорт.\n\nКочевник использует 1 семейный транспорт за раз (замена к следующему утру). Семья чинит разбитый транспорт за неделю (и штраф 500eb). На 10 ранге можно выводить весь свой автопарк одновременно.";
+                    default: return "";
+                }
+            }
+        }
+
+        private int _roleRank = 4;
+        public int RoleRank
+        {
+            get => _roleRank;
+            set
+            {
+                _roleRank = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SoloPointsText));
+                OnPropertyChanged(nameof(TechPointsText));
+                OnPropertyChanged(nameof(MedtechPointsText));
+                OnPropertyChanged(nameof(NetrunnerTotal)); // <--- Добавили
+                OnPropertyChanged(nameof(NetrunnerActions)); // <--- Добавили
+                RecalculatePenalties();
+            }
+        }
+        public Visibility IsSoloVis => Role == "Соло" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsTechVis => Role == "Техник" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsMedtechVis => Role == "Медтехник" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsNetrunnerVis => Role == "Нетраннер" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsTextRoleVis => (Role != "Соло" && Role != "Техник" && Role != "Медтехник" && Role != "Нетраннер") ? Visibility.Visible : Visibility.Collapsed;
+
+        // --- СОЛО ---
+        private int _soloThreat; public int SoloThreat { get => _soloThreat; set { _soloThreat = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); RecalculatePenalties(); } }
+        private int _soloAwareness; public int SoloAwareness { get => _soloAwareness; set { _soloAwareness = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); } }
+        private int _soloDeflection; public int SoloDeflection { get => _soloDeflection; set { _soloDeflection = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); } }
+        private int _soloFumble; public int SoloFumble { get => _soloFumble; set { _soloFumble = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); } }
+        private int _soloInitiative; public int SoloInitiative { get => _soloInitiative; set { _soloInitiative = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); RecalculatePenalties(); } }
+        private int _soloPrecision; public int SoloPrecision { get => _soloPrecision; set { _soloPrecision = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); } }
+        public int SoloPointsUsed => SoloThreat * 1 + SoloAwareness * 1 + SoloDeflection * 2 + SoloFumble * 1 + SoloInitiative * 1 + SoloPrecision * 3;
+        public string SoloPointsText => $"СВОБОДНЫХ ОЧКОВ: {RoleRank - SoloPointsUsed}";
+
+        // --- ТЕХНИК ---
+        private int _techField; public int TechField { get => _techField; set { _techField = value; OnPropertyChanged(); OnPropertyChanged(nameof(TechPointsText)); RecalculatePenalties(); } }
+        private int _techUpgrade; public int TechUpgrade { get => _techUpgrade; set { _techUpgrade = value; OnPropertyChanged(); OnPropertyChanged(nameof(TechPointsText)); } }
+        private int _techFab; public int TechFab { get => _techFab; set { _techFab = value; OnPropertyChanged(); OnPropertyChanged(nameof(TechPointsText)); } }
+        private int _techInvent; public int TechInvent { get => _techInvent; set { _techInvent = value; OnPropertyChanged(); OnPropertyChanged(nameof(TechPointsText)); } }
+        public int TechPointsUsed => TechField + TechUpgrade + TechFab + TechInvent;
+        public string TechPointsText => $"СВОБОДНЫХ ОЧКОВ: {RoleRank - TechPointsUsed}";
+
+        // --- МЕДТЕХНИК ---
+        private int _medSurgery; public int MedSurgery { get => _medSurgery; set { _medSurgery = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedSurgeryTotal)); } }
+        private int _medPharma; public int MedPharma { get => _medPharma; set { _medPharma = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedPharmaTotal)); } }
+        private int _medCryo; public int MedCryo { get => _medCryo; set { _medCryo = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedCryoTotal)); } }
+        public int MedtechPointsUsed => MedSurgery + MedPharma + MedCryo;
+        public string MedtechPointsText => $"СВОБОДНЫХ ОЧКОВ: {RoleRank - MedtechPointsUsed}";
+
+        public int BaseTech => HexStats?.FirstOrDefault(s => s.Name == "ТЕХ" || s.Name == "TECH")?.CurrentValue ?? 0;
+        public int MedSurgeryTotal => BaseTech + MedSurgery;
+        public int MedPharmaTotal => BaseTech + MedPharma;
+        public int MedCryoTotal => BaseTech + MedCryo;
+        // --- НЕТРАННЕР ---
+        public int NetrunnerTotal => (HexStats?.FirstOrDefault(s => s.Name == "ИНТ" || s.Name == "INT")?.CurrentValue ?? 0) + RoleRank;
+        public int NetrunnerActions
+        {
+            get
+            {
+                if (RoleRank >= 10) return 5;
+                if (RoleRank >= 7) return 4;
+                if (RoleRank >= 4) return 3;
+                return 2;
+            }
+        }
+
+        // Вспомогательный метод для добавления бонусов роли к скиллам
+        public void ApplyRoleModToSkill(string skillName, int value)
+        {
+            var allCats = new List<SheetSkillCategory>();
+            if (CenterSkillCategories != null) allCats.AddRange(CenterSkillCategories);
+            if (RightSkillCategories1 != null) allCats.AddRange(RightSkillCategories1);
+            if (RightSkillCategories2 != null) allCats.AddRange(RightSkillCategories2);
+
+            foreach (var cat in allCats)
+                foreach (var skill in cat.Skills)
+                    if (skill.Name == skillName || skill.BaseName == skillName)
+                        skill.RoleMod += value;
+        }
 
         public List<SheetStat> HexStats { get; set; }
         public Dictionary<string, int> Stats { get; set; }
@@ -357,6 +457,7 @@ namespace CyberpunkRED_Generator
             if (refStat != null)
             {
                 int baseInit = refStat.CurrentValue;
+                if (Role == "Соло") baseInit += SoloInitiative;
                 bool hasKerenzikov = CyberwareBlocks?.Any(b => b.InstalledItems.Any(i => i.Name == "Керензиков")) == true;
                 bool hasSandevistan = CyberwareBlocks?.Any(b => b.InstalledItems.Any(i => i.Name == "Сандевистан")) == true;
 
@@ -525,7 +626,38 @@ namespace CyberpunkRED_Generator
                     skill.EquipmentMod = 0;
                     skill.VisualMod = 0;
                     skill.AudioMod = 0;
+                    skill.RoleMod = 0;
                 }
+            }
+
+            // <--- СРАЗУ ПОСЛЕ ЦИКЛА ДОБАВЛЯЕМ ЛОГИКУ БОНУСОВ РОЛЕЙ --->
+            if (Role == "Фиксер")
+            {
+                ApplyRoleModToSkill("Торговля", RoleRank);
+                ApplyRoleModToSkill("Знаток Улиц", RoleRank);
+            }
+            else if (Role == "Кочевник")
+            {
+                ApplyRoleModToSkill("Авиационные технологии", RoleRank);
+                ApplyRoleModToSkill("Автомеханика", RoleRank);
+                ApplyRoleModToSkill("Морские технологии", RoleRank);
+
+                ApplyRoleModToSkill("Вождение", RoleRank);
+                ApplyRoleModToSkill("Пилотирование (x2)", RoleRank);
+                ApplyRoleModToSkill("Судоходство", RoleRank);
+            }
+            else if (Role == "Соло")
+            {
+                ApplyRoleModToSkill("Внимательность", SoloThreat);
+            }
+            else if (Role == "Техник")
+            {
+                ApplyRoleModToSkill("Знание техники", TechField);
+                ApplyRoleModToSkill("Кибертехника", TechField);
+                ApplyRoleModToSkill("Автомеханика", TechField);
+                ApplyRoleModToSkill("Морские технологии", TechField);
+                ApplyRoleModToSkill("Авиационные технологии", TechField);
+                ApplyRoleModToSkill("Оружейник", TechField);
             }
 
             var activeModifiers = new List<SkillModifierDef>();
@@ -580,6 +712,10 @@ namespace CyberpunkRED_Generator
                 ApplyStatPenalty("СКО", "MOVE", moveStat.ArmorPenalty);
             }
             CurrentDeathSave = Math.Max(0, BaseDeathSave - dsPenalty);
+
+            OnPropertyChanged(nameof(MedSurgeryTotal));
+            OnPropertyChanged(nameof(MedPharmaTotal));
+            OnPropertyChanged(nameof(MedCryoTotal));
 
             UpdateDerivedCombatStats();
         }
@@ -773,6 +909,27 @@ namespace CyberpunkRED_Generator
 
                         Addictions = _originalData.Addictions ?? ""
                     };
+
+                    viewModel.RoleRank = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("RoleRank") ? _originalData.SystemStats["RoleRank"] : 4;
+
+                    if (_originalData.SystemStats != null)
+                    {
+                        viewModel.SoloThreat = _originalData.SystemStats.ContainsKey("SoloThreat") ? _originalData.SystemStats["SoloThreat"] : 0;
+                        viewModel.SoloAwareness = _originalData.SystemStats.ContainsKey("SoloAwareness") ? _originalData.SystemStats["SoloAwareness"] : 0;
+                        viewModel.SoloDeflection = _originalData.SystemStats.ContainsKey("SoloDeflection") ? _originalData.SystemStats["SoloDeflection"] : 0;
+                        viewModel.SoloFumble = _originalData.SystemStats.ContainsKey("SoloFumble") ? _originalData.SystemStats["SoloFumble"] : 0;
+                        viewModel.SoloInitiative = _originalData.SystemStats.ContainsKey("SoloInitiative") ? _originalData.SystemStats["SoloInitiative"] : 0;
+                        viewModel.SoloPrecision = _originalData.SystemStats.ContainsKey("SoloPrecision") ? _originalData.SystemStats["SoloPrecision"] : 0;
+
+                        viewModel.TechField = _originalData.SystemStats.ContainsKey("TechField") ? _originalData.SystemStats["TechField"] : 0;
+                        viewModel.TechUpgrade = _originalData.SystemStats.ContainsKey("TechUpgrade") ? _originalData.SystemStats["TechUpgrade"] : 0;
+                        viewModel.TechFab = _originalData.SystemStats.ContainsKey("TechFab") ? _originalData.SystemStats["TechFab"] : 0;
+                        viewModel.TechInvent = _originalData.SystemStats.ContainsKey("TechInvent") ? _originalData.SystemStats["TechInvent"] : 0;
+
+                        viewModel.MedSurgery = _originalData.SystemStats.ContainsKey("MedSurgery") ? _originalData.SystemStats["MedSurgery"] : 0;
+                        viewModel.MedPharma = _originalData.SystemStats.ContainsKey("MedPharma") ? _originalData.SystemStats["MedPharma"] : 0;
+                        viewModel.MedCryo = _originalData.SystemStats.ContainsKey("MedCryo") ? _originalData.SystemStats["MedCryo"] : 0;
+                    }
 
                     viewModel.MaxHP = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("HP") ? _originalData.SystemStats["HP"] : 40;
                     viewModel.CurrentHP = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("CurrentHP") ? _originalData.SystemStats["CurrentHP"] : viewModel.MaxHP;
@@ -1074,6 +1231,82 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        private void RoleRank_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
+            {
+                if (val > 777)
+                {
+                    tb.Text = "777";
+                    tb.SelectionStart = tb.Text.Length;
+                }
+            }
+        }
+
+        private void BtnRolePlus_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            string tag = (sender as Button)?.Tag.ToString();
+
+            // Логика Соло
+            if (tag == "Threat" || tag == "Awareness" || tag == "Deflection" || tag == "Fumble" || tag == "Initiative" || tag == "Precision")
+            {
+                int cost = tag == "Deflection" ? 2 : (tag == "Precision" ? 3 : 1);
+                if (vm.RoleRank - vm.SoloPointsUsed >= cost)
+                {
+                    if (tag == "Threat") vm.SoloThreat++;
+                    else if (tag == "Awareness") vm.SoloAwareness++;
+                    else if (tag == "Deflection") vm.SoloDeflection++;
+                    else if (tag == "Fumble") vm.SoloFumble++;
+                    else if (tag == "Initiative") vm.SoloInitiative++;
+                    else if (tag == "Precision") vm.SoloPrecision++;
+                }
+            }
+            // Логика Техника
+            else if (tag == "TechField" || tag == "TechUpgrade" || tag == "TechFab" || tag == "TechInvent")
+            {
+                if (vm.RoleRank - vm.TechPointsUsed >= 1)
+                {
+                    if (tag == "TechField") vm.TechField++;
+                    else if (tag == "TechUpgrade") vm.TechUpgrade++;
+                    else if (tag == "TechFab") vm.TechFab++;
+                    else if (tag == "TechInvent") vm.TechInvent++;
+                }
+            }
+            // Логика Медтехника
+            else if (tag == "MedSurgery" || tag == "MedPharma" || tag == "MedCryo")
+            {
+                if (vm.RoleRank - vm.MedtechPointsUsed >= 1)
+                {
+                    if (tag == "MedSurgery") vm.MedSurgery++;
+                    else if (tag == "MedPharma") vm.MedPharma++;
+                    else if (tag == "MedCryo") vm.MedCryo++;
+                }
+            }
+        }
+
+        private void BtnRoleMinus_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            string tag = (sender as Button)?.Tag.ToString();
+
+            if (tag == "Threat" && vm.SoloThreat > 0) vm.SoloThreat--;
+            else if (tag == "Awareness" && vm.SoloAwareness > 0) vm.SoloAwareness--;
+            else if (tag == "Deflection" && vm.SoloDeflection > 0) vm.SoloDeflection--;
+            else if (tag == "Fumble" && vm.SoloFumble > 0) vm.SoloFumble--;
+            else if (tag == "Initiative" && vm.SoloInitiative > 0) vm.SoloInitiative--;
+            else if (tag == "Precision" && vm.SoloPrecision > 0) vm.SoloPrecision--;
+
+            else if (tag == "TechField" && vm.TechField > 0) vm.TechField--;
+            else if (tag == "TechUpgrade" && vm.TechUpgrade > 0) vm.TechUpgrade--;
+            else if (tag == "TechFab" && vm.TechFab > 0) vm.TechFab--;
+            else if (tag == "TechInvent" && vm.TechInvent > 0) vm.TechInvent--;
+
+            else if (tag == "MedSurgery" && vm.MedSurgery > 0) vm.MedSurgery--;
+            else if (tag == "MedPharma" && vm.MedPharma > 0) vm.MedPharma--;
+            else if (tag == "MedCryo" && vm.MedCryo > 0) vm.MedCryo--;
+        }
+
         private bool SaveData()
         {
             try
@@ -1082,12 +1315,31 @@ namespace CyberpunkRED_Generator
                 {
                     var vm = this.DataContext as SheetViewModel;
 
+                    _originalData.Name = vm.Name;
+
                     if (_originalData.SystemStats == null) _originalData.SystemStats = new Dictionary<string, int>();
                     _originalData.SystemStats["CurrentHumanity"] = vm.CurrentHumanity;
                     _originalData.SystemStats["MaxHumanity"] = vm.MaxHumanity;
                     _originalData.SystemStats["HP"] = vm.MaxHP;
                     _originalData.SystemStats["CurrentHP"] = vm.CurrentHP;
                     _originalData.SystemStats["DeathSave"] = vm.BaseDeathSave;
+
+                    _originalData.SystemStats["RoleRank"] = vm.RoleRank;
+                    _originalData.SystemStats["SoloThreat"] = vm.SoloThreat;
+                    _originalData.SystemStats["SoloAwareness"] = vm.SoloAwareness;
+                    _originalData.SystemStats["SoloDeflection"] = vm.SoloDeflection;
+                    _originalData.SystemStats["SoloFumble"] = vm.SoloFumble;
+                    _originalData.SystemStats["SoloInitiative"] = vm.SoloInitiative;
+                    _originalData.SystemStats["SoloPrecision"] = vm.SoloPrecision;
+
+                    _originalData.SystemStats["TechField"] = vm.TechField;
+                    _originalData.SystemStats["TechUpgrade"] = vm.TechUpgrade;
+                    _originalData.SystemStats["TechFab"] = vm.TechFab;
+                    _originalData.SystemStats["TechInvent"] = vm.TechInvent;
+
+                    _originalData.SystemStats["MedSurgery"] = vm.MedSurgery;
+                    _originalData.SystemStats["MedPharma"] = vm.MedPharma;
+                    _originalData.SystemStats["MedCryo"] = vm.MedCryo;
 
                     var luckStat = vm.HexStats.FirstOrDefault(s => s.Name == "УДЧ" || s.Name == "LUCK");
                     if (luckStat != null) _originalData.SystemStats["CurrentLuck"] = luckStat.CurrentValue;

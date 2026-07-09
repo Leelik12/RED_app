@@ -22,7 +22,21 @@
     "CurrentHumanity": 13,
     "MaxHumanity": 52,
     "CurrentHP": 35,
-    "CurrentLuck": 3
+    "CurrentLuck": 3,
+    "RoleRank": 5,
+    "SoloThreat": 0,
+    "SoloAwareness": 0,
+    "SoloDeflection": 0,
+    "SoloFumble": 0,
+    "SoloInitiative": 0,
+    "SoloPrecision": 0,
+    "TechField": 0,
+    "TechUpgrade": 0,
+    "TechFab": 0,
+    "TechInvent": 0,
+    "MedSurgery": 0,
+    "MedPharma": 0,
+    "MedCryo": 0
   },
   "Lifepath": {
     "Культурное происхождение": "Южная Азия",
