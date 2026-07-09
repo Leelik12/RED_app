@@ -266,9 +266,9 @@
                             </Border>
                             <Border Grid.Column="1" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <TextBox Text="{Binding CurrentHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Right" MinWidth="25"/>
+                                    <TextBox Text="{Binding CurrentHumanity, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBoxWithMinus" TextChanged="CurrentHumanity_TextChanged" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Right" MinWidth="25"/>
                                     <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="4,0"/>
-                                    <TextBox Text="{Binding MaxHumanity, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Left" MinWidth="25"/>
+                                    <TextBox Text="{Binding MaxHumanity, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="MaxHumanity_TextChanged" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" TextAlignment="Left" MinWidth="25"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -286,7 +286,7 @@
                                         <TextBlock Text="ПЗ" Foreground="#050505" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Padding="2"/>
                                     </Border>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4">
-                                        <TextBox Text="{Binding CurrentHP, UpdateSourceTrigger=PropertyChanged}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#FFFFFF" TextAlignment="Right" MinWidth="25"/>
+                                        <TextBox Text="{Binding CurrentHP, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="CurrentHP_TextChanged" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" Background="Transparent" BorderThickness="0" CaretBrush="#FFFFFF" TextAlignment="Right" MinWidth="25"/>
                                         <TextBlock Text="/" Foreground="#00FFCC" FontSize="20" FontWeight="Bold" Margin="2,0"/>
                                         <TextBlock Text="{Binding MaxHP}" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
                                     </StackPanel>
@@ -417,7 +417,7 @@
                                                             <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                         <Border Grid.Column="1" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="2" Style="{StaticResource SkillBox}">
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -478,7 +478,7 @@
                                                             <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                         <Border Grid.Column="1" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="2" Style="{StaticResource SkillBox}">
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -539,7 +539,7 @@
                                                             <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                         <Border Grid.Column="1" Style="{StaticResource SkillBox}">
-                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
+                                                            <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
                                                         </Border>
                                                         <Border Grid.Column="2" Style="{StaticResource SkillBox}">
                                                             <TextBlock Text="{Binding StatValue}" Foreground="#E0E0E0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -652,10 +652,10 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="Защита головы" Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
                                         <Border Grid.Column="1" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBox Text="{Binding Armor.HeadSp, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                            <TextBox Text="{Binding Armor.HeadSp, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                         <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBox Text="{Binding Armor.HeadPenalty, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                            <TextBox Text="{Binding Armor.HeadPenalty, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                     </Grid>
                                     <Grid Margin="0,2" Height="25">
@@ -667,10 +667,10 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="Защита туловища" Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
                                         <Border Grid.Column="1" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBox Text="{Binding Armor.BodySp, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                            <TextBox Text="{Binding Armor.BodySp, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                         <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBox Text="{Binding Armor.BodyPenalty, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                            <TextBox Text="{Binding Armor.BodyPenalty, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                     </Grid>
                                     <Grid Margin="0,2" Height="25">
@@ -682,10 +682,10 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="Щит" Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
                                         <Border Grid.Column="1" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBox Text="{Binding Armor.ShieldSp, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                            <TextBox Text="{Binding Armor.ShieldSp, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                         <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
-                                            <TextBox Text="{Binding Armor.ShieldPenalty, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                            <TextBox Text="{Binding Armor.ShieldPenalty, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                         </Border>
                                     </Grid>
                                     <TextBlock Text="Штрафы брони применяются к РЕА, ЛВК и СКО" Foreground="#FF3333" FontSize="11" Margin="0,6,0,0"/>

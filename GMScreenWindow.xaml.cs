@@ -66,22 +66,71 @@ namespace CyberpunkRED_Generator
         public bool IsPlayer { get; set; }
 
         private int _initiative;
-        public int Initiative { get => _initiative; set { _initiative = value; OnPropertyChanged(); } }
+        public int Initiative
+        {
+            get => _initiative;
+            set { _initiative = Math.Min(777, Math.Max(0, value)); OnPropertyChanged(); }
+        }
 
         private string _name;
         public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
 
-        private int _currentHP;
-        public int CurrentHP { get => _currentHP; set { _currentHP = value; OnPropertyChanged(); } }
-
         private int _maxHP;
-        public int MaxHP { get => _maxHP; set { _maxHP = value; OnPropertyChanged(); } }
+        public int MaxHP
+        {
+            get => _maxHP;
+            set
+            {
+                int val = Math.Min(777, Math.Max(1, value));
+                if (_maxHP == val) return;
+                _maxHP = val;
+                if (_currentHP > _maxHP) CurrentHP = _maxHP;
+                OnPropertyChanged();
+                Recalculate();
+            }
+        }
+
+        private int _currentHP;
+        public int CurrentHP
+        {
+            get => _currentHP;
+            set
+            {
+                int val = value;
+                if (val > MaxHP) val = MaxHP;
+                if (val < 0) val = 0;
+                if (_currentHP == val) return;
+                _currentHP = val;
+                OnPropertyChanged();
+                Recalculate();
+            }
+        }
 
         private int _headArmor;
-        public int HeadArmor { get => _headArmor; set { _headArmor = Math.Max(0, value); OnPropertyChanged(); } }
+        public int HeadArmor
+        {
+            get => _headArmor;
+            set
+            {
+                int val = Math.Min(777, Math.Max(0, value));
+                if (_headArmor == val) return;
+                _headArmor = val;
+                OnPropertyChanged();
+            }
+        }
 
         private int _bodyArmor;
-        public int BodyArmor { get => _bodyArmor; set { _bodyArmor = Math.Max(0, value); OnPropertyChanged(); } }
+        public int BodyArmor
+        {
+            get => _bodyArmor;
+            set
+            {
+                int val = Math.Min(777, Math.Max(0, value));
+                if (_bodyArmor == val) return;
+                _bodyArmor = val;
+                OnPropertyChanged();
+            }
+        }
 
         public string CombatStatsDisplay { get; set; }
         public ObservableCollection<string> DisplaySkills { get; set; } = new ObservableCollection<string>();
@@ -250,6 +299,23 @@ namespace CyberpunkRED_Generator
             this.DataContext = this;
         }
 
+        private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]+$");
+        }
+
+        private void NumberLimitTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
+            {
+                if (val > 777)
+                {
+                    tb.Text = "777";
+                    tb.SelectionStart = tb.Text.Length;
+                }
+            }
+        }
+
         private void BtnNextTurn_Click(object sender, RoutedEventArgs e)
         {
             if (Combatants.Count == 0) return;
@@ -300,8 +366,17 @@ namespace CyberpunkRED_Generator
             string cyberName = CbGenCyber.Text?.Trim();
             if (!string.IsNullOrEmpty(cyberName) && !NewEnemyCyberware.Contains(cyberName))
             {
-                NewEnemyCyberware.Add(cyberName);
-                CbGenCyber.Text = "";
+                // Проверяем, есть ли такой имплант в базе (без учета регистра)
+                bool exists = CoreDataBase.AllCyberware.Any(c => c.Name.Equals(cyberName, StringComparison.OrdinalIgnoreCase));
+                if (exists)
+                {
+                    NewEnemyCyberware.Add(cyberName);
+                    CbGenCyber.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("Такого импланта нет в базе! Проверьте правильность написания или добавьте его через генератор.", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
 
@@ -355,8 +430,8 @@ namespace CyberpunkRED_Generator
                 Name = "ИГРОК",
                 IsPlayer = true,
                 Initiative = 0,
-                CurrentHP = 40,
                 MaxHP = 40,
+                CurrentHP = 40,
                 HeadArmor = 11,
                 BodyArmor = 11,
                 BaseMove = 5,
@@ -531,8 +606,8 @@ namespace CyberpunkRED_Generator
                     Name = enemyData.Name,
                     IsPlayer = false,
                     Initiative = 0,
-                    CurrentHP = enemyData.HP,
                     MaxHP = enemyData.HP,
+                    CurrentHP = enemyData.HP,
                     HeadArmor = enemyData.HeadArmor,
                     BodyArmor = enemyData.BodyArmor,
                     BaseMove = enemyData.BaseMove,

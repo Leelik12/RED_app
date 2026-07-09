@@ -38,15 +38,6 @@ G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.csproj.GenerateResource.cache
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.csproj.CoreCompileInputs.cache
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.exe
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.pdb
-G:\GitRepos\RED_app\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
-G:\GitRepos\RED_app\bin\Debug\System.Buffers.dll
-G:\GitRepos\RED_app\bin\Debug\System.IO.Pipelines.dll
-G:\GitRepos\RED_app\bin\Debug\System.Memory.dll
-G:\GitRepos\RED_app\bin\Debug\System.Numerics.Vectors.dll
-G:\GitRepos\RED_app\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
-G:\GitRepos\RED_app\bin\Debug\System.Text.Encodings.Web.dll
-G:\GitRepos\RED_app\bin\Debug\System.Text.Json.dll
-G:\GitRepos\RED_app\bin\Debug\System.Threading.Tasks.Extensions.dll
 G:\GitRepos\RED_app\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
 G:\GitRepos\RED_app\bin\Debug\System.Buffers.xml
 G:\GitRepos\RED_app\bin\Debug\System.IO.Pipelines.xml
@@ -63,3 +54,9 @@ G:\GitRepos\RED_app\obj\Debug\GMScreenWindow.baml
 G:\GitRepos\RED_app\obj\Debug\GMScreenWindow.g.cs
 G:\GitRepos\RED_app\obj\Debug\GeneratedInternalTypeHelper.g.cs
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen_MarkupCompile.lref
+G:\GitRepos\RED_app\bin\Debug\CyberpunkGen.exe.manifest
+G:\GitRepos\RED_app\bin\Debug\CyberpunkGen.application
+G:\GitRepos\RED_app\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.csproj.Fody.CopyLocal.cache
+G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.exe.manifest
+G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.application

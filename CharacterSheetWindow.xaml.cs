@@ -177,7 +177,20 @@ namespace CyberpunkRED_Generator
         public int StatValue { get => _statValue; set { _statValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
 
         private int _level;
-        public int Level { get => _level; set { _level = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
+        public int Level
+        {
+            get => _level;
+            set
+            {
+                int val = Math.Max(0, Math.Min(777, value));
+                if (_level == val) return;
+                _level = val;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Base));
+                OnPropertyChanged(nameof(DisplayModifier));
+                OnPropertyChanged(nameof(DisplayBase));
+            }
+        }
 
         private int _woundPenalty;
         public int WoundPenalty { get => _woundPenalty; set { _woundPenalty = value; OnPropertyChanged(); OnPropertyChanged(nameof(Base)); OnPropertyChanged(nameof(DisplayModifier)); OnPropertyChanged(nameof(DisplayBase)); } }
@@ -254,12 +267,51 @@ namespace CyberpunkRED_Generator
         public Dictionary<string, int> Stats { get; set; }
         public Dictionary<string, int> SystemStats { get; set; }
 
-        private int _currentHumanity; public int CurrentHumanity { get => _currentHumanity; set { _currentHumanity = value; OnPropertyChanged(); UpdateEmp(); } }
-        private int _maxHumanity; public int MaxHumanity { get => _maxHumanity; set { _maxHumanity = value; OnPropertyChanged(); } }
+        private int _currentHumanity;
+        public int CurrentHumanity
+        {
+            get => _currentHumanity;
+            set
+            {
+                int val = value;
+                if (val < -777) val = -777;
+                if (val > MaxHumanity) val = MaxHumanity;
+                _currentHumanity = val;
+                OnPropertyChanged();
+                UpdateEmp();
+            }
+        }
+
+        private int _maxHumanity;
+        public int MaxHumanity
+        {
+            get => _maxHumanity;
+            set
+            {
+                int baseEmp = Stats != null && Stats.ContainsKey("EMP") ? Stats["EMP"] : (Stats != null && Stats.ContainsKey("ЭМП") ? Stats["ЭМП"] : 5);
+                int limit = baseEmp * 10;
+                int val = Math.Max(0, Math.Min(limit, value));
+
+                _maxHumanity = val;
+                if (_currentHumanity > _maxHumanity) CurrentHumanity = _maxHumanity;
+                OnPropertyChanged();
+            }
+        }
 
         // здоровье и травмы
         private int _currentHP;
-        public int CurrentHP { get => _currentHP; set { if (_currentHP == value) return; _currentHP = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        public int CurrentHP
+        {
+            get => _currentHP;
+            set
+            {
+                int val = Math.Max(0, Math.Min(MaxHP, value));
+                if (_currentHP == val) return;
+                _currentHP = val;
+                OnPropertyChanged();
+                RecalculatePenalties();
+            }
+        }
 
         private int _maxHP;
         public int MaxHP { get => _maxHP; set { if (_maxHP == value) return; _maxHP = value; OnPropertyChanged(); RecalculatePenalties(); } }
@@ -583,6 +635,81 @@ namespace CyberpunkRED_Generator
     {
         private string _currentFilePath;
         private CharacterSaveData _originalData;
+
+        private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]+$");
+        }
+
+        private void NumberValidationTextBoxWithMinus(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[-0-9]+$");
+        }
+
+        private void NumberLimit777_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
+            {
+                if (val > 777)
+                {
+                    tb.Text = "777";
+                    tb.SelectionStart = tb.Text.Length;
+                }
+            }
+        }
+
+        private void CurrentHumanity_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
+            {
+                if (this.DataContext is SheetViewModel vm)
+                {
+                    if (val > vm.MaxHumanity)
+                    {
+                        tb.Text = vm.MaxHumanity.ToString();
+                        tb.SelectionStart = tb.Text.Length;
+                    }
+                    else if (val < -777)
+                    {
+                        tb.Text = "-777";
+                        tb.SelectionStart = tb.Text.Length;
+                    }
+                }
+            }
+        }
+
+        private void MaxHumanity_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
+            {
+                if (this.DataContext is SheetViewModel vm)
+                {
+                    int baseEmp = vm.Stats != null && vm.Stats.ContainsKey("EMP") ? vm.Stats["EMP"] : (vm.Stats != null && vm.Stats.ContainsKey("ЭМП") ? vm.Stats["ЭМП"] : 5);
+                    int limit = baseEmp * 10;
+
+                    if (val > limit)
+                    {
+                        tb.Text = limit.ToString();
+                        tb.SelectionStart = tb.Text.Length;
+                    }
+                }
+            }
+        }
+
+        private void CurrentHP_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
+            {
+                if (this.DataContext is SheetViewModel vm)
+                {
+                    if (val > vm.MaxHP)
+                    {
+                        tb.Text = vm.MaxHP.ToString();
+                        tb.SelectionStart = tb.Text.Length;
+                    }
+                }
+            }
+        }
 
         public CharacterSheetWindow(string jsonFilePath)
         {

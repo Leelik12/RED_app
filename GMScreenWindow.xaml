@@ -220,7 +220,7 @@
 
                                                 <StackPanel Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0">
                                                     <TextBlock Text="ИНИЦ." Foreground="#777777" FontSize="12" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                                    <TextBox Text="{Binding Initiative, UpdateSourceTrigger=PropertyChanged}" Background="#000000" Foreground="#00FFCC" FontSize="22" FontWeight="Bold" BorderBrush="#444444" BorderThickness="1" TextAlignment="Center" Width="45" Padding="0,2"/>
+                                                    <TextBox Text="{Binding Initiative, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#000000" Foreground="#00FFCC" FontSize="22" FontWeight="Bold" BorderBrush="#444444" BorderThickness="1" TextAlignment="Center" Width="45" Padding="0,2"/>
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,20,0">
@@ -246,10 +246,10 @@
                                                 <StackPanel Grid.Column="2" VerticalAlignment="Top" Margin="0,5,20,0">
                                                     <TextBlock Text="ЗДОРОВЬЕ (ПЗ)" Foreground="#777777" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                                                        <Button Content="-" Background="#333" Foreground="White" Width="22" Height="22" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Tag="{Binding}" Click="BtnHeal_Click"/>
-                                                        <TextBox Text="{Binding CurrentHP, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="#FF3333" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="38"/>
+                                                        <Button Content="+" Background="#FF3333" Foreground="Black" Width="22" Height="22" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Tag="{Binding}" Click="BtnHeal_Click" ToolTip="Исцелить 1 ПЗ"/>
+                                                        <TextBox Text="{Binding CurrentHP, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="#FF3333" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="38"/>
                                                         <TextBlock Text="/" Foreground="#777777" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0"/>
-                                                        <TextBox Text="{Binding MaxHP, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="#777777" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="38"/>
+                                                        <TextBox Text="{Binding MaxHP, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="#777777" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="38"/>
                                                         <Button Content="-" Background="#FF3333" Foreground="Black" Width="22" Height="22" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Tag="{Binding}" Click="BtnDamage_Click" ToolTip="Нанести 1 урон"/>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -257,13 +257,13 @@
                                                 <StackPanel Grid.Column="3" VerticalAlignment="Top" Margin="0,5,20,0">
                                                     <TextBlock Text="ОС (ГОЛОВА)" Foreground="#777777" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,8">
-                                                        <TextBox Text="{Binding HeadArmor, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
+                                                        <TextBox Text="{Binding HeadArmor, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
                                                         <Button Content="-1 ОС" Background="#333333" Foreground="#00FFCC" BorderThickness="0" Padding="6,2" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnAblateHead_Click"/>
                                                     </StackPanel>
 
                                                     <TextBlock Text="ОС (ТЕЛО)" Foreground="#777777" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                                        <TextBox Text="{Binding BodyArmor, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
+                                                        <TextBox Text="{Binding BodyArmor, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
                                                         <Button Content="-1 ОС" Background="#333333" Foreground="#00FFCC" BorderThickness="0" Padding="6,2" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnAblateBody_Click"/>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -444,15 +444,15 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0">
                                             <TextBlock Text="Боевой Номер (БН):" Foreground="#00FFCC" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenCN" Text="12" Background="#050505" Foreground="#00FFCC" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenCN" Text="12" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#00FFCC" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="2">
                                             <TextBlock Text="Спасбросок смерти (База):" Foreground="#FF3333" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenDeathSaveCN" Text="5" Background="#050505" Foreground="#FF3333" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenDeathSaveCN" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FF3333" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="4">
                                             <TextBlock Text="СКО (Move):" Foreground="#FFFFFF" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenMove" Text="5" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenMove" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
 
@@ -461,43 +461,43 @@
                                         <UniformGrid Columns="5" Margin="0,0,0,15">
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="ИНТ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StINT" Text="5" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StINT" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="РЕА" Foreground="#0FC" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StREF" Text="5" Background="#050" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StREF" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="ЛВК" Foreground="#0FC" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StDEX" Text="5" Background="#050" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StDEX" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="ТЕХ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StTECH" Text="5" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StTECH" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="ХАР" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StCOOL" Text="5" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StCOOL" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="ВОЛЯ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StWILL" Text="5" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StWILL" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="УДЧ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StLUCK" Text="5" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StLUCK" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="СКО" Foreground="#FFF" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StMOVE" Text="5" Background="#050" Foreground="#FFF" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StMOVE" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="ТЕЛ" Foreground="#F33" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StBODY" Text="5" Background="#050" Foreground="#F33" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StBODY" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#F33" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
                                                 <TextBlock Text="ЭМП" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StEMP" Text="5" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBox x:Name="StEMP" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
                                             </StackPanel>
                                         </UniformGrid>
 
@@ -512,7 +512,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <ComboBox x:Name="CbGenSkills" ItemsSource="{Binding AllSkillNames}" Background="#0A0A0A" Foreground="#FFF" BorderBrush="#444" Height="26"/>
-                                            <TextBox x:Name="TxtGenSkillLevel" Grid.Column="2" Text="10" Background="#0A0A0A" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#444" Height="26"/>
+                                            <TextBox x:Name="TxtGenSkillLevel" Grid.Column="2" Text="10" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#0A0A0A" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#444" Height="26"/>
                                             <Button Grid.Column="4" Content="+" Foreground="#0FC" Background="Transparent" FontWeight="Bold" FontSize="18" Cursor="Hand" BorderThickness="0" Click="BtnAddGenSkill_Click"/>
                                         </Grid>
 
@@ -546,15 +546,15 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0">
                                             <TextBlock Text="ОС Головы:" Foreground="#999999" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenHead" Text="7" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenHead" Text="7" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="2">
                                             <TextBlock Text="ОС Тела:" Foreground="#999999" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenBody" Text="7" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenBody" Text="7" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="4">
                                             <TextBlock Text="Здоровье (ПЗ):" Foreground="#999999" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenHP" Text="30" Background="#050505" Foreground="#FF3333" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenHP" Text="30" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FF3333" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
 
