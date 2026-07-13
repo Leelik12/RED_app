@@ -7,11 +7,11 @@ using System.Windows;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набор атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("CyberpunkGen")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Cyberpunk RED Terminal")]
+[assembly: AssemblyDescription("Генератор и трекер персонажей для НРИ Cyberpunk RED, с функцией мониторинга инициативы")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CyberpunkGen")]
+[assembly: AssemblyCompany("Leelik12")]
+[assembly: AssemblyProduct("Cyberpunk RED Terminal")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

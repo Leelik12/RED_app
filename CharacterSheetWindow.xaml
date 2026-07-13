@@ -486,7 +486,7 @@
                                 <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
                                     <TextBlock Text="ЗАМЕТКИ" Style="{StaticResource RedHeaderText}" FontSize="12"/>
                                 </Border>
-                                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                                        <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="#111111" BorderBrush="#444444" BorderThickness="1" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
                             </Grid>
                         </Border>
 
@@ -848,7 +848,7 @@
                                 <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
                                     <TextBlock Text="ЗАВИСИМОСТИ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
                                 </Border>
-                                <TextBox Text="{Binding Addictions, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                                        <TextBox Text="{Binding Addictions, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" Background="#111111" BorderBrush="#444444" BorderThickness="1" TextWrapping="Wrap" AcceptsReturn="True" Margin="4,24,4,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
                             </Grid>
                         </Border>
                     </Grid>
@@ -1081,16 +1081,18 @@
                         </Grid>
                     </Border>
 
-                    <Grid Grid.Column="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="6.0*"/>
-                            <RowDefinition Height="12"/>
-                            <RowDefinition Height="1.5*"/>
-                            <RowDefinition Height="12"/>
-                            <RowDefinition Height="1.0*"/>
-                        </Grid.RowDefinitions>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="6.0*"/>
+                                    <RowDefinition Height="12"/>
+                                    <RowDefinition Height="1.2*"/>
+                                    <RowDefinition Height="12"/>
+                                    <RowDefinition Height="1.5*"/>
+                                    <RowDefinition Height="12"/>
+                                    <RowDefinition Height="1.0*"/>
+                                </Grid.RowDefinitions>
 
-                        <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                                <Border Grid.Row="0" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -1112,6 +1114,7 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="СНАРЯЖЕНИЕ" Foreground="#FFFFFF" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                         <TextBlock Grid.Column="1" Text="ЗАМЕТКИ" Foreground="#FFFFFF" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                        <Button Grid.Column="1" Content="+" Foreground="#050505" Background="#00FFCC" BorderThickness="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Width="20" Height="20" FontWeight="Bold" Cursor="Hand" Click="BtnAddGear_Click" ToolTip="Добавить пустую строку снаряжения"/>
                                     </Grid>
                                 </Border>
 
@@ -1169,15 +1172,64 @@
 
                         <Border Grid.Row="2" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
                             <Grid>
-                                <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
-                                    <TextBlock Text="ОБРАЗ И СТИЛЬ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
-                                </Border>
-                                <TextBox Text="{Binding StyleNotes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" AcceptsReturn="True" TextWrapping="Wrap" Margin="8,24,8,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="2"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Margin="8,4">
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="200"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="ПУНКТЫ УЛУЧШЕНИЙ" Foreground="#FF3333" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="1" Text="{Binding ImprovementPoints, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Foreground="#00FFCC" Background="#111111" BorderBrush="#444444" BorderThickness="1" 
+                                                 FontSize="14" FontWeight="Bold" TextAlignment="Center" Padding="2" CaretBrush="#00FFCC"
+                                                 PreviewTextInput="NumberValidationTextBox"/>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="200"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="РЕПУТАЦИЯ" Foreground="#FF3333" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="1" Text="{Binding Reputation, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Foreground="#00FFCC" Background="#111111" BorderBrush="#444444" BorderThickness="1" 
+                                                 FontSize="14" FontWeight="Bold" TextAlignment="Center" Padding="2" CaretBrush="#00FFCC"
+                                                 PreviewTextInput="NumberValidationTextBox"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Border Grid.Column="1" Background="#333333" Margin="0,4"/>
+
+                                <Grid Grid.Column="2" Margin="8,4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="ПРИОБРЕТЕНИЕ РЕПУТАЦИИ (За что знают)" Foreground="#FF3333" FontWeight="Bold" FontSize="11" Margin="0,0,0,4"/>
+                                    <TextBox Grid.Row="1" Text="{Binding ReputationEvents, UpdateSourceTrigger=PropertyChanged}" 
+                                             Foreground="#E0E0E0" FontSize="12" Background="#111111" BorderThickness="1" BorderBrush="#444444" Padding="4"
+                                             TextWrapping="Wrap" AcceptsReturn="True" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                                </Grid>
                             </Grid>
                         </Border>
 
-                        <Grid Grid.Row="4">
-                            <Grid.ColumnDefinitions>
+                        <Border Grid.Row="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
+                            <Grid>
+                                <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
+                                    <TextBlock Text="ОБРАЗ И СТИЛЬ" Style="{StaticResource RedHeaderText}" FontSize="11"/>
+                                </Border>
+                                        <TextBox Text="{Binding StyleNotes, UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" Background="#111111" BorderBrush="#444444" FontSize="14" BorderThickness="1" AcceptsReturn="True" TextWrapping="Wrap" Margin="8,24,8,4" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
+                            </Grid>
+                        </Border>
+
+                        <Grid Grid.Row="6">
+                                    <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="45*"/>
                                 <ColumnDefinition Width="12"/>
                                 <ColumnDefinition Width="20*"/>
@@ -1191,7 +1243,7 @@
                                         <TextBlock Text="ЖИЛЬЕ" Style="{StaticResource RedHeaderText}" FontSize="10"/>
                                     </Border>
                                     <TextBox Text="{Binding Housing, UpdateSourceTrigger=PropertyChanged}" 
-                                             Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" 
+                                             Foreground="#E0E0E0" Background="#111111" BorderBrush="#444444" BorderThickness="1" FontSize="14" 
                                              AcceptsReturn="True" TextWrapping="Wrap" Margin="6,22,6,4" CaretBrush="#00FFCC" 
                                              VerticalScrollBarVisibility="Auto"/>
                                 </Grid>
@@ -1203,7 +1255,7 @@
                                         <TextBlock Text="АРЕНДНАЯ ПЛАТА" Style="{StaticResource RedHeaderText}" FontSize="10"/>
                                     </Border>
                                     <TextBox Text="{Binding Rent, UpdateSourceTrigger=PropertyChanged}" 
-                                             Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" 
+                                             Foreground="#E0E0E0" FontSize="14" Background="#111111" BorderBrush="#444444" BorderThickness="1" 
                                              AcceptsReturn="True" TextWrapping="Wrap" Margin="6,22,6,4" CaretBrush="#00FFCC" 
                                              VerticalScrollBarVisibility="Auto"/>
                                 </Grid>
@@ -1215,7 +1267,7 @@
                                         <TextBlock Text="ОБРАЗ ЖИЗНИ" Style="{StaticResource RedHeaderText}" FontSize="10"/>
                                     </Border>
                                     <TextBox Text="{Binding Lifestyle, UpdateSourceTrigger=PropertyChanged}" 
-                                             Foreground="#E0E0E0" FontSize="14" Background="Transparent" BorderThickness="0" 
+                                             Foreground="#E0E0E0" FontSize="14" Background="#111111" BorderBrush="#444444" BorderThickness="1" 
                                              AcceptsReturn="True" TextWrapping="Wrap" Margin="6,22,6,4" CaretBrush="#00FFCC" 
                                              VerticalScrollBarVisibility="Auto"/>
                                 </Grid>

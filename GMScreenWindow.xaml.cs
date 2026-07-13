@@ -280,6 +280,12 @@ namespace CyberpunkRED_Generator
 
     public partial class GMScreenWindow : Window
     {
+        // --- МЕТОДЫ-МОСТЫ ДЛЯ ВАЛИДАЦИИ UI ---
+        private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
+            => UIHelpers.NumberValidationTextBox(sender, e);
+
+        private void NumberLimitTextBox_TextChanged(object sender, TextChangedEventArgs e)
+            => UIHelpers.NumberLimitTextBox_TextChanged(sender, e);
         public ObservableCollection<CombatantViewModel> Combatants { get; set; } = new ObservableCollection<CombatantViewModel>();
         public ObservableCollection<EnemySaveData> AvailableEnemies { get; set; } = new ObservableCollection<EnemySaveData>();
 
@@ -297,23 +303,6 @@ namespace CyberpunkRED_Generator
         {
             InitializeComponent();
             this.DataContext = this;
-        }
-
-        private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]+$");
-        }
-
-        private void NumberLimitTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is TextBox tb && int.TryParse(tb.Text, out int val))
-            {
-                if (val > 777)
-                {
-                    tb.Text = "777";
-                    tb.SelectionStart = tb.Text.Length;
-                }
-            }
         }
 
         private void BtnNextTurn_Click(object sender, RoutedEventArgs e)

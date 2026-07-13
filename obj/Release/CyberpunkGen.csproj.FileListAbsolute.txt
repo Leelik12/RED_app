@@ -36,3 +36,4 @@ G:\GitRepos\RED_app\obj\Release\CyberpunkGen.exe
 G:\GitRepos\RED_app\obj\Release\CyberpunkGen.pdb
 G:\GitRepos\RED_app\bin\Release\System.Diagnostics.DiagnosticSource.xml
 G:\GitRepos\RED_app\obj\Release\CyberpunkGen.csproj.Fody.CopyLocal.cache
+G:\GitRepos\RED_app\obj\Release\CyberpunkGen.csproj.Fody.RuntimeCopyLocal.cache

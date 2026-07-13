@@ -60,3 +60,4 @@ G:\GitRepos\RED_app\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.csproj.Fody.CopyLocal.cache
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.exe.manifest
 G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.application
+G:\GitRepos\RED_app\obj\Debug\CyberpunkGen.csproj.Fody.RuntimeCopyLocal.cache

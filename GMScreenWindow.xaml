@@ -231,7 +231,7 @@
                                                     <ItemsControl ItemsSource="{Binding DisplaySkills}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
-                                                                <WrapPanel Orientation="Vertical" MaxHeight="100"/>
+                                                                <WrapPanel Orientation="Vertical" MaxHeight="125"/>
                                                             </ItemsPanelTemplate>
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>

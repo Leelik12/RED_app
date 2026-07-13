@@ -36,7 +36,9 @@
     "TechInvent": 0,
     "MedSurgery": 0,
     "MedPharma": 0,
-    "MedCryo": 0
+    "MedCryo": 0,
+    "ImprovementPoints": 25,
+    "Reputation": 25
   },
   "Lifepath": {
     "Культурное происхождение": "Южная Азия",
@@ -203,6 +205,7 @@
   "Housing": "вм",
   "Rent": "вм",
   "Lifestyle": "вм",
+  "ReputationEvents": "fdbhgdfngfngfn",
   "AmmoValue": "вм",
   "CashValue": "вм",
   "GearItems": [
