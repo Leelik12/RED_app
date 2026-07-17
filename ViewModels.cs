@@ -74,16 +74,18 @@ namespace CyberpunkRED_Generator
         public string TechPointsText => $"СВОБОДНЫХ ОЧКОВ: {RoleRank - TechPointsUsed}";
 
         // --- МЕДТЕХНИК ---
-        private int _medSurgery; public int MedSurgery { get => _medSurgery; set { _medSurgery = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedSurgeryTotal)); } }
-        private int _medPharma; public int MedPharma { get => _medPharma; set { _medPharma = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedPharmaTotal)); } }
-        private int _medCryo; public int MedCryo { get => _medCryo; set { _medCryo = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedCryoTotal)); } }
+        private int _medSurgery; public int MedSurgery { get => _medSurgery; set { _medSurgery = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedSurgeryTotal)); RecalculatePenalties(); } }
+        private int _medPharma; public int MedPharma { get => _medPharma; set { _medPharma = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedicalTechTotal)); RecalculatePenalties(); } }
+        private int _medCryo; public int MedCryo { get => _medCryo; set { _medCryo = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedicalTechTotal)); RecalculatePenalties(); } }
+
         public int MedtechPointsUsed => MedSurgery + MedPharma + MedCryo;
         public string MedtechPointsText => $"СВОБОДНЫХ ОЧКОВ: {RoleRank - MedtechPointsUsed}";
 
         public int BaseTech => HexStats?.FirstOrDefault(s => s.Name == "ТЕХ" || s.Name == "TECH")?.CurrentValue ?? 0;
-        public int MedSurgeryTotal => BaseTech + MedSurgery;
-        public int MedPharmaTotal => BaseTech + MedPharma;
-        public int MedCryoTotal => BaseTech + MedCryo;
+
+        // Итоговые значения навыков по правилам:
+        public int MedSurgeryTotal => BaseTech + (MedSurgery * 2);
+        public int MedicalTechTotal => BaseTech + MedPharma + MedCryo;
         // --- НЕТРАННЕР ---
         public int NetrunnerTotal => (HexStats?.FirstOrDefault(s => s.Name == "ИНТ" || s.Name == "INT")?.CurrentValue ?? 0) + RoleRank;
         public int NetrunnerActions
@@ -244,11 +246,11 @@ namespace CyberpunkRED_Generator
         public List<SheetSkillCategory> RightSkillCategories1 { get; set; }
         public List<SheetSkillCategory> RightSkillCategories2 { get; set; }
 
-        public Dictionary<string, string> Lifepath { get; set; }
-        public Dictionary<string, string> RoleLifepath { get; set; }
-        public List<string> Friends { get; set; }
+        public ObservableCollection<LifepathItem> Lifepath { get; set; }
+        public ObservableCollection<LifepathItem> RoleLifepath { get; set; }
+        public ObservableCollection<StringItem> Friends { get; set; }
+        public ObservableCollection<StringItem> TragicLoves { get; set; }
         public List<EnemyData> Enemies { get; set; }
-        public List<string> TragicLoves { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -407,7 +409,6 @@ namespace CyberpunkRED_Generator
                 ApplyRoleModToSkill("Авиационные технологии", TechField);
                 ApplyRoleModToSkill("Оружейник", TechField);
             }
-
             var activeModifiers = new List<SkillModifierDef>();
 
             if (CriticalInjuriesList != null)
@@ -462,8 +463,7 @@ namespace CyberpunkRED_Generator
             CurrentDeathSave = Math.Max(0, BaseDeathSave - dsPenalty);
 
             OnPropertyChanged(nameof(MedSurgeryTotal));
-            OnPropertyChanged(nameof(MedPharmaTotal));
-            OnPropertyChanged(nameof(MedCryoTotal));
+            OnPropertyChanged(nameof(MedicalTechTotal));
 
             UpdateDerivedCombatStats();
         }
@@ -645,9 +645,9 @@ namespace CyberpunkRED_Generator
 
         public Visibility AddBtnVis => CanAddMultiple ? Visibility.Visible : Visibility.Collapsed;
         public Visibility RemoveBtnVis => IsVariant ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility SubNameVis => IsVariant ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility BaseNameVis => !IsVariant ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility BaseVariantLabelVis => IsVariant ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility SubNameVis => (IsVariant || BaseName == "Язык (Родной)") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility BaseNameVis => !(IsVariant || BaseName == "Язык (Родной)") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility BaseVariantLabelVis => (IsVariant || BaseName == "Язык (Родной)") ? Visibility.Visible : Visibility.Collapsed;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -669,12 +669,24 @@ namespace CyberpunkRED_Generator
             get => _subName;
             set { _subName = value; OnPropertyChanged(); }
         }
+        public string BaseName { get; set; } //
 
+        // === ИСПРАВЛЕННЫЕ СВОЙСТВА ВИДИМОСТИ ===
         public Visibility NormalControlsVisibility => CanAddMultiple ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility AddButtonVisibility => CanAddMultiple ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility SubNameVisibility => IsVariant ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility RemoveButtonVisibility => IsVariant ? Visibility.Visible : Visibility.Collapsed;
-        //
+        public Visibility AddBtnVis => CanAddMultiple ? Visibility.Visible : Visibility.Collapsed;
+
+        // Крестик удаления показываем ТОЛЬКО у вариантов (у базового Родного языка его быть не должно)
+        public Visibility RemoveBtnVis => IsVariant ? Visibility.Visible : Visibility.Collapsed;
+
+        // Поле ввода показываем, если это вариант ИЛИ если это базовый "Язык (Родной)"
+        public Visibility SubNameVis => (IsVariant || BaseName == "Язык (Родной)") ? Visibility.Visible : Visibility.Collapsed;
+
+        // Прячем обычное имя, если включилось поле ввода
+        public Visibility BaseNameVis => !(IsVariant || BaseName == "Язык (Родной)") ? Visibility.Visible : Visibility.Collapsed;
+
+        // Показываем имя с двоеточием (например, "Язык (Родной): ")
+        public Visibility BaseVariantLabelVis => (IsVariant || BaseName == "Язык (Родной)") ? Visibility.Visible : Visibility.Collapsed;
+        // ========================================
 
         private int _baseStatValue = 5;
 
@@ -801,9 +813,44 @@ namespace CyberpunkRED_Generator
     {
         private string _name; public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
         private string _damage; public string Damage { get => _damage; set { _damage = value; OnPropertyChanged(); } }
-        private string _ammo; public string Ammo { get => _ammo; set { _ammo = value; OnPropertyChanged(); } }
+        private string _ammoCurrent; public string AmmoCurrent { get => _ammoCurrent; set { _ammoCurrent = value; OnPropertyChanged(); } }
+        private string _ammoMax; public string AmmoMax { get => _ammoMax; set { _ammoMax = value; OnPropertyChanged(); } }
+        private string _ammoTotal; public string AmmoTotal { get => _ammoTotal; set { _ammoTotal = value; OnPropertyChanged(); } }
         private string _rof; public string Rof { get => _rof; set { _rof = value; OnPropertyChanged(); } }
         private string _notes; public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    public class StringItem : INotifyPropertyChanged
+    {
+        private string _value;
+        public string Value { get => _value; set { _value = value; OnPropertyChanged(); } }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    public class LifepathItem : INotifyPropertyChanged
+    {
+        private string _key;
+        public string Key { get => _key; set { _key = value; OnPropertyChanged(); } }
+
+        private string _value;
+        public string Value { get => _value; set { _value = value; OnPropertyChanged(); } }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    public class EditableString : INotifyPropertyChanged
+    {
+        private string _value;
+        public string Value { get => _value; set { _value = value; OnPropertyChanged(); } }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    public class EditableKeyValue : INotifyPropertyChanged
+    {
+        public string Key { get; set; }
+        private string _value;
+        public string Value { get => _value; set { _value = value; OnPropertyChanged(); } }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }

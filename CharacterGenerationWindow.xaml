@@ -68,21 +68,31 @@
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
                                         <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <Path x:Name="Arrow" Fill="#00D4B2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Data="M 0 0 L 5 5 L 10 0 Z"/>
+                                            <Path x:Name="Arrow" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBox}}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Data="M 0 0 L 5 5 L 10 0 Z"/>
                                         </Border>
                                     </ControlTemplate>
                                 </ToggleButton.Template>
                             </ToggleButton>
-                            <ContentPresenter IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" TextElement.Foreground="{TemplateBinding Foreground}" Margin="10,8,30,8" VerticalAlignment="Center" HorizontalAlignment="Left" />
+
+                            <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" TextElement.Foreground="{TemplateBinding Foreground}" Margin="10,8,30,8" VerticalAlignment="Center" HorizontalAlignment="Left" />
+
+                            <TextBox x:Name="PART_EditableTextBox" Visibility="Hidden" Background="Transparent" Foreground="{TemplateBinding Foreground}" BorderThickness="0" Margin="8,0,30,0" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" FontFamily="Consolas" CaretBrush="{TemplateBinding Foreground}"/>
+
                             <Popup Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
                                 <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="300">
-                                    <Border Background="#000000" BorderThickness="2" BorderBrush="#FF4444"/>
+                                    <Border Background="#000000" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}"/>
                                     <ScrollViewer Margin="1" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
                                 </Grid>
                             </Popup>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEditable" Value="True">
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -119,6 +129,90 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="SmallBtn" TargetType="Button">
+            <Setter Property="Background" Value="#0A0A0A"/>
+            <Setter Property="Foreground" Value="#00D4B2"/>
+            <Setter Property="BorderBrush" Value="#00D4B2"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+        </Style>
+
+        <DataTemplate x:Key="SkillCategoryTemplate">
+            <StackPanel Margin="0,0,0,25">
+
+                <Border Background="#FF4444" Padding="10,5" Margin="0,0,0,5">
+                    <TextBlock Text="{Binding CategoryName}" Foreground="#000000" FontSize="16" FontWeight="Heavy"/>
+                </Border>
+
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="45"/>
+                        <ColumnDefinition Width="105"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="НАВЫК" Foreground="#777777" FontSize="12" FontWeight="Bold" Margin="4,0,0,0"/>
+                    <TextBlock Grid.Column="1" Text="СТАТ" Foreground="#777777" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="УРОВЕНЬ" Foreground="#777777" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="СУММА" Foreground="#00D4B2" FontSize="12" FontWeight="Bold" TextAlignment="Center"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding Skills}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Padding="0,5" Margin="0,2">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="45"/>
+                                        <ColumnDefinition Width="105"/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                        <Button Content="X" Style="{StaticResource SmallBtn}" Width="20" Height="20" Margin="0,0,5,0"
+                                                Foreground="#FF4444" BorderBrush="#FF4444" FontSize="12"
+                                                Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click"/>
+
+                                        <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="14" VerticalAlignment="Center" 
+                                                   Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+
+                                        <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="14" VerticalAlignment="Center" 
+                                                   Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
+
+                                        <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Visibility="{Binding SubNameVis}"
+                                                 Margin="4,0,0,0" Width="100" Background="#1A1A1A" Foreground="#00D4B2" BorderBrush="#00D4B2" BorderThickness="1"
+                                                 Padding="2" VerticalAlignment="Center" FontFamily="Consolas"/>
+
+                                        <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" 
+                                                Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" 
+                                                Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Text="{Binding StatName}" Foreground="#757575" FontSize="14" VerticalAlignment="Center" TextAlignment="Center"/>
+
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding NormalControlsVisibility}">
+                                        <Button Content="-" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnMinus_Click"/>
+                                        <TextBlock Text="{Binding Level}" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFFFFF" FontSize="18"/>
+                                        <Button Content="+" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnPlus_Click"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="3" Text="{Binding Total}" Foreground="#00D4B2" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"
+                                               Visibility="{Binding NormalControlsVisibility}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
+
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1920" Height="1080">
@@ -127,7 +221,7 @@
             <TextBlock x:Name="TxtProgress" Text="ЭТАП 1: ХАРАКТЕРИСТИКИ" Foreground="#00D4B2" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
         </Border>
 
-        <TabControl x:Name="WizardTabControl" Background="Transparent" BorderThickness="0" Margin="0,60,0,0">
+        <TabControl x:Name="WizardTabControl" Background="Transparent" BorderThickness="0" Margin="0,60,0,0" SelectionChanged="WizardTabControl_SelectionChanged">
 
             <TabItem>
                 <Grid Margin="20">
@@ -202,61 +296,61 @@
 
                             <UniformGrid x:Name="StatsGrid" Columns="2" Margin="0,10,0,0">
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="INT:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="ИНТ:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtInt" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtInt" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtInt" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="REF:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="РЕА:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtRef" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtRef" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtRef" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="DEX:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="ЛВК:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtDex" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtDex" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtDex" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="TECH:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="ТЕХ:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtTech" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtTech" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtTech" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="COOL:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="ХАР:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtCool" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtCool" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtCool" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="WILL:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="ВОЛЯ:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtWill" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtWill" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtWill" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="LUCK:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="УДЧ:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtLuck" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtLuck" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtLuck" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="MOVE:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="СКО:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtMove" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtMove" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtMove" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="BODY:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="ТЕЛ:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtBody" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtBody" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtBody" Click="StatBtnPlus_Click"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5,8">
-                                    <TextBlock Text="EMP:" Style="{StaticResource StatName}"/>
+                                    <TextBlock Text="ЭМП:" Style="{StaticResource StatName}"/>
                                     <Button Content="-" Style="{StaticResource StatBtn}" Tag="TxtEmp" Click="StatBtnMinus_Click"/>
                                     <TextBlock x:Name="TxtEmp" Text="2" Style="{StaticResource StatValue}"/>
                                     <Button Content="+" Style="{StaticResource StatBtn}" Tag="TxtEmp" Click="StatBtnPlus_Click"/>
@@ -328,33 +422,33 @@
                             <Button Grid.Row="1" Content="АЛГОРИТМ РАНДОМА (БРОСОК 1D10)" Style="{StaticResource CyberButton}" Click="BtnLifepathRandom_Click" Margin="0,0,0,20"/>
 
                             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly">
-                                <StackPanel Margin="0,0,15,0">
+                                        <StackPanel Margin="0,0,15,0" TextBoxBase.TextChanged="UpdateLifepathLog">
                                     <TextBlock Text="Культурное происхождение:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbOrigin" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbOrigin" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Личность:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbPersonality" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbPersonality" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Стиль одежды:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbClothing" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbClothing" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Прическа:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbHair" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbHair" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Особенность:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbFeature" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbFeature" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Что ты ценишь больше всего:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbValue" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbValue" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Как ты относишься к людям:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbPeople" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbPeople" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Самый ценный человек:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbPerson" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbPerson" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Самая ценная вещь:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbPossession" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbPossession" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Семейное происхождение:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbFamilyBackground" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbFamilyBackground" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Окружение детства:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbChildhood" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbChildhood" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Трагедия в семье:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbFamilyCrisis" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbFamilyCrisis" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                     <TextBlock Text="Твоя цель в жизни:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <ComboBox x:Name="CbLifeGoal" SelectionChanged="UpdateLifepathLog"/>
+                                            <ComboBox x:Name="CbLifeGoal" SelectionChanged="UpdateLifepathLog" IsEditable="True"  />
                                 </StackPanel>
                             </ScrollViewer>
                         </Grid>
@@ -471,7 +565,7 @@
                             <Button Grid.Row="1" Content="АЛГОРИТМ РАНДОМА (1D10 - 7)" Style="{StaticResource CyberButton}" Click="BtnRelationsRandom_Click" Margin="0,0,0,20" HorizontalAlignment="Left"/>
 
                             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly">
-                                <StackPanel Margin="0,0,15,0">
+                                        <StackPanel Margin="0,0,15,0" TextBoxBase.TextChanged="UpdateRelationsLog">
                                     <TextBlock Text="Количество друзей:" Foreground="#999999" Margin="0,0,0,5"/>
                                     <ComboBox x:Name="CbCountFriends" SelectionChanged="CountChanged">
                                         <ComboBoxItem Content="0" Tag="0"/>
@@ -482,15 +576,15 @@
                                     <StackPanel x:Name="PanelFriends" Visibility="Collapsed" Margin="10,0,0,10">
                                         <StackPanel x:Name="SlotF1">
                                             <TextBlock Text="Друг 1:" Foreground="#00D4B2"/>
-                                            <ComboBox x:Name="CbF1" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbF1" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                         <StackPanel x:Name="SlotF2">
                                             <TextBlock Text="Друг 2:" Foreground="#00D4B2"/>
-                                            <ComboBox x:Name="CbF2" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbF2" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                         <StackPanel x:Name="SlotF3">
                                             <TextBlock Text="Друг 3:" Foreground="#00D4B2"/>
-                                            <ComboBox x:Name="CbF3" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbF3" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                     </StackPanel>
 
@@ -505,35 +599,35 @@
                                         <StackPanel x:Name="SlotE1" Margin="0,0,0,15">
                                             <TextBlock Text="ВРАГ 1" Foreground="#FF4444" Margin="0,0,0,5" FontSize="18"/>
                                             <TextBlock Text="Кто он:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE1Who" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE1Who" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Причина вражды:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE1Cause" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE1Cause" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Как он нападёт:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE1Hate" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE1Hate" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Что они сделают:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE1Action" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE1Action" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                         <StackPanel x:Name="SlotE2" Margin="0,0,0,15">
                                             <TextBlock Text="ВРАГ 2" Foreground="#FF4444" Margin="0,0,0,5" FontSize="18"/>
                                             <TextBlock Text="Кто он:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE2Who" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE2Who" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Причина вражды:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE2Cause" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE2Cause" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Как он нападёт:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE2Hate" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE2Hate" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Что они сделают:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE2Action" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE2Action" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                         <StackPanel x:Name="SlotE3" Margin="0,0,0,15">
                                             <TextBlock Text="ВРАГ 3" Foreground="#FF4444" Margin="0,0,0,5" FontSize="18"/>
                                             <TextBlock Text="Кто он:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE3Who" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE3Who" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Причина вражды:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE3Cause" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE3Cause" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Как он нападёт:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE3Hate" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE3Hate" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                             <TextBlock Text="Что они сделают:" Foreground="#999999"/>
-                                            <ComboBox x:Name="CbE3Action" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbE3Action" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                     </StackPanel>
 
@@ -547,15 +641,15 @@
                                     <StackPanel x:Name="PanelLove" Visibility="Collapsed" Margin="10,0,0,10">
                                         <StackPanel x:Name="SlotL1">
                                             <TextBlock Text="Роман 1:" Foreground="#00D4B2"/>
-                                            <ComboBox x:Name="CbL1" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbL1" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                         <StackPanel x:Name="SlotL2">
                                             <TextBlock Text="Роман 2:" Foreground="#00D4B2"/>
-                                            <ComboBox x:Name="CbL2" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbL2" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                         <StackPanel x:Name="SlotL3">
                                             <TextBlock Text="Роман 3:" Foreground="#00D4B2"/>
-                                            <ComboBox x:Name="CbL3" SelectionChanged="UpdateRelationsLog"/>
+                                                    <ComboBox x:Name="CbL3" SelectionChanged="UpdateRelationsLog" IsEditable="True"  />
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
@@ -641,63 +735,22 @@
                                 <TextBlock Grid.Column="3" Text="СУММА" Foreground="#00D4B2" FontSize="18" TextAlignment="Center"/>
                             </Grid>
 
-                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                                <ItemsControl x:Name="IcCategories">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Margin="0,0,15,25">
-                                                <Border Background="#FF4444" Padding="10,5" Margin="0,0,0,10">
-                                                    <TextBlock Text="{Binding CategoryName}" Foreground="#000000" FontSize="18" FontWeight="Bold"/>
-                                                </Border>
+                                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                        <Grid Margin="0,0,15,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="25"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="25"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
 
-                                                <ItemsControl ItemsSource="{Binding Skills}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <Grid Margin="0,6">
-                                                                <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="2*"/>
-                                                                    <ColumnDefinition Width="80"/>
-                                                                    <ColumnDefinition Width="120"/>
-                                                                    <ColumnDefinition Width="80"/>
-                                                                </Grid.ColumnDefinitions>
-
-                                                                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-                                                                    <Button Content="X" Style="{StaticResource SmallBtn}" Width="20" Height="20" Margin="0,0,5,0"
-                                                                            Foreground="#FF4444" BorderBrush="#FF4444" FontSize="12"
-                                                                            Visibility="{Binding RemoveButtonVisibility}" Tag="{Binding}" Click="BtnRemoveVariant_Click"/>
-
-                                                                    <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" VerticalAlignment="Center" 
-                                                                               ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-
-                                                                    <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" 
-                                                                             Visibility="{Binding SubNameVisibility}"
-                                                                             Margin="10,0,0,0" Width="100" Background="#1A1A1A" Foreground="#00D4B2" BorderBrush="#00D4B2" BorderThickness="1"
-                                                                             Padding="2" VerticalAlignment="Center" FontFamily="Consolas"/>
-                                                                </StackPanel>
-
-                                                                <TextBlock Grid.Column="1" Text="{Binding StatName}" Foreground="#757575" VerticalAlignment="Center" TextAlignment="Center"/>
-
-                                                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding NormalControlsVisibility}">
-                                                                    <Button Content="-" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnMinus_Click"/>
-                                                                    <TextBlock Text="{Binding Level}" Width="40" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFFFFF" FontSize="18"/>
-                                                                    <Button Content="+" Style="{StaticResource SmallBtn}" Tag="{Binding}" Click="SkillBtnPlus_Click"/>
-                                                                </StackPanel>
-
-                                                                <Button Grid.Column="2" Content="+ ДОБАВИТЬ" Background="#1A1A1A" Foreground="#00D4B2" BorderBrush="#00D4B2" BorderThickness="1" Padding="10,2" FontSize="12" Height="24" FontWeight="Bold" Cursor="Hand"
-                                                                        Visibility="{Binding AddButtonVisibility}" Tag="{Binding}" Click="BtnAddVariant_Click"/>
-
-                                                                <TextBlock Grid.Column="3" Text="{Binding Total}" Foreground="#00D4B2" FontSize="20" TextAlignment="Center" VerticalAlignment="Center"
-                                                                           Visibility="{Binding NormalControlsVisibility}"/>
-                                                            </Grid>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </Grid>
+                                            <ItemsControl x:Name="IcCategories1" Grid.Column="0" ItemTemplate="{StaticResource SkillCategoryTemplate}"/>
+                                            <ItemsControl x:Name="IcCategories2" Grid.Column="2" ItemTemplate="{StaticResource SkillCategoryTemplate}"/>
+                                            <ItemsControl x:Name="IcCategories3" Grid.Column="4" ItemTemplate="{StaticResource SkillCategoryTemplate}"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Grid>
                     </Border>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">

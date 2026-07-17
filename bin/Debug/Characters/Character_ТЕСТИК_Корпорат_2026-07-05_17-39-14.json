@@ -168,35 +168,45 @@
     {
       "Name": "уауауау",
       "Damage": "ауауауа",
-      "Ammo": "уауа",
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
       "Rof": "уауау",
       "Notes": "ауа"
     },
     {
       "Name": null,
       "Damage": null,
-      "Ammo": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
       "Rof": null,
       "Notes": null
     },
     {
       "Name": "птпатпат",
       "Damage": null,
-      "Ammo": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
       "Rof": null,
       "Notes": null
     },
     {
       "Name": null,
       "Damage": null,
-      "Ammo": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
       "Rof": null,
       "Notes": null
     },
     {
       "Name": null,
       "Damage": null,
-      "Ammo": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
       "Rof": null,
       "Notes": null
     }

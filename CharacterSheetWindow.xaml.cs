@@ -107,11 +107,11 @@ namespace CyberpunkRED_Generator
                         Role = _originalData.Role,
                         Stats = _originalData.Stats,
                         SystemStats = _originalData.SystemStats,
-                        Lifepath = _originalData.Lifepath,
-                        RoleLifepath = _originalData.RoleLifepath,
-                        Friends = _originalData.Friends,
+                        Lifepath = new ObservableCollection<LifepathItem>(_originalData.Lifepath.Select(kvp => new LifepathItem { Key = kvp.Key, Value = kvp.Value })),
+                        RoleLifepath = new ObservableCollection<LifepathItem>(_originalData.RoleLifepath.Select(kvp => new LifepathItem { Key = kvp.Key, Value = kvp.Value })),
+                        Friends = new ObservableCollection<StringItem>(_originalData.Friends.Select(x => new StringItem { Value = x })),
+                        TragicLoves = new ObservableCollection<StringItem>(_originalData.TragicLoves.Select(x => new StringItem { Value = x })),
                         Enemies = _originalData.Enemies,
-                        TragicLoves = _originalData.TragicLoves,
                         Notes = _originalData.Notes ?? "",
                         RoleAbilityNotes = _originalData.RoleAbilityNotes ?? "",
 
@@ -255,13 +255,12 @@ namespace CyberpunkRED_Generator
                         { "Образовательные (прод.)", new[] {  "Язык", "Язык (Уличный Сленг)", "Язык (Родной)", "Знание местности (Твой дом)", "Знание местности", "Поиск информации", "Наука", "Тактика", "Выживание в пустыне" } },
                         { "Ближний бой", new[] { "Рукопашный бой", "Уклонение", "Боевые искусства (x2)", "Оружие ближнего боя" } },
                         { "Сценические Навыки", new[] { "Актерское мастерство", "Игра на инструментах" } },
-                        { "Дальний бой", new[] { "Стрельба из лука", "Автоматический огонь (x2)", "Пистолеты" } }
+                        { "Дальний бой", new[] { "Стрельба из лука", "Автоматический огонь (x2)", "Пистолеты",  "Оружие кр. калибра (x2)", "Тактическое оружие"} }
                     };
 
                     var col3Structure = new Dictionary<string, string[]> {
-                        { "Дальний бой (прод.)", new[] { "Оружие кр. калибра (x2)", "Тактическое оружие" } },
                         { "Социальные Навыки", new[] { "Подкуп", "Общение", "Проницательность", "Допрос", "Убеждение", "Уход за собой", "Знаток Улиц", "Торговля", "Гардероб и стиль" } },
-                        { "Технические Навыки", new[] { "Авиационные технологии", "Знание техники", "Кибертехника", "Подрывник (x2)", "Электроника/Безопасность (x2)", "Первая помощь", "Фальсификация", "Автомеханика", "Художественное ремесло", "Парамедик (x2)", "Кино- и фототехника", "Взлом замков", "Морские технологии", "Оружейник" } }
+                        { "Технические Навыки", new[] { "Авиационные технологии", "Знание техники", "Кибертехника", "Подрывник (x2)", "Электроника/Безопасность (x2)", "Первая помощь", "Фальсификация", "Автомеханика", "Художественное ремесло", "Парамедик (x2)", "Кино- и фототехника", "Взлом замков", "Морские технологии", "Оружейник"} }
                     };
 
                     viewModel.CenterSkillCategories = BuildColumn(col1Structure, _originalData);
@@ -368,8 +367,15 @@ namespace CyberpunkRED_Generator
                 statVal = (int)Math.Floor(currHum / 10.0);
             }
 
-            var savedSkill = charData.Skills.FirstOrDefault(s => s.Name == def.Name);
+            var savedSkill = charData.Skills.FirstOrDefault(s => s.Name == def.Name || (def.Name == "Язык (Родной)" && s.Name.StartsWith("Язык (Родной):")));
             int lvl = savedSkill != null ? savedSkill.Level : (def.IsBasic ? 2 : def.FreeLevels);
+
+            // Вытаскиваем вписанный язык
+            string subName = "";
+            if (def.Name == "Язык (Родной)" && savedSkill != null && savedSkill.Name.Contains(":"))
+            {
+                subName = savedSkill.Name.Split(':')[1].Trim();
+            }
 
             return new SheetSkill
             {
@@ -380,7 +386,8 @@ namespace CyberpunkRED_Generator
                 Level = lvl,
                 Description = def.Description,
                 CanAddMultiple = def.CanAddMultiple,
-                IsVariant = false
+                IsVariant = false,
+                SubName = subName
             };
         }
 
@@ -508,9 +515,9 @@ namespace CyberpunkRED_Generator
             {
                 if (vm.RoleRank - vm.MedtechPointsUsed >= 1)
                 {
-                    if (tag == "MedSurgery") vm.MedSurgery++;
-                    else if (tag == "MedPharma") vm.MedPharma++;
-                    else if (tag == "MedCryo") vm.MedCryo++;
+                    if (tag == "MedSurgery" && vm.MedSurgery < 5) vm.MedSurgery++;
+                    else if (tag == "MedPharma" && vm.MedPharma < 5) vm.MedPharma++;
+                    else if (tag == "MedCryo" && vm.MedCryo < 5) vm.MedCryo++;
                 }
             }
         }
@@ -596,6 +603,11 @@ namespace CyberpunkRED_Generator
                     _originalData.CriticalInjuriesList = vm.CriticalInjuriesList.Select(x => x.Name).ToList();
                     _originalData.Addictions = vm.Addictions;
 
+                    _originalData.Friends = vm.Friends.Select(x => x.Value).ToList();
+                    _originalData.TragicLoves = vm.TragicLoves.Select(x => x.Value).ToList();
+                    _originalData.Lifepath = vm.Lifepath.ToDictionary(x => x.Key, x => x.Value ?? "");
+                    _originalData.RoleLifepath = vm.RoleLifepath.ToDictionary(x => x.Key, x => x.Value ?? "");
+
                     _originalData.Skills.Clear();
                     var allCategories = vm.CenterSkillCategories.Concat(vm.RightSkillCategories1).Concat(vm.RightSkillCategories2);
                     foreach (var cat in allCategories)
@@ -605,9 +617,18 @@ namespace CyberpunkRED_Generator
                             if (skill.CanAddMultiple) continue;
                             if (skill.IsVariant && string.IsNullOrWhiteSpace(skill.SubName)) continue;
 
-                            if (skill.Level > 0 || skill.IsVariant)
+                            if (skill.Level > 0 || skill.IsVariant || skill.BaseName == "Язык (Родной)")
                             {
-                                string exportName = skill.IsVariant ? $"{skill.BaseName}: {skill.SubName.Trim()}" : skill.Name;
+                                string exportName = skill.Name;
+                                if (skill.IsVariant && !string.IsNullOrWhiteSpace(skill.SubName))
+                                {
+                                    exportName = $"{skill.BaseName}: {skill.SubName.Trim()}";
+                                }
+                                else if (skill.BaseName == "Язык (Родной)" && !string.IsNullOrWhiteSpace(skill.SubName))
+                                {
+                                    exportName = $"{skill.Name}: {skill.SubName.Trim()}";
+                                }
+
                                 _originalData.Skills.Add(new SkillSaveData { Name = exportName, Level = skill.Level, Total = skill.Base });
                             }
                         }

@@ -248,222 +248,243 @@
 
                                     <Border BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A">
                                         <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
                                             <Border Style="{StaticResource RedHeader}" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0,0,2,2" Panel.ZIndex="1">
                                                 <TextBlock Text="{Binding Role, StringFormat='СПОСОБНОСТЬ: {0}'}" Style="{StaticResource RedHeaderText}" FontSize="11"/>
                                             </Border>
 
-                                            <Grid Visibility="{Binding IsTextRoleVis}" Margin="4,24,4,4">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="*"/>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="50"/>
-                                                </Grid.RowDefinitions>
+                                            <ScrollViewer Grid.Row="0" Margin="4,24,4,4" VerticalScrollBarVisibility="Auto">
+                                                <StackPanel>
+                                                    <TextBlock Visibility="{Binding IsTextRoleVis}" Text="{Binding RoleDescription}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="4,0,4,4"/>
 
-                                                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0,0,0,4">
-                                                    <TextBlock Text="{Binding RoleDescription}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="4,0,4,0"/>
-                                                </ScrollViewer>
+                                                    <StackPanel Visibility="{Binding IsSoloVis}" Margin="0,0,0,4">
+                                                        <TextBlock Text="{Binding SoloPointsText}" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
+                                                        <Grid Margin="0,1">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Обнаружение угрозы (1)" ToolTip="Каждое очко даёт +1 ко всем проверкам навыка Внимательность." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="Threat" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding SoloThreat}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="Threat" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,1">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Оценка ситуации (1)" ToolTip="Каждое очко даёт +1 к урону (до учёта брони) первой успешной атаки за раунд." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="Awareness" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding SoloAwareness}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="Awareness" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,1">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Снижение урона (2)" ToolTip="Уменьшает первый урон в раунде. За 2 очка: -1. За 4 очка: -2. За 6: -3. За 8: -4. За 10: -5." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="Deflection" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding SoloDeflection}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="Deflection" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,1">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Компенсация провала (1)" ToolTip="За 4 очка игнорирует критические провалы (выпавшие 1) при атаке (считается просто как 1)." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="Fumble" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding SoloFumble}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="Fumble" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,1">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Моментальная реакция (1)" ToolTip="Каждое очко даёт +1 ко всем броскам Инициативы." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="Initiative" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding SoloInitiative}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="Initiative" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,1">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Точная атака (3)" ToolTip="За 3 очка: +1 ко всем атакам. За 6 очков: +2. За 9 очков: +3." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="Precision" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding SoloPrecision}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="Precision" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </StackPanel>
 
-                                                <TextBlock Grid.Row="1" Text="ЛИЧНЫЕ ЗАМЕТКИ:" Foreground="#FF3333" FontSize="10" FontWeight="Bold"/>
-                                                <TextBox Grid.Row="2" Text="{Binding RoleAbilityNotes, UpdateSourceTrigger=PropertyChanged}" 
-                                                 Foreground="#E0E0E0" FontSize="13" Background="#111111" BorderThickness="1" BorderBrush="#333333" Padding="2"
-                                                 TextWrapping="Wrap" AcceptsReturn="True" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
-                                            </Grid>
+                                                    <StackPanel Visibility="{Binding IsTechVis}" Margin="0,0,0,4">
+                                                        <TextBlock Text="{Binding TechPointsText}" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
+                                                        <Grid Margin="0,2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Полевая экспертиза (1)" ToolTip="Добавляет ранг ко всем Техническим навыкам. Позволяет временно починить предмет." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="TechField" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding TechField}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="TechField" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Улучшение (1)" ToolTip="Улучшает предмет. Требует материалы той же цены." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="TechUpgrade" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding TechUpgrade}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="TechUpgrade" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Производство (1)" ToolTip="Изготовление предмета по категории цены на 1 уровень ниже рыночной." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="TechFab" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding TechFab}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="TechFab" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Изобретение (1)" ToolTip="Создание новых модификаций и уникальных предметов." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="TechInvent" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding TechInvent}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="TechInvent" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </StackPanel>
 
-                                            <StackPanel Visibility="{Binding IsSoloVis}" Margin="4,24,4,4">
-                                                <TextBlock Text="{Binding SoloPointsText}" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
-                                                <Grid Margin="0,1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Обнаружение угрозы (1)" ToolTip="Каждое очко даёт +1 ко всем проверкам навыка Внимательность." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="Threat" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding SoloThreat}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="Threat" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                    <StackPanel Visibility="{Binding IsMedtechVis}" Margin="0,0,0,4">
+                                                        <TextBlock Text="{Binding MedtechPointsText}" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
+
+                                                        <Grid Margin="0,2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Хирургия" ToolTip="Позволяет лечить тяжёлые травмы и ставить импланты." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="MedSurgery" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding MedSurgery}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="MedSurgery" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Фармацевтика" ToolTip="Синтез препаратов." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="MedPharma" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding MedPharma}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="MedPharma" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                        <Grid Margin="0,2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Опер. криосистем" ToolTip="Эксплуатация криокамер." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="-" Tag="MedCryo" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                                <TextBlock Text="{Binding MedCryo}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
+                                                                <Button Content="+" Tag="MedCryo" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+
+                                                        <Border BorderBrush="#333333" BorderThickness="0,1,0,0" Margin="0,6,0,0" Padding="0,6,0,0">
+                                                            <StackPanel>
+                                                                <TextBlock Text="СПЕЦИАЛЬНЫЕ НАВЫКИ РОЛИ:" Foreground="#FF3333" FontSize="10" FontWeight="Bold" Margin="0,0,0,4"/>
+
+                                                                <Grid Margin="0,2">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock Text="Хирургия [ТЕХ]" Foreground="#00FFCC" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding MedSurgeryTotal}" Foreground="#00FFCC" FontSize="14" FontWeight="Heavy" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                                                </Grid>
+
+                                                                <Grid Margin="0,2">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock Text="Медицинские технологии [ТЕХ]" Foreground="#00FFCC" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding MedicalTechTotal}" Foreground="#00FFCC" FontSize="14" FontWeight="Heavy" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                                                </Grid>
+                                                            </StackPanel>
+                                                        </Border>
                                                     </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Оценка ситуации (1)" ToolTip="Каждое очко даёт +1 к урону (до учёта брони) первой успешной атаки за раунд." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="Awareness" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding SoloAwareness}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="Awareness" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
+
+                                                    <StackPanel Visibility="{Binding IsNetrunnerVis}" Background="#0A0A0A" Margin="0,0,0,4">
+                                                        <TextBlock Text="ХАРАКТЕРИСТИКИ СЕТИ" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,8" HorizontalAlignment="Center"/>
+                                                        <Grid Margin="0,4">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Интерфейс" ToolTip="Основной ролевой навык для погружения в Сеть." Cursor="Help" Foreground="#E0E0E0" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding NetrunnerTotal, StringFormat='[ИТОГ: {0}]'}" Foreground="#00FFCC" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                                        </Grid>
+                                                        <Grid Margin="0,4">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Text="Сетевых действий за ход" ToolTip="Определяется твоим Рангом Роли. (1-3 = 2 действия, 4-6 = 3 действия, 7-9 = 4 действия, 10 = 5 действий)" Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding NetrunnerActions}" Foreground="#00FFCC" FontSize="16" FontWeight="Heavy" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                        </Grid>
+                                                        <TextBlock Text="* Итог рассчитывается как [Ранг роли + Стат ИНТ]" Foreground="#777777" FontSize="9" Margin="0,15,0,0" TextWrapping="Wrap" HorizontalAlignment="Center"/>
                                                     </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Снижение урона (2)" ToolTip="Уменьшает первый урон в раунде. За 2 очка: -1. За 4 очка: -2. За 6: -3. За 8: -4. За 10: -5." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="Deflection" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding SoloDeflection}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="Deflection" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Компенсация провала (1)" ToolTip="За 4 очка игнорирует критические провалы (выпавшие 1) при атаке (считается просто как 1)." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="Fumble" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding SoloFumble}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="Fumble" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Моментальная реакция (1)" ToolTip="Каждое очко даёт +1 ко всем броскам Инициативы." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="Initiative" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding SoloInitiative}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="Initiative" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Точная атака (3)" ToolTip="За 3 очка: +1 ко всем атакам. За 6 очков: +2. За 9 очков: +3." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="Precision" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding SoloPrecision}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="Precision" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
+
+                                                </StackPanel>
+                                            </ScrollViewer>
+
+                                            <StackPanel Grid.Row="1" Margin="8,0,8,8">
+                                                <TextBlock Text="ЛИЧНЫЕ ЗАМЕТКИ ПО РОЛИ:" Foreground="#FF3333" FontSize="10" FontWeight="Bold"/>
+                                                <TextBox Height="45" Text="{Binding RoleAbilityNotes, UpdateSourceTrigger=PropertyChanged}" 
+                                                         Foreground="#E0E0E0" FontSize="13" Background="#111111" BorderThickness="1" BorderBrush="#333333" Padding="2"
+                                                         TextWrapping="Wrap" AcceptsReturn="True" CaretBrush="#00FFCC" VerticalScrollBarVisibility="Auto"/>
                                             </StackPanel>
 
-                                            <StackPanel Visibility="{Binding IsTechVis}" Margin="4,24,4,4">
-                                                <TextBlock Text="{Binding TechPointsText}" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Полевая экспертиза (1)" ToolTip="Добавляет ранг ко всем Техническим навыкам. Позволяет временно починить предмет (аварийный ремонт) на 10 мин за ранг." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="TechField" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding TechField}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="TechField" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Улучшение (1)" ToolTip="Улучшает предмет (снизить ПЧ, добавить слот, скрыть оружие, повысить качество). Требует материалы той же цены." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="TechUpgrade" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding TechUpgrade}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="TechUpgrade" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Производство (1)" ToolTip="Изготовление предмета по категории цены на 1 уровень ниже рыночной." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="TechFab" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding TechFab}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="TechFab" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Изобретение (1)" ToolTip="Создание новых модификаций и уникальных предметов совместно с рефери." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="TechInvent" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding TechInvent}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="TechInvent" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </StackPanel>
-
-                                            <StackPanel Visibility="{Binding IsMedtechVis}" Margin="4,24,4,4">
-                                                <TextBlock Text="{Binding MedtechPointsText}" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Хирургия (1)" ToolTip="Позволяет лечить самые тяжёлые критические травмы и устанавливать киберимпланты." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <TextBlock Grid.Column="1" Text="{Binding MedSurgeryTotal, StringFormat='[ИТОГ: {0}]'}" Foreground="#777777" FontSize="10" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="MedSurgery" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding MedSurgery}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="MedSurgery" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Фармацевтика (1)" ToolTip="Синтез препаратов: Антибиотики, Детокс, Всплеск, Спидхил, Стим. Требует материалы на 200eb." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <TextBlock Grid.Column="1" Text="{Binding MedPharmaTotal, StringFormat='[ИТОГ: {0}]'}" Foreground="#777777" FontSize="10" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="MedPharma" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding MedPharma}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="MedPharma" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Опер. криосистем (1)" ToolTip="Уровень 1: крионасос. Уровни 2+: доступ к корпоративным криокамерам, получение личных криокамер." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <TextBlock Grid.Column="1" Text="{Binding MedCryoTotal, StringFormat='[ИТОГ: {0}]'}" Foreground="#777777" FontSize="10" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                                        <Button Content="-" Tag="MedCryo" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                        <TextBlock Text="{Binding MedCryo}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
-                                                        <Button Content="+" Tag="MedCryo" Click="BtnRolePlus_Click" Style="{StaticResource TinyRoleBtn}"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                                <TextBlock Text="* Итог рассчитывается как [Ранг навыка + Стат ТЕХ]" Foreground="#777777" FontSize="9" Margin="0,4,0,0" TextWrapping="Wrap"/>
-                                            </StackPanel>
-
-                                            <StackPanel Visibility="{Binding IsNetrunnerVis}" Margin="4,24,4,4">
-                                                <TextBlock Text="ХАРАКТЕРИСТИКИ СЕТИ" Foreground="#FF3333" FontSize="11" FontWeight="Bold" Margin="0,0,0,4" HorizontalAlignment="Center"/>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Интерфейс (1)" ToolTip="Основной ролевой навык для погружения в Сеть." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <TextBlock Grid.Column="1" Text="{Binding NetrunnerTotal, StringFormat='[ИТОГ: {0}]'}" Foreground="#777777" FontSize="10" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                                </Grid>
-                                                <Grid Margin="0,2">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Сетевых действий" ToolTip="Определяется твоим Рангом Роли. (1-3 = 2 действия, 4-6 = 3 действия, 7-9 = 4 действия, 10 = 5 действий)" Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
-                                                    <TextBlock Grid.Column="1" Text="{Binding NetrunnerActions}" Foreground="#00FFCC" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0" TextAlignment="Center" Width="20"/>
-                                                </Grid>
-                                                <TextBlock Text="* Итог рассчитывается как [Ранг роли + Стат ИНТ]" Foreground="#777777" FontSize="9" Margin="0,4,0,0" TextWrapping="Wrap"/>
-                                            </StackPanel>
                                         </Grid>
                                     </Border>
 
@@ -612,7 +633,8 @@
                     </Border>
 
                     <Border Grid.Row="0" Grid.Column="4" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4" Margin="0,0,0,10">
-                        <ItemsControl ItemsSource="{Binding CenterSkillCategories}">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding CenterSkillCategories}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="0,0,0,4">
@@ -635,7 +657,8 @@
                                         <ItemsControl ItemsSource="{Binding Skills}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid Margin="2">
+                                                                <Border BorderBrush="#222222" BorderThickness="0,0,0,3" Padding="0,0,0,0" Margin="0,0,0,0">
+                                                                    <Grid Margin="0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="28"/>
@@ -647,8 +670,25 @@
                                                             <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
                                                             <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
                                                             <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                            <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC" Width="120" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
-                                                            <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                                        <Grid Visibility="{Binding SubNameVis}" Margin="10,0,0,0" Width="100" VerticalAlignment="Center">
+                                                                            <TextBlock Text="(Впишите)" Foreground="#555555" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" IsHitTestVisible="False">
+                                                                                <TextBlock.Style>
+                                                                                    <Style TargetType="TextBlock">
+                                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding SubName}" Value="">
+                                                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                                            </DataTrigger>
+                                                                                            <DataTrigger Binding="{Binding SubName}" Value="{x:Null}">
+                                                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </TextBlock.Style>
+                                                                            </TextBlock>
+                                                                            <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="#00D4B2" BorderBrush="#00D4B2" BorderThickness="1" Padding="2" VerticalAlignment="Center" FontFamily="Consolas"/>
+                                                                        </Grid>
+                                                                        <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                         <Border Grid.Column="1" Style="{StaticResource SkillBox}">
                                                             <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
@@ -663,17 +703,20 @@
                                                             <TextBlock Text="{Binding DisplayBase}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                                                         </Border>
                                                     </Grid>
-                                                </DataTemplate>
+                                                                </Border>
+                                                            </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+                                    </ScrollViewer>
                     </Border>
 
                     <Border Grid.Row="0" Grid.Column="6" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4" Margin="0,0,0,10">
-                        <ItemsControl ItemsSource="{Binding RightSkillCategories1}">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding RightSkillCategories1}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="0,0,0,4">
@@ -696,7 +739,8 @@
                                         <ItemsControl ItemsSource="{Binding Skills}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid Margin="2">
+                                                                <Border BorderBrush="#222222" BorderThickness="0,0,0,3" Padding="0,0,0,0" Margin="0,0,0,0">
+                                                                    <Grid Margin="0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="28"/>
@@ -708,8 +752,25 @@
                                                             <Button Content="x" Foreground="#FF3333" Background="Transparent" BorderThickness="0" Visibility="{Binding RemoveBtnVis}" Tag="{Binding}" Click="BtnRemoveVariant_Click" Margin="0,0,4,0" Padding="0" Cursor="Hand" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
                                                             <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseNameVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
                                                             <TextBlock Text="{Binding BaseName, StringFormat='{}{0}: '}" Foreground="#E0E0E0" FontSize="15" VerticalAlignment="Center" Visibility="{Binding BaseVariantLabelVis}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000"/>
-                                                            <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding SubNameVis}" Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC" Width="220" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
-                                                            <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                                                        <Grid Visibility="{Binding SubNameVis}" Width="220" Margin="0" VerticalAlignment="Center">
+                                                                            <TextBlock Text="(Впишите)" Foreground="#555555" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="False">
+                                                                                <TextBlock.Style>
+                                                                                    <Style TargetType="TextBlock">
+                                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding SubName}" Value="">
+                                                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                                            </DataTrigger>
+                                                                                            <DataTrigger Binding="{Binding SubName}" Value="{x:Null}">
+                                                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </TextBlock.Style>
+                                                                            </TextBlock>
+                                                                            <TextBox Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="#00FFCC" BorderThickness="0" CaretBrush="#00FFCC" FontSize="15" Padding="0" Margin="0" VerticalAlignment="Center" FontFamily="Consolas"/>
+                                                                        </Grid>
+                                                                        <Button Content="+" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" Visibility="{Binding AddBtnVis}" Tag="{Binding}" Click="BtnAddVariant_Click" Margin="6,0,0,0" Padding="0" Cursor="Hand" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                         <Border Grid.Column="1" Style="{StaticResource SkillBox}">
                                                             <TextBox Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimit777_TextChanged" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Consolas"/>
@@ -724,17 +785,20 @@
                                                             <TextBlock Text="{Binding DisplayBase}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                                                         </Border>
                                                     </Grid>
-                                                </DataTemplate>
+                                                                </Border>
+                                                            </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </Border>
+                                </ScrollViewer>
+                            </Border>
 
                     <Border Grid.Row="0" Grid.Column="8" BorderBrush="#FF3333" BorderThickness="2" Background="#0A0A0A" Padding="8,4" Margin="0,0,0,10">
-                        <ItemsControl ItemsSource="{Binding RightSkillCategories2}">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding RightSkillCategories2}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="0,0,0,4">
@@ -757,7 +821,8 @@
                                         <ItemsControl ItemsSource="{Binding Skills}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid Margin="2">
+                                                                <Border BorderBrush="#222222" BorderThickness="0,0,0,3" Padding="0,0,0,0" Margin="0,0,0,0">
+                                                                    <Grid Margin="0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="28"/>
@@ -785,14 +850,16 @@
                                                             <TextBlock Text="{Binding DisplayBase}" Foreground="#00FFCC" FontWeight="Bold" TextAlignment="Center" FontSize="15" VerticalAlignment="Center" TextWrapping="NoWrap"/>
                                                         </Border>
                                                     </Grid>
-                                                </DataTemplate>
+                                                                </Border>
+                                                            </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </Border>
+                                </ScrollViewer>
+                            </Border>
 
 
                     <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
@@ -961,8 +1028,15 @@
                                                         </Grid.ColumnDefinitions>
                                                         <TextBox Grid.Column="0" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC"/>
                                                         <TextBox Grid.Column="1" Text="{Binding Damage, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
-                                                        <TextBox Grid.Column="2" Text="{Binding Ammo, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
-                                                        <TextBox Grid.Column="3" Text="{Binding Rof, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
+                                                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                    <TextBox Text="{Binding AmmoCurrent, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" TextAlignment="Right" CaretBrush="#00FFCC" MinWidth="15"/>
+                                                                    <TextBlock Text="/" Foreground="#00FFCC" FontSize="13" Margin="2,0" VerticalAlignment="Center"/>
+                                                                    <TextBox Text="{Binding AmmoMax, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" TextAlignment="Left" CaretBrush="#00FFCC" MinWidth="15"/>
+                                                                    <TextBlock Text="(" Foreground="#888888" FontSize="13" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                                                                    <TextBox Text="{Binding AmmoTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="#888888" Background="Transparent" BorderThickness="0" FontSize="13" TextAlignment="Center" CaretBrush="#888888" MinWidth="20"/>
+                                                                    <TextBlock Text=")" Foreground="#888888" FontSize="13" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                                <TextBox Grid.Column="3" Text="{Binding Rof, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" TextAlignment="Center" CaretBrush="#00FFCC"/>
                                                         <TextBox Grid.Column="4" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" Background="Transparent" BorderThickness="0" FontSize="13" VerticalAlignment="Center" Margin="2,0" CaretBrush="#00FFCC"/>
                                                     </Grid>
                                                 </Border>
@@ -1008,8 +1082,8 @@
                                                     </Grid.RowDefinitions>
                                                     <TextBlock Text="{Binding Key}" Foreground="#999999" FontSize="12" FontWeight="Bold" Margin="2,0,0,2"/>
                                                     <Border Grid.Row="1" Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1" Padding="10,6">
-                                                        <TextBlock Text="{Binding Value}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
-                                                    </Border>
+                                                                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Foreground="#FFFFFF" Background="Transparent" BorderThickness="0" FontSize="14" TextWrapping="Wrap" AcceptsReturn="True" CaretBrush="#00FFCC"/>
+                                                            </Border>
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
@@ -1028,8 +1102,8 @@
                                                     </Grid.RowDefinitions>
                                                     <TextBlock Text="{Binding Key}" Foreground="#FF3333" FontSize="12" FontWeight="Bold" Margin="2,0,0,2"/>
                                                     <Border Grid.Row="1" Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="1" Padding="10,6">
-                                                        <TextBlock Text="{Binding Value}" Foreground="#FFFFFF" FontSize="14" TextWrapping="Wrap"/>
-                                                    </Border>
+                                                                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Foreground="#FFFFFF" Background="Transparent" BorderThickness="0" FontSize="14" TextWrapping="Wrap" AcceptsReturn="True" CaretBrush="#00FFCC"/>
+                                                            </Border>
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
@@ -1066,13 +1140,13 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Border Background="#0A0A0A" BorderBrush="#FF3333" BorderThickness="1" Padding="10" Margin="0,0,0,8">
-                                                    <StackPanel>
-                                                        <TextBlock Text="{Binding Who}" Foreground="#FF3333" FontWeight="Bold" FontSize="14" Margin="0,0,0,4"/>
-                                                        <TextBlock Text="{Binding Cause, StringFormat='Причина: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2"/>
-                                                        <TextBlock Text="{Binding Hate, StringFormat='Уровень: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2"/>
-                                                        <TextBlock Text="{Binding Action, StringFormat='План: {0}'}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap"/>
-                                                    </StackPanel>
-                                                </Border>
+                                                            <StackPanel>
+                                                                <TextBox Text="{Binding Who, UpdateSourceTrigger=PropertyChanged}" Foreground="#FF3333" FontWeight="Bold" FontSize="14" Margin="0,0,0,4" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                                                <TextBox Text="{Binding Cause, StringFormat='Причина: {0}', UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                                                <TextBox Text="{Binding Hate, StringFormat='Уровень: {0}', UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Margin="0,0,0,2" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                                                <TextBox Text="{Binding Action, StringFormat='План: {0}', UpdateSourceTrigger=PropertyChanged}" Foreground="#E0E0E0" FontSize="13" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
+                                                            </StackPanel>
+                                                        </Border>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
