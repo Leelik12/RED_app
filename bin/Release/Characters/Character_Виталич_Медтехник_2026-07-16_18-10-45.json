@@ -1,0 +1,638 @@
+﻿{
+  "Name": "Виталич",
+  "Role": "Медтехник",
+  "RoleAbilityNotes": "",
+  "Stats": {
+    "INT": 8,
+    "REF": 8,
+    "DEX": 6,
+    "TECH": 8,
+    "COOL": 6,
+    "WILL": 6,
+    "LUCK": 2,
+    "MOVE": 4,
+    "BODY": 6,
+    "EMP": 8
+  },
+  "SystemStats": {
+    "HP": 40,
+    "WoundedThreshold": 20,
+    "DeathSave": 6,
+    "Humanity": 80,
+    "CurrentHumanity": 43,
+    "MaxHumanity": 64,
+    "CurrentHP": 40,
+    "ImprovementPoints": 0,
+    "Reputation": 0,
+    "RoleRank": 4,
+    "SoloThreat": 0,
+    "SoloAwareness": 0,
+    "SoloDeflection": 0,
+    "SoloFumble": 0,
+    "SoloInitiative": 0,
+    "SoloPrecision": 0,
+    "TechField": 0,
+    "TechUpgrade": 0,
+    "TechFab": 0,
+    "TechInvent": 0,
+    "MedSurgery": 2,
+    "MedPharma": 2,
+    "MedCryo": 0,
+    "CurrentLuck": 2,
+    "DS0": 0,
+    "DS1": 0,
+    "DS2": 0,
+    "DS3": 0,
+    "DS4": 0,
+    "DS5": 0,
+    "DS6": 0,
+    "DS7": 0,
+    "DS8": 0,
+    "DS9": 0
+  },
+  "Lifepath": {
+    "Культурное происхождение": "Западная Европа",
+    "Личность": "Капризный, вспыльчивый и упрямый",
+    "Стиль одежды": "Urban Flash (яркий, технологичный, уличный)",
+    "Прическа": "Дикие и хаотичные",
+    "Отличительная черта": "Перчатки без пальцев",
+    "Ценность": "Власть",
+    "Отношение к людям": "Уничтожь всех и пусть тараканы захватят мир",
+    "Самый ценный человек": "Возлюбленный",
+    "Самая ценная вещь": "Предмет одежды",
+    "Семейное происхождение": "Крысы из мегабашен",
+    "Окружение детства": "Бегал по улицам без какого-либо надзора взрослых.",
+    "Трагедия в семье": "Твою семью изгнали или иным образом выгнали из их родного дома/страны/корпорации.",
+    "Цель в жизни": "Добиться власти и контроля."
+  },
+  "RoleLifepath": {
+    "Какой ты Медтехник?": "Риппер",
+    "Расскажи о своём партнере?": "Работаю один",
+    "Твое рабочее место": "Это хоть и не последнее слово техники, но для тебя всё удобно",
+    "Кто твои клиенты?": "Местные фиксеры присылают к тебе клиентов",
+    "Где ты берешь материалы?": "Местный фиксер поставляет припасы в обмен на мед помощь"
+  },
+  "Friends": [
+    "Кто-то, кого ты знаешь с улицы",
+    "Учитель или наставник"
+  ],
+  "Enemies": [
+    {
+      "Who": "Член банды",
+      "Cause": "Один из вас был романтическим соперником",
+      "Hate": "Могущественный бандит или небольшая корпа",
+      "Action": "Нанести подлый удар в спину. Не обязательно в прямом смысле"
+    },
+    {
+      "Who": "Враг детства",
+      "Cause": "Один из вас потерял лицо или статус",
+      "Hate": "Самостоятельно, но он будет идти до конца. При любом исходе",
+      "Action": "Избегать накала"
+    }
+  ],
+  "TragicLoves": [
+    "Любовный интерес сошёл с ума или стал киберпсихом"
+  ],
+  "Skills": [
+    {
+      "Name": "Концентрация",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Атлетика",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Сопр. пыткам/наркотикам",
+      "Level": 6,
+      "Total": 14
+    },
+    {
+      "Name": "Скрытность",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Вождение",
+      "Level": 4,
+      "Total": 12
+    },
+    {
+      "Name": "Образование",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Язык (Уличный Сленг)",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Язык (Родной): Французский",
+      "Level": 4,
+      "Total": 12
+    },
+    {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Рукопашный бой",
+      "Level": 4,
+      "Total": 10
+    },
+    {
+      "Name": "Уклонение",
+      "Level": 6,
+      "Total": 12
+    },
+    {
+      "Name": "Пистолеты",
+      "Level": 6,
+      "Total": 14
+    },
+    {
+      "Name": "Тактическое оружие",
+      "Level": 6,
+      "Total": 14
+    },
+    {
+      "Name": "Общение",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Проницательность",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Убеждение",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Знание техники",
+      "Level": 6,
+      "Total": 14
+    },
+    {
+      "Name": "Кибертехника",
+      "Level": 6,
+      "Total": 14
+    },
+    {
+      "Name": "Электроника/Безопасность (x2)",
+      "Level": 6,
+      "Total": 14
+    },
+    {
+      "Name": "Первая помощь",
+      "Level": 2,
+      "Total": 12
+    },
+    {
+      "Name": "Парамедик (x2)",
+      "Level": 4,
+      "Total": 14
+    }
+  ],
+  "Notes": "Фармацевтика: спидхил, Быстрый детоксикатор",
+  "Armor": {
+    "HeadSp": "11",
+    "HeadPenalty": null,
+    "BodySp": "11",
+    "BodyPenalty": null,
+    "ShieldSp": null,
+    "ShieldPenalty": null
+  },
+  "Weapons": [
+    {
+      "Name": "Тяжелый пистолет",
+      "Damage": "3d6",
+      "AmmoCurrent": "8",
+      "AmmoMax": "8",
+      "AmmoTotal": "42",
+      "Rof": "2",
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    }
+  ],
+  "StyleNotes": "Низ,куртка,обувь,украшения - Urban Flash\r\nВерх - Businesswear\r\nЗеркальные очки - Bohemian",
+  "Housing": "",
+  "Rent": "",
+  "Lifestyle": "",
+  "ReputationEvents": "",
+  "AmmoValue": "",
+  "CashValue": "750",
+  "GearItems": [
+    {
+      "Name": "Легкий Бронекостюм",
+      "Notes": null
+    },
+    {
+      "Name": "Сумка Медтеха",
+      "Notes": "Полноценный медицинский набор в сумке "
+    },
+    {
+      "Name": "Аэрогиппо",
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    }
+  ],
+  "CustomCyberwareList": [],
+  "CyberwareBlocks": [
+    {
+      "Name": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 5,
+      "OptionsText": "",
+      "SlotsText": "свободно 5/5",
+      "InstalledItems": []
+    },
+    {
+      "Name": "КИБЕРАУДИО (CYBERAUDIO)",
+      "IsInstalled": true,
+      "UsedSlots": 1,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 2/3",
+      "InstalledItems": [
+        {
+          "Name": "Набор кибераудио",
+          "Category": "КИБЕРАУДИО (CYBERAUDIO)",
+          "Description": "Набор кибераудио устанавливается скрытно во внутреннюю часть черепа. Система имеет 3 слота для опций кибераудио. Пользователь может иметь только один установленный набор.",
+          "HumanityLoss": "2d6 (7)",
+          "Slots": 0,
+          "IsCustom": false,
+          "IsFoundation": true,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [],
+          "TooltipText": "Набор кибераудио устанавливается скрытно во внутреннюю часть черепа. Система имеет 3 слота для опций кибераудио. Пользователь может иметь только один установленный набор.\n\nПЧ: 2d6 (7) | Слотов: 0"
+        },
+        {
+          "Name": "Внутренний агент",
+          "Category": "КИБЕРАУДИО (CYBERAUDIO)",
+          "Description": "Полнофункциональный агент (см. раздел снаряжения стр. 358), управляемый исключительно голосовыми командами. Изображения описываются голосом, но вывод может быть связан с киберглазом с хироном или ближайшим экраном, если требуется визуальный вывод. Щепку памяти имплантированного агента нельзя извлечь без хирургического вмешательства. Требует набор кибераудио.",
+          "HumanityLoss": "1d6 (3)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "Набор кибераудио",
+          "SkillModifiers": [],
+          "TooltipText": "Полнофункциональный агент (см. раздел снаряжения стр. 358), управляемый исключительно голосовыми командами. Изображения описываются голосом, но вывод может быть связан с киберглазом с хироном или ближайшим экраном, если требуется визуальный вывод. Щепку памяти имплантированного агента нельзя извлечь без хирургического вмешательства. Требует набор кибераудио.\n\nПЧ: 1d6 (3) | Слотов: 1\nТРЕБУЕТ: Набор кибераудио"
+        }
+      ]
+    },
+    {
+      "Name": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 2,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 5/7",
+      "InstalledItems": [
+        {
+          "Name": "Связыватели токсинов",
+          "Category": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+          "Description": "+2 к проверкам сопротивления пыткам/наркотикам. Повторная установка не дает преимуществ.",
+          "HumanityLoss": "1d6/2 (2)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [
+            {
+              "SkillName": "Сопр. пыткам/наркотикам",
+              "Value": 2,
+              "ModType": "Normal"
+            }
+          ],
+          "TooltipText": "+2 к проверкам сопротивления пыткам/наркотикам. Повторная установка не дает преимуществ.\n\nПЧ: 1d6/2 (2) | Слотов: 1"
+        },
+        {
+          "Name": "Усиленные антитела",
+          "Category": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+          "Description": "После стабилизации ты восстанавливаешь количество ПЗ, равное твоему ТЕЛО, умноженному на два, за каждый день отдыха или легкой активности. Это заменяет твою обычную скорость исцеления.",
+          "HumanityLoss": "1d6/2 (2)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [],
+          "TooltipText": "После стабилизации ты восстанавливаешь количество ПЗ, равное твоему ТЕЛО, умноженному на два, за каждый день отдыха или легкой активности. Это заменяет твою обычную скорость исцеления.\n\nПЧ: 1d6/2 (2) | Слотов: 1"
+        }
+      ]
+    },
+    {
+      "Name": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+      "IsInstalled": true,
+      "UsedSlots": 1,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 2/3",
+      "InstalledItems": [
+        {
+          "Name": "Киберглаз",
+          "Category": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+          "Description": "Все нижеописанные опции устанавливаются в искусственный глаз, заменяющий органический. Каждый киберглаз имеет 3 слота опций для киберглаза. Некоторые опции должны быть сопряжёнными, чтобы работать корректно (покупаются дважды и устанавливаются в два разных киберглаза персонажа, ПЧ рассчитывается отдельно за каждую покупку).",
+          "HumanityLoss": "2d6 (7)",
+          "Slots": 0,
+          "IsCustom": false,
+          "IsFoundation": true,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [],
+          "TooltipText": "Все нижеописанные опции устанавливаются в искусственный глаз, заменяющий органический. Каждый киберглаз имеет 3 слота опций для киберглаза. Некоторые опции должны быть сопряжёнными, чтобы работать корректно (покупаются дважды и устанавливаются в два разных киберглаза персонажа, ПЧ рассчитывается отдельно за каждую покупку).\n\nПЧ: 2d6 (7) | Слотов: 0"
+        },
+        {
+          "Name": "Хирон",
+          "Category": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+          "Description": "Проецирует подэкран в поле зрения.",
+          "HumanityLoss": "1d6/2 (2)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "Киберглаз",
+          "SkillModifiers": [],
+          "TooltipText": "Проецирует подэкран в поле зрения.\n\nПЧ: 1d6/2 (2) | Слотов: 1\nТРЕБУЕТ: Киберглаз"
+        }
+      ]
+    },
+    {
+      "Name": "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+      "IsInstalled": true,
+      "UsedSlots": 2,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 2/4",
+      "InstalledItems": [
+        {
+          "Name": "Киберрука",
+          "Category": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+          "Description": "Протез руки. Имеет 4 слота опций. Поставляется со стандартной кистью, не вызывающей потерю человечности и не занимающей слот.",
+          "HumanityLoss": "2d6 (7)",
+          "Slots": 0,
+          "IsCustom": false,
+          "IsFoundation": true,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [],
+          "TooltipText": "Протез руки. Имеет 4 слота опций. Поставляется со стандартной кистью, не вызывающей потерю человечности и не занимающей слот.\n\nПЧ: 2d6 (7) | Слотов: 0"
+        },
+        {
+          "Name": "Медсканер",
+          "Category": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+          "Description": "Медсканер, установленный в киберруку. Сканер с внешними датчиками диагностирует травмы и болезни, позволяя оказывать неотложную помощь без навыка хирургии. +2 к первой помощи и парамедицине. Требует киберруку и занимает 2 слота опций.",
+          "HumanityLoss": "2d6 (7)",
+          "Slots": 2,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "Киберрука",
+          "SkillModifiers": [
+            {
+              "SkillName": "Первая помощь",
+              "Value": 2,
+              "ModType": "Normal"
+            },
+            {
+              "SkillName": "Парамедик (x2)",
+              "Value": 2,
+              "ModType": "Normal"
+            }
+          ],
+          "TooltipText": "Медсканер, установленный в киберруку. Сканер с внешними датчиками диагностирует травмы и болезни, позволяя оказывать неотложную помощь без навыка хирургии. +2 к первой помощи и парамедицине. Требует киберруку и занимает 2 слота опций.\n\nПЧ: 2d6 (7) | Слотов: 2\nТРЕБУЕТ: Киберрука"
+        }
+      ]
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 3,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/7",
+      "InstalledItems": [
+        {
+          "Name": "Светотату",
+          "Category": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+          "Description": "Подкожный имплант, выводящий постоянное LED-отображение текущего времени и даты, видимое сквозь кожу.",
+          "HumanityLoss": "0 (—)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [
+            {
+              "SkillName": "Гардероб и стиль",
+              "Value": 2,
+              "ModType": "Normal"
+            }
+          ],
+          "TooltipText": "Подкожный имплант, выводящий постоянное LED-отображение текущего времени и даты, видимое сквозь кожу.\n\nПЧ: 0 (—) | Слотов: 1"
+        },
+        {
+          "Name": "Светотату",
+          "Category": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+          "Description": "Подкожный имплант, выводящий постоянное LED-отображение текущего времени и даты, видимое сквозь кожу.",
+          "HumanityLoss": "0 (—)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [
+            {
+              "SkillName": "Гардероб и стиль",
+              "Value": 2,
+              "ModType": "Normal"
+            }
+          ],
+          "TooltipText": "Подкожный имплант, выводящий постоянное LED-отображение текущего времени и даты, видимое сквозь кожу.\n\nПЧ: 0 (—) | Слотов: 1"
+        },
+        {
+          "Name": "Светотату",
+          "Category": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+          "Description": "Подкожный имплант, выводящий постоянное LED-отображение текущего времени и даты, видимое сквозь кожу.",
+          "HumanityLoss": "0 (—)",
+          "Slots": 1,
+          "IsCustom": false,
+          "IsFoundation": false,
+          "IsPaired": false,
+          "Requires": "",
+          "SkillModifiers": [
+            {
+              "SkillName": "Гардероб и стиль",
+              "Value": 2,
+              "ModType": "Normal"
+            }
+          ],
+          "TooltipText": "Подкожный имплант, выводящий постоянное LED-отображение текущего времени и даты, видимое сквозь кожу.\n\nПЧ: 0 (—) | Слотов: 1"
+        }
+      ]
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "БОРГИРОВАНИЕ (BORGWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    }
+  ],
+  "CriticalInjuries": null,
+  "Addictions": "",
+  "CriticalInjuriesList": []
+}

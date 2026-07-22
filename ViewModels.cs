@@ -173,6 +173,19 @@ namespace CyberpunkRED_Generator
         private string _woundStateText; public string WoundStateText { get => _woundStateText; set { _woundStateText = value; OnPropertyChanged(); } }
         private string _woundTooltipText; public string WoundTooltipText { get => _woundTooltipText; set { _woundTooltipText = value; OnPropertyChanged(); } }
 
+        // --- Состояния чекбоксов для спасбросков ---
+        private bool _ds0; public bool DS0 { get => _ds0; set { _ds0 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds1; public bool DS1 { get => _ds1; set { _ds1 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds2; public bool DS2 { get => _ds2; set { _ds2 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds3; public bool DS3 { get => _ds3; set { _ds3 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds4; public bool DS4 { get => _ds4; set { _ds4 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds5; public bool DS5 { get => _ds5; set { _ds5 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds6; public bool DS6 { get => _ds6; set { _ds6 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds7; public bool DS7 { get => _ds7; set { _ds7 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds8; public bool DS8 { get => _ds8; set { _ds8 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        private bool _ds9; public bool DS9 { get => _ds9; set { _ds9 = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        // ------------------------------------------
+
         public ObservableCollection<CriticalInjuryItem> CriticalInjuriesList { get; set; }
         public List<string> AvailableInjuries => CoreDataBase.CriticalInjuries.Select(x => x.Name).ToList();
         private string _selectedInjuryToAdd; public string SelectedInjuryToAdd { get => _selectedInjuryToAdd; set { _selectedInjuryToAdd = value; OnPropertyChanged(); } }
@@ -355,13 +368,38 @@ namespace CyberpunkRED_Generator
             else if (CurrentHP > threshold) { WoundStateText = "ЛЕГКОЕ"; WoundTooltipText = "СЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 10"; }
             else if (CurrentHP > 0)
             {
-                WoundStateText = "ТЯЖЕЛОЕ"; woundSkillPenalty += 2; WoundTooltipText = "ЭФФЕКТ: -2 ко всем действиям.\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 13";
+                WoundStateText = "ТЯЖЕЛОЕ";
+                if (installedCyberware.Any(c => c.Name.Contains("Подавитель боли")))
+                {
+                    WoundTooltipText = "ЭФФЕКТ: -2 ко всем действиям (ИГНОРИРУЕТСЯ ПОДАВИТЕЛЕМ БОЛИ).\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 13";
+                }
+                else
+                {
+                    woundSkillPenalty += 2;
+                    WoundTooltipText = "ЭФФЕКТ: -2 ко всем действиям.\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 13";
+                }
             }
             else
             {
                 WoundStateText = "СМЕРТЕЛЬНОЕ"; woundSkillPenalty += 4; woundMovePenalty += 6;
                 WoundTooltipText = "ЭФФЕКТ: -4 к действиям, -6 СКО.\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 15";
             }
+
+            // === ПЕРЕМЕЩЕННАЯ ЛОГИКА ТРАВМ (Считаем ВСЕ штрафы до применения к навыкам) ===
+            var activeModifiers = new List<SkillModifierDef>();
+
+            if (CriticalInjuriesList != null)
+            {
+                foreach (var inj in CriticalInjuriesList)
+                {
+                    if (inj.SkillModifiers != null)
+                        activeModifiers.AddRange(inj.SkillModifiers);
+                    dsPenalty += inj.DeathSavePenalty;
+                    woundMovePenalty += inj.MovePenalty;
+                    woundSkillPenalty += inj.AllActionsPenalty;
+                }
+            }
+            // =================================
 
             var allCats = new List<SheetSkillCategory>();
             allCats.AddRange(CenterSkillCategories);
@@ -409,31 +447,26 @@ namespace CyberpunkRED_Generator
                 ApplyRoleModToSkill("Авиационные технологии", TechField);
                 ApplyRoleModToSkill("Оружейник", TechField);
             }
-            var activeModifiers = new List<SkillModifierDef>();
-
-            if (CriticalInjuriesList != null)
-            {
-                foreach (var inj in CriticalInjuriesList)
-                {
-                    activeModifiers.AddRange(inj.SkillModifiers);
-                    dsPenalty += inj.DeathSavePenalty;
-                    woundMovePenalty += inj.MovePenalty;
-                    woundSkillPenalty += inj.AllActionsPenalty;
-                }
-            }
 
             var appliedCyberwareMods = new HashSet<string>();
             foreach (var cw in installedCyberware)
             {
                 if (!appliedCyberwareMods.Contains(cw.Name))
                 {
-                    activeModifiers.AddRange(cw.SkillModifiers);
+                    if (cw.SkillModifiers != null)
+                        activeModifiers.AddRange(cw.SkillModifiers);
                     appliedCyberwareMods.Add(cw.Name);
                 }
             }
 
+            // Удаляем бонус Светотату, который мог автоматически подтянуться из БД (чтобы не было дублирования)
+            activeModifiers.RemoveAll(m => m.SkillName == "Гардероб и стиль" && installedCyberware.Any(c => c.Name == "Светотату" && c.SkillModifiers != null && c.SkillModifiers.Contains(m)));
+
+            // Добавляем бонус только если установлено 3 и более штук
             if (installedCyberware.Count(c => c.Name == "Светотату") >= 3)
+            {
                 activeModifiers.Add(new SkillModifierDef { SkillName = "Гардероб и стиль", Value = 2 });
+            }
 
             if (installedCyberware.Any(c => c.Name == "Химкожа") && installedCyberware.Any(c => c.Name == "Техноволосы"))
                 activeModifiers.Add(new SkillModifierDef { SkillName = "Уход за собой", Value = 2 });
@@ -460,7 +493,10 @@ namespace CyberpunkRED_Generator
                 moveStat.WoundPenalty = -woundMovePenalty;
                 ApplyStatPenalty("СКО", "MOVE", moveStat.ArmorPenalty);
             }
-            CurrentDeathSave = Math.Max(0, BaseDeathSave - dsPenalty);
+
+            // --- РАСЧЕТ ИТОГОВОГО СПАСБРОСКА ОТ СМЕРТИ (Включая чекбоксы ручных штрафов) ---
+            int manualDsPenalty = (DS0 ? 1 : 0) + (DS1 ? 1 : 0) + (DS2 ? 1 : 0) + (DS3 ? 1 : 0) + (DS4 ? 1 : 0) + (DS5 ? 1 : 0) + (DS6 ? 1 : 0) + (DS7 ? 1 : 0) + (DS8 ? 1 : 0) + (DS9 ? 1 : 0);
+            CurrentDeathSave = Math.Max(0, BaseDeathSave - dsPenalty - manualDsPenalty);
 
             OnPropertyChanged(nameof(MedSurgeryTotal));
             OnPropertyChanged(nameof(MedicalTechTotal));

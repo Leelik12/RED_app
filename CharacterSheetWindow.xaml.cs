@@ -150,6 +150,18 @@ namespace CyberpunkRED_Generator
                         viewModel.MedSurgery = _originalData.SystemStats.ContainsKey("MedSurgery") ? _originalData.SystemStats["MedSurgery"] : 0;
                         viewModel.MedPharma = _originalData.SystemStats.ContainsKey("MedPharma") ? _originalData.SystemStats["MedPharma"] : 0;
                         viewModel.MedCryo = _originalData.SystemStats.ContainsKey("MedCryo") ? _originalData.SystemStats["MedCryo"] : 0;
+
+                        // Загружаем чекбоксы спасбросков
+                        viewModel.DS0 = _originalData.SystemStats.ContainsKey("DS0") && _originalData.SystemStats["DS0"] == 1;
+                        viewModel.DS1 = _originalData.SystemStats.ContainsKey("DS1") && _originalData.SystemStats["DS1"] == 1;
+                        viewModel.DS2 = _originalData.SystemStats.ContainsKey("DS2") && _originalData.SystemStats["DS2"] == 1;
+                        viewModel.DS3 = _originalData.SystemStats.ContainsKey("DS3") && _originalData.SystemStats["DS3"] == 1;
+                        viewModel.DS4 = _originalData.SystemStats.ContainsKey("DS4") && _originalData.SystemStats["DS4"] == 1;
+                        viewModel.DS5 = _originalData.SystemStats.ContainsKey("DS5") && _originalData.SystemStats["DS5"] == 1;
+                        viewModel.DS6 = _originalData.SystemStats.ContainsKey("DS6") && _originalData.SystemStats["DS6"] == 1;
+                        viewModel.DS7 = _originalData.SystemStats.ContainsKey("DS7") && _originalData.SystemStats["DS7"] == 1;
+                        viewModel.DS8 = _originalData.SystemStats.ContainsKey("DS8") && _originalData.SystemStats["DS8"] == 1;
+                        viewModel.DS9 = _originalData.SystemStats.ContainsKey("DS9") && _originalData.SystemStats["DS9"] == 1;
                     }
 
                     viewModel.MaxHP = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("HP") ? _originalData.SystemStats["HP"] : 40;
@@ -449,7 +461,7 @@ namespace CyberpunkRED_Generator
                         MovePenalty = def.MovePenalty,
                         DeathSavePenalty = def.DeathSavePenalty,
                         EffectText = def.EffectText,
-                        SkillModifiers = def.SkillModifiers 
+                        SkillModifiers = def.SkillModifiers
                     });
                     vm.RecalculatePenalties();
                 }
@@ -560,6 +572,18 @@ namespace CyberpunkRED_Generator
                     _originalData.SystemStats["HP"] = vm.MaxHP;
                     _originalData.SystemStats["CurrentHP"] = vm.CurrentHP;
                     _originalData.SystemStats["DeathSave"] = vm.BaseDeathSave;
+
+                    // Сохраняем стейт чекбоксов
+                    _originalData.SystemStats["DS0"] = vm.DS0 ? 1 : 0;
+                    _originalData.SystemStats["DS1"] = vm.DS1 ? 1 : 0;
+                    _originalData.SystemStats["DS2"] = vm.DS2 ? 1 : 0;
+                    _originalData.SystemStats["DS3"] = vm.DS3 ? 1 : 0;
+                    _originalData.SystemStats["DS4"] = vm.DS4 ? 1 : 0;
+                    _originalData.SystemStats["DS5"] = vm.DS5 ? 1 : 0;
+                    _originalData.SystemStats["DS6"] = vm.DS6 ? 1 : 0;
+                    _originalData.SystemStats["DS7"] = vm.DS7 ? 1 : 0;
+                    _originalData.SystemStats["DS8"] = vm.DS8 ? 1 : 0;
+                    _originalData.SystemStats["DS9"] = vm.DS9 ? 1 : 0;
 
                     _originalData.SystemStats["ImprovementPoints"] = vm.ImprovementPoints;
                     _originalData.SystemStats["Reputation"] = vm.Reputation;
@@ -743,11 +767,6 @@ namespace CyberpunkRED_Generator
             if (cat.Contains("ДОП. ПРАВАЯ КИБЕРРУКА")) return "ДОП. ЛЕВАЯ КИБЕРРУКА (EXTRA ARM L)";
             if (cat.Contains("ДОП. ЛЕВАЯ КИБЕРРУКА")) return "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)";
 
-            // Борговские дополнительные глаза (линкуем 1-ый со 2-ым)
-            if (cat.Contains("ДОП. КИБЕРГЛАЗ 1")) return "ДОП. КИБЕРГЛАЗ 2 (EXTRA OPTIC 2)";
-            if (cat.Contains("ДОП. КИБЕРГЛАЗ 2")) return "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)";
-            if (cat.Contains("ДОП. КИБЕРГЛАЗ 3")) return "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)";
-
             return "";
         }
         private void BtnInstallCyber_Click(object sender, RoutedEventArgs e)
@@ -780,7 +799,7 @@ namespace CyberpunkRED_Generator
                 }
 
                 // Поиск зависимостей по всему телу
-                if (!string.IsNullOrWhiteSpace(def.Requires))
+                if (!string.IsNullOrWhiteSpace(def.Requires) && def.Name != "Подкожный захват")
                 {
                     bool hasRequirement = vm.CyberwareBlocks.Any(b => b.InstalledItems.Any(i => i.Name == def.Requires));
                     if (!hasRequirement)
@@ -906,6 +925,7 @@ namespace CyberpunkRED_Generator
                         MessageBox.Show("Плечевое крепление установлено! В ваш лист добавлены слоты для дополнительных киберрук.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
+                // СТАЛО:
                 else if (def.Name == "Фасеточное крепление")
                 {
                     if (!vm.CyberwareBlocks.Any(b => b.Name == "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)"))
@@ -913,7 +933,9 @@ namespace CyberpunkRED_Generator
                         vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
                         vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 2 (EXTRA OPTIC 2)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
                         vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 3 (EXTRA OPTIC 3)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
-                        MessageBox.Show("Фасеточное крепление установлено! В ваш лист добавлены слоты для дополнительных киберглаз.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
+                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 4 (EXTRA OPTIC 4)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 5 (EXTRA OPTIC 5)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                        MessageBox.Show("Фасеточное крепление установлено! В ваш лист добавлены слоты для 5 дополнительных киберглаз.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
 

@@ -1,0 +1,429 @@
+﻿{
+  "Name": "4е5",
+  "Role": "Техник",
+  "RoleAbilityNotes": "",
+  "Stats": {
+    "INT": 3,
+    "REF": 4,
+    "DEX": 7,
+    "TECH": 5,
+    "COOL": 4,
+    "WILL": 4,
+    "LUCK": 4,
+    "MOVE": 7,
+    "BODY": 6,
+    "EMP": 8
+  },
+  "SystemStats": {
+    "HP": 35,
+    "WoundedThreshold": 18,
+    "DeathSave": 6,
+    "Humanity": 80,
+    "CurrentHumanity": 80,
+    "MaxHumanity": 80,
+    "CurrentHP": 35,
+    "ImprovementPoints": 0,
+    "Reputation": 0,
+    "RoleRank": 4,
+    "SoloThreat": 0,
+    "SoloAwareness": 0,
+    "SoloDeflection": 0,
+    "SoloFumble": 0,
+    "SoloInitiative": 0,
+    "SoloPrecision": 0,
+    "TechField": 0,
+    "TechUpgrade": 0,
+    "TechFab": 0,
+    "TechInvent": 0,
+    "MedSurgery": 0,
+    "MedPharma": 0,
+    "MedCryo": 0,
+    "CurrentLuck": 4,
+    "DS0": 1,
+    "DS1": 1,
+    "DS2": 0,
+    "DS3": 0,
+    "DS4": 0,
+    "DS5": 0,
+    "DS6": 0,
+    "DS7": 0,
+    "DS8": 0,
+    "DS9": 0
+  },
+  "Lifepath": {
+    "Культурное происхождение": "Западная Европа",
+    "Личность": "Застенчивый и скрытный",
+    "Стиль одежды": "Bag Lady Chic (бездомный, рваный, бродяжный)",
+    "Прическа": "Лысина",
+    "Отличительная черта": "Странные импланты ногтей",
+    "Ценность": "Деньги",
+    "Отношение к людям": "Люди — это препятствия, которые нужно уничтожить, если они мне мешают",
+    "Самый ценный человек": "Питомец",
+    "Самая ценная вещь": "Ювелирное изделие",
+    "Семейное происхождение": "Крысы из мегабашен",
+    "Окружение детства": "В роскошном корпоративном небоскрёбе, возвышающемся над шумной толпой.",
+    "Трагедия в семье": "Твоя семья вовлечена в долгосрочный заговор, организацию или ассоциацию, например, преступный клан или революционную группу.",
+    "Цель в жизни": "Добиться власти и контроля."
+  },
+  "RoleLifepath": {
+    "Какой ты специалист?": "Мусорщик",
+    "Как выглядит твое рабочее место?": "Всё разложено по цветам, но всё еще кошмар",
+    "Если есть партнёр, то кто он?": "Романтический партнёр",
+    "Кто твои главные клиенты?": "Менеджеры корпораций, использующие тебя для “черных проектов”",
+    "Где ты берешь материалы?": "У тебя есть лазейки в несколько корпоративных складов",
+    "Кто за тобой охотится?": "Техник конкурент хочет украсть твоих клиентов"
+  },
+  "Friends": [
+    "Бывший возлюбленный",
+    "Старый друг детства",
+    "Бывший возлюбленный"
+  ],
+  "Enemies": [
+    {
+      "Who": "Враг детства",
+      "Cause": "Вы просто друг друга не выносите",
+      "Hate": "Могущественный бандит или небольшая корпа",
+      "Action": "Подставить за преступление или другое деяние, которое оппонент не совершал"
+    },
+    {
+      "Who": "Корпоративный менеджер",
+      "Cause": "Причинил крупное публичное унижение",
+      "Hate": "Он и несколько (1d10/2) друзей",
+      "Action": "Войти в убийственную ярость и вырвать врагу лицо"
+    },
+    {
+      "Who": "Партнёр или коллега",
+      "Cause": "Отклонил предложение работы или романтических отношений",
+      "Hate": "Самостоятельно, но он будет идти до конца. При любом исходе",
+      "Action": "Избегать накала"
+    }
+  ],
+  "TragicLoves": [
+    "Твой любовный интерес был похищен",
+    "Соперник выбил вас из игры"
+  ],
+  "Skills": [
+    {
+      "Name": "Концентрация",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 5
+    },
+    {
+      "Name": "Атлетика",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Скрытность",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Образование",
+      "Level": 2,
+      "Total": 5
+    },
+    {
+      "Name": "Язык (Уличный Сленг)",
+      "Level": 2,
+      "Total": 5
+    },
+    {
+      "Name": "Язык (Родной)",
+      "Level": 4,
+      "Total": 7
+    },
+    {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 5
+    },
+    {
+      "Name": "Рукопашный бой",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Уклонение",
+      "Level": 2,
+      "Total": 9
+    },
+    {
+      "Name": "Общение",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Проницательность",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Убеждение",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Первая помощь",
+      "Level": 2,
+      "Total": 7
+    }
+  ],
+  "Notes": "",
+  "Armor": {
+    "HeadSp": null,
+    "HeadPenalty": null,
+    "BodySp": null,
+    "BodyPenalty": null,
+    "ShieldSp": null,
+    "ShieldPenalty": null
+  },
+  "Weapons": [
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    }
+  ],
+  "StyleNotes": "",
+  "Housing": "",
+  "Rent": "",
+  "Lifestyle": "",
+  "ReputationEvents": "",
+  "AmmoValue": "",
+  "CashValue": "",
+  "GearItems": [
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    }
+  ],
+  "CustomCyberwareList": [],
+  "CyberwareBlocks": [
+    {
+      "Name": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 5,
+      "OptionsText": "",
+      "SlotsText": "свободно 5/5",
+      "InstalledItems": []
+    },
+    {
+      "Name": "КИБЕРАУДИО (CYBERAUDIO)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "БОРГИРОВАНИЕ (BORGWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    }
+  ],
+  "CriticalInjuries": null,
+  "Addictions": "",
+  "CriticalInjuriesList": [
+    "Травма Шеи",
+    "Травма Шеи",
+    "Травма Шеи",
+    "Оторванная Рука"
+  ]
+}

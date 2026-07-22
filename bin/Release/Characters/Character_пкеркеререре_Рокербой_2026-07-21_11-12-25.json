@@ -1,0 +1,414 @@
+﻿{
+  "Name": "пкеркеререре",
+  "Role": "Рокербой",
+  "RoleAbilityNotes": "",
+  "Stats": {
+    "INT": 8,
+    "REF": 7,
+    "DEX": 4,
+    "TECH": 7,
+    "COOL": 8,
+    "WILL": 6,
+    "LUCK": 8,
+    "MOVE": 8,
+    "BODY": 3,
+    "EMP": 6
+  },
+  "SystemStats": {
+    "HP": 35,
+    "WoundedThreshold": 18,
+    "DeathSave": 3,
+    "Humanity": 60,
+    "CurrentHumanity": 60,
+    "MaxHumanity": 60,
+    "CurrentHP": 35,
+    "ImprovementPoints": 0,
+    "Reputation": 0,
+    "RoleRank": 4,
+    "SoloThreat": 0,
+    "SoloAwareness": 0,
+    "SoloDeflection": 0,
+    "SoloFumble": 0,
+    "SoloInitiative": 0,
+    "SoloPrecision": 0,
+    "TechField": 0,
+    "TechUpgrade": 0,
+    "TechFab": 0,
+    "TechInvent": 0,
+    "MedSurgery": 0,
+    "MedPharma": 0,
+    "MedCryo": 0,
+    "CurrentLuck": 8
+  },
+  "Lifepath": {
+    "Культурное происхождение": "Северная Америка",
+    "Личность": "Застенчивый и скрытный",
+    "Стиль одежды": "Generic Chic (стандартный, яркий, модульный) ",
+    "Прическа": "Ирокез",
+    "Отличительная черта": "Татуировки",
+    "Ценность": "Деньги",
+    "Отношение к людям": "Я остаюсь нейтральным",
+    "Самый ценный человек": "Родители",
+    "Самая ценная вещь": "Оружие",
+    "Семейное происхождение": "Руководители корпорации",
+    "Окружение детства": "Бегал по улицам без какого-либо надзора взрослых.",
+    "Трагедия в семье": "Твоя семья потеряла всё из-за предательства.",
+    "Цель в жизни": "Избавиться от дурной репутации."
+  },
+  "RoleLifepath": {
+    "Какой ты Рокербой?": "Музыкант",
+    "Ты в группе или выступаешь соло?": "Выступаю соло",
+    "Почему ушел из группы?": "Ты был придурком и остальная часть группа проголосовала за твой уход",
+    "Где ты выступаешь?": "Альтернативные кафе",
+    "Кто пытается тебе помешать?": "Старый член группы, который думает, что ты запятнал репутацию"
+  },
+  "Friends": [
+    "Кто-то, кого ты знаешь с улицы",
+    "Как родитель для тебя",
+    "Как родитель для тебя"
+  ],
+  "Enemies": [
+    {
+      "Who": "Бывший друг",
+      "Cause": "Вы просто друг друга не выносите",
+      "Hate": "Он и несколько (1d10/2) друзей",
+      "Action": "Избегать накала"
+    },
+    {
+      "Who": "Бывший друг",
+      "Cause": "Один из вас был бизнес-конкурентом",
+      "Hate": "Местные корпы или законники",
+      "Action": "Устроить вербальную перепалку"
+    },
+    {
+      "Who": "Партнёр или коллега",
+      "Cause": "Причинил крупное публичное унижение",
+      "Hate": "Мощная корпа",
+      "Action": "Избегать накала"
+    }
+  ],
+  "TragicLoves": [
+    "Твой любовный интерес был похищен",
+    "Любовный интерес сошёл с ума или стал киберпсихом",
+    "Твой Любовный интерес покончил с собой"
+  ],
+  "Skills": [
+    {
+      "Name": "Концентрация",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Атлетика",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Скрытность",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Образование",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Язык (Уличный Сленг)",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Язык (Родной)",
+      "Level": 4,
+      "Total": 12
+    },
+    {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Рукопашный бой",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Уклонение",
+      "Level": 2,
+      "Total": 6
+    },
+    {
+      "Name": "Общение",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Проницательность",
+      "Level": 2,
+      "Total": 8
+    },
+    {
+      "Name": "Убеждение",
+      "Level": 2,
+      "Total": 10
+    },
+    {
+      "Name": "Первая помощь",
+      "Level": 2,
+      "Total": 9
+    }
+  ],
+  "Notes": "",
+  "Armor": {
+    "HeadSp": null,
+    "HeadPenalty": null,
+    "BodySp": null,
+    "BodyPenalty": null,
+    "ShieldSp": null,
+    "ShieldPenalty": null
+  },
+  "Weapons": [
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Damage": null,
+      "AmmoCurrent": null,
+      "AmmoMax": null,
+      "AmmoTotal": null,
+      "Rof": null,
+      "Notes": null
+    }
+  ],
+  "StyleNotes": "",
+  "Housing": "",
+  "Rent": "",
+  "Lifestyle": "",
+  "ReputationEvents": "",
+  "AmmoValue": "",
+  "CashValue": "",
+  "GearItems": [
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    },
+    {
+      "Name": null,
+      "Notes": null
+    }
+  ],
+  "CustomCyberwareList": [],
+  "CyberwareBlocks": [
+    {
+      "Name": "НЕЙРОИНТЕРФЕЙС (NEURALWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 5,
+      "OptionsText": "",
+      "SlotsText": "свободно 5/5",
+      "InstalledItems": []
+    },
+    {
+      "Name": "КИБЕРАУДИО (CYBERAUDIO)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНУТРЕННИЕ ИМПЛАНТЫ (INTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВЫЙ КИБЕРГЛАЗ (CYBEROPTIC R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВЫЙ КИБЕРГЛАЗ (CYBEROPTIC L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ВНЕШНИЕ ИМПЛАНТЫ (EXTERNAL)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРРУКА (CYBERARM R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРРУКА (CYBERARM L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 4,
+      "OptionsText": "",
+      "SlotsText": "свободно 4/4",
+      "InstalledItems": []
+    },
+    {
+      "Name": "СТИЛЕВОЙ КИБЕРИМПЛАНТ (FASHIONWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ПРАВАЯ КИБЕРНОГА (CYBERLEG R)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "ЛЕВАЯ КИБЕРНОГА (CYBERLEG L)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 3,
+      "OptionsText": "",
+      "SlotsText": "свободно 3/3",
+      "InstalledItems": []
+    },
+    {
+      "Name": "БОРГИРОВАНИЕ (BORGWARE)",
+      "IsInstalled": false,
+      "UsedSlots": 0,
+      "MaxSlots": 7,
+      "OptionsText": "",
+      "SlotsText": "свободно 7/7",
+      "InstalledItems": []
+    }
+  ],
+  "CriticalInjuries": null,
+  "Addictions": "",
+  "CriticalInjuriesList": []
+}
