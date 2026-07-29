@@ -104,7 +104,6 @@ namespace CyberpunkRED_Generator
                     var viewModel = new SheetViewModel
                     {
                         Name = _originalData.Name,
-                        Role = _originalData.Role,
                         Stats = _originalData.Stats,
                         SystemStats = _originalData.SystemStats,
                         Lifepath = new ObservableCollection<LifepathItem>(_originalData.Lifepath.Select(kvp => new LifepathItem { Key = kvp.Key, Value = kvp.Value })),
@@ -131,7 +130,18 @@ namespace CyberpunkRED_Generator
                         Addictions = _originalData.Addictions ?? ""
                     };
 
-                    viewModel.RoleRank = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("RoleRank") ? _originalData.SystemStats["RoleRank"] : 4;
+                    // Загрузка мультиклассов (если их еще нет, создаем из старой роли)
+                    if (_originalData.ActiveRoles != null && _originalData.ActiveRoles.Count > 0)
+                    {
+                        viewModel.ActiveRoles = new ObservableCollection<RoleData>(_originalData.ActiveRoles);
+                    }
+                    else
+                    {
+                        viewModel.ActiveRoles = new ObservableCollection<RoleData> {
+                            new RoleData { Name = _originalData.Role, Rank = _originalData.SystemStats != null && _originalData.SystemStats.ContainsKey("RoleRank") ? _originalData.SystemStats["RoleRank"] : 4 }
+                        };
+                    }
+                    viewModel.ChangeRoleIndex(0); // Инициализация
 
                     if (_originalData.SystemStats != null)
                     {
@@ -151,7 +161,6 @@ namespace CyberpunkRED_Generator
                         viewModel.MedPharma = _originalData.SystemStats.ContainsKey("MedPharma") ? _originalData.SystemStats["MedPharma"] : 0;
                         viewModel.MedCryo = _originalData.SystemStats.ContainsKey("MedCryo") ? _originalData.SystemStats["MedCryo"] : 0;
 
-                        // Загружаем чекбоксы спасбросков
                         viewModel.DS0 = _originalData.SystemStats.ContainsKey("DS0") && _originalData.SystemStats["DS0"] == 1;
                         viewModel.DS1 = _originalData.SystemStats.ContainsKey("DS1") && _originalData.SystemStats["DS1"] == 1;
                         viewModel.DS2 = _originalData.SystemStats.ContainsKey("DS2") && _originalData.SystemStats["DS2"] == 1;
@@ -194,6 +203,11 @@ namespace CyberpunkRED_Generator
                         }
                     }
                     if (viewModel.AvailableInjuries.Count > 0) viewModel.SelectedInjuryToAdd = viewModel.AvailableInjuries[0];
+
+                    // Загрузка снаряжения и нового упрощенного режима
+                    viewModel.IsGearSimpleMode = _originalData.IsGearSimpleMode;
+                    viewModel.GearSimpleNames = _originalData.GearSimpleNames ?? "";
+                    viewModel.GearSimpleNotes = _originalData.GearSimpleNotes ?? "";
 
                     viewModel.GearItems = new ObservableCollection<GearRowItem>();
                     if (_originalData.GearItems != null) foreach (var item in _originalData.GearItems) viewModel.GearItems.Add(item);
@@ -292,12 +306,35 @@ namespace CyberpunkRED_Generator
 
                     viewModel.Armor = _originalData.Armor ?? new ArmorData();
 
-                    viewModel.RecalculatePenalties();
+                    // Загружаем NPC
+                    if (_originalData.NPCs != null)
+                    {
+                        foreach (var npcData in _originalData.NPCs)
+                        {
+                            var npcVM = new CombatantViewModel
+                            {
+                                OriginalData = npcData,
+                                Name = npcData.Name,
+                                MaxHP = npcData.HP,
+                                CurrentHP = npcData.HP,
+                                HeadArmor = npcData.HeadArmor,
+                                BodyArmor = npcData.BodyArmor,
+                                BaseMove = npcData.BaseMove,
+                                BaseDeathSave = npcData.BaseDeathSave,
+                                Weapons = npcData.Weapons,
+                                Gear = npcData.Gear,
+                                Cyberware = npcData.Cyberware
+                            };
+                            npcVM.RebuildStatsDisplay();
+                            viewModel.NPCs.Add(npcVM);
+                        }
+                    }
 
-                    // первичный расчет при загрузке файла персонажа
+                    viewModel.RecalculatePenalties();
                     viewModel.UpdateDerivedCombatStats();
 
                     this.DataContext = viewModel;
+                    LoadEnemiesFromFolder(); // Подгружаем врагов для комбобокса
                 }
             }
             catch (Exception ex)
@@ -573,7 +610,6 @@ namespace CyberpunkRED_Generator
                     _originalData.SystemStats["CurrentHP"] = vm.CurrentHP;
                     _originalData.SystemStats["DeathSave"] = vm.BaseDeathSave;
 
-                    // Сохраняем стейт чекбоксов
                     _originalData.SystemStats["DS0"] = vm.DS0 ? 1 : 0;
                     _originalData.SystemStats["DS1"] = vm.DS1 ? 1 : 0;
                     _originalData.SystemStats["DS2"] = vm.DS2 ? 1 : 0;
@@ -587,9 +623,12 @@ namespace CyberpunkRED_Generator
 
                     _originalData.SystemStats["ImprovementPoints"] = vm.ImprovementPoints;
                     _originalData.SystemStats["Reputation"] = vm.Reputation;
-                    _originalData.ReputationEvents = vm.ReputationEvents; // Добавь свойство ReputationEvents в класс CharacterSaveData, если его там нет!
+                    _originalData.ReputationEvents = vm.ReputationEvents;
 
+                    // Сохраняем мультикласс и активный ранг
+                    _originalData.ActiveRoles = vm.ActiveRoles.ToList();
                     _originalData.SystemStats["RoleRank"] = vm.RoleRank;
+
                     _originalData.SystemStats["SoloThreat"] = vm.SoloThreat;
                     _originalData.SystemStats["SoloAwareness"] = vm.SoloAwareness;
                     _originalData.SystemStats["SoloDeflection"] = vm.SoloDeflection;
@@ -620,10 +659,17 @@ namespace CyberpunkRED_Generator
                     _originalData.Lifestyle = vm.Lifestyle;
                     _originalData.AmmoValue = vm.AmmoValue;
                     _originalData.CashValue = vm.CashValue;
+
+                    // Сохраняем снаряжение (оба режима)
+                    _originalData.IsGearSimpleMode = vm.IsGearSimpleMode;
+                    _originalData.GearSimpleNames = vm.GearSimpleNames;
+                    _originalData.GearSimpleNotes = vm.GearSimpleNotes;
                     _originalData.GearItems = vm.GearItems.ToList();
 
-                    _originalData.CyberwareBlocks = vm.CyberwareBlocks.ToList();
+                    // Сохраняем вкладку NPC
+                    _originalData.NPCs = vm.NPCs.Select(npc => npc.OriginalData).ToList();
 
+                    _originalData.CyberwareBlocks = vm.CyberwareBlocks.ToList();
                     _originalData.CriticalInjuriesList = vm.CriticalInjuriesList.Select(x => x.Name).ToList();
                     _originalData.Addictions = vm.Addictions;
 
@@ -1058,6 +1104,350 @@ namespace CyberpunkRED_Generator
             // очищаем форму
             vm.NewCyberName = ""; vm.NewCyberDesc = ""; vm.NewCyberHL = ""; vm.NewCyberSlots = "1"; vm.NewCyberIsFoundation = false; vm.NewCyberIsPaired = false; vm.NewCyberRequires = "";
             vm.NewCyberModifiers.Clear();
+        }
+
+        private void BtnToggleGearMode_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is SheetViewModel vm) vm.IsGearSimpleMode = !vm.IsGearSimpleMode;
+        }
+
+        private void BtnPrevRole_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is SheetViewModel vm && vm.ActiveRoles.Count > 1)
+                vm.ChangeRoleIndex(vm.ActiveRoles.IndexOf(vm.CurrentActiveRole) - 1);
+        }
+
+        private void BtnNextRole_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is SheetViewModel vm && vm.ActiveRoles.Count > 1)
+                vm.ChangeRoleIndex(vm.ActiveRoles.IndexOf(vm.CurrentActiveRole) + 1);
+        }
+
+        private void BtnAddRole_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            var availableRoles = CoreDataBase.Roles.Where(r => !vm.ActiveRoles.Any(ar => ar.Name == r)).ToList();
+            if (availableRoles.Count == 0)
+            {
+                MessageBox.Show("Вы уже взяли все возможные роли!", "ИНФО", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            Window prompt = new Window { Title = "ВЫБОР РОЛИ", Width = 300, Height = 130, Background = new SolidColorBrush(Color.FromRgb(10, 10, 10)), WindowStartupLocation = WindowStartupLocation.CenterScreen, ResizeMode = ResizeMode.NoResize, WindowStyle = WindowStyle.ToolWindow };
+            prompt.Resources = this.Resources; // ПРИМЕНЯЕМ СТИЛИ ОКНА, чтобы комбобокс стал темным
+
+            var combo = new ComboBox { ItemsSource = availableRoles, SelectedIndex = 0, Margin = new Thickness(10) };
+            var btn = new Button { Content = "ДОБАВИТЬ МУЛЬТИКЛАСС", Margin = new Thickness(10), Background = Brushes.Red, Foreground = Brushes.Black, FontWeight = FontWeights.Bold, Cursor = System.Windows.Input.Cursors.Hand };
+            btn.Click += (s, ev) => {
+                if (combo.SelectedItem != null)
+                {
+                    vm.ActiveRoles.Add(new RoleData { Name = combo.SelectedItem.ToString(), Rank = 1 });
+                    vm.ChangeRoleIndex(vm.ActiveRoles.Count - 1);
+                    prompt.DialogResult = true;
+                }
+            };
+            var stack = new StackPanel(); stack.Children.Add(combo); stack.Children.Add(btn);
+            prompt.Content = stack;
+            prompt.ShowDialog();
+        }
+
+        private void BtnRemoveRole_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if (vm != null)
+            {
+                if (vm.ActiveRoles.Count > 1)
+                {
+                    var res = MessageBox.Show($"Вы уверены, что хотите удалить роль '{vm.CurrentActiveRole.Name}'?\nВсе вложенные в нее очки способностей будут сброшены.", "УДАЛЕНИЕ РОЛИ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (res == MessageBoxResult.Yes)
+                    {
+                        vm.RemoveCurrentRole();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("У персонажа должна быть хотя бы одна роль! Вы не можете удалить последнюю.", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+        private void LoadEnemiesFromFolder()
+        {
+            if (!(this.DataContext is SheetViewModel vm)) return;
+            vm.AvailableEnemies.Clear();
+            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
+            if (Directory.Exists(folderPath))
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                foreach (string file in Directory.GetFiles(folderPath, "*.json"))
+                {
+                    try { vm.AvailableEnemies.Add(JsonSerializer.Deserialize<EnemySaveData>(File.ReadAllText(file), options)); } catch { }
+                }
+            }
+        }
+
+        private void BtnAddNPC_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if (vm != null && sender is Button btn && btn.Tag is ComboBox cb && cb.SelectedItem is EnemySaveData enemyData)
+            {
+                var combatant = new CombatantViewModel
+                {
+                    OriginalData = enemyData,
+                    Name = enemyData.Name,
+                    MaxHP = enemyData.HP,
+                    CurrentHP = enemyData.HP,
+                    HeadArmor = enemyData.HeadArmor,
+                    BodyArmor = enemyData.BodyArmor,
+                    BaseMove = enemyData.BaseMove,
+                    BaseDeathSave = enemyData.BaseDeathSave,
+                    Weapons = enemyData.Weapons,
+                    Gear = enemyData.Gear,
+                    Cyberware = enemyData.Cyberware
+                };
+                combatant.RebuildStatsDisplay();
+                vm.NPCs.Add(combatant);
+            }
+        }
+
+        private void BtnRemoveNPC_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c && this.DataContext is SheetViewModel vm) vm.NPCs.Remove(c); }
+        private void BtnHealNPC_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c) c.CurrentHP++; }
+        private void BtnDamageNPC_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c) c.CurrentHP--; }
+        private void BtnAblateHeadNPC_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c && c.HeadArmor > 0) c.HeadArmor--; }
+        private void BtnAblateBodyNPC_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c && c.BodyArmor > 0) c.BodyArmor--; }
+
+        private void BtnOpenEnemyManager_Click(object sender, RoutedEventArgs e)
+        {
+            LoadEnemiesFromFolder();
+            RbGenCN.IsChecked = true;
+            if (this.DataContext is SheetViewModel vm)
+            {
+                vm.NewEnemySkills.Clear();
+                vm.NewEnemyCyberware.Clear();
+            }
+            EnemyManagerOverlay.Visibility = Visibility.Visible;
+        }
+
+        private void BtnCloseEnemyManager_Click(object sender, RoutedEventArgs e)
+        {
+            EnemyManagerOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void GenMode_Changed(object sender, RoutedEventArgs e)
+        {
+            if (PanelGenCN == null || PanelGenFull == null) return;
+            bool isCN = RbGenCN.IsChecked == true;
+            PanelGenCN.Visibility = isCN ? Visibility.Visible : Visibility.Collapsed;
+            PanelGenFull.Visibility = isCN ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void BtnAddGenSkill_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if (vm != null && CbGenSkills.SelectedItem != null && int.TryParse(TxtGenSkillLevel.Text, out int inputValue))
+            {
+                string skillName = CbGenSkills.SelectedItem.ToString();
+                int skillLevel = inputValue;
+
+                if (ChkSkillIsTotal.IsChecked == true)
+                {
+                    var def = CoreDataBase.AllSkills.FirstOrDefault(s => s.Name == skillName);
+                    if (def != null)
+                    {
+                        string statKey = def.Stat;
+                        switch (statKey)
+                        {
+                            case "ИНТ": statKey = "INT"; break;
+                            case "РЕА": statKey = "REF"; break;
+                            case "ЛВК": statKey = "DEX"; break;
+                            case "ТЕХ": statKey = "TECH"; break;
+                            case "ХАР": statKey = "COOL"; break;
+                            case "ВОЛЯ": statKey = "WILL"; break;
+                            case "УДЧ": statKey = "LUCK"; break;
+                            case "СКО": statKey = "MOVE"; break;
+                            case "ТЕЛ": statKey = "BODY"; break;
+                            case "ЭМП": statKey = "EMP"; break;
+                        }
+
+                        int statValue = 5;
+                        switch (statKey)
+                        {
+                            case "INT": int.TryParse(StINT.Text, out statValue); break;
+                            case "REF": int.TryParse(StREF.Text, out statValue); break;
+                            case "DEX": int.TryParse(StDEX.Text, out statValue); break;
+                            case "TECH": int.TryParse(StTECH.Text, out statValue); break;
+                            case "COOL": int.TryParse(StCOOL.Text, out statValue); break;
+                            case "WILL": int.TryParse(StWILL.Text, out statValue); break;
+                            case "LUCK": int.TryParse(StLUCK.Text, out statValue); break;
+                            case "MOVE": int.TryParse(StMOVE.Text, out statValue); break;
+                            case "BODY": int.TryParse(StBODY.Text, out statValue); break;
+                            case "EMP": int.TryParse(StEMP.Text, out statValue); break;
+                        }
+                        skillLevel = inputValue - statValue;
+                        if (skillLevel < 0) skillLevel = 0;
+                    }
+                }
+                vm.NewEnemySkills.Add(new SkillSaveData { Name = skillName, Total = skillLevel });
+            }
+        }
+
+        private void BtnRemoveGenSkill_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is SkillSaveData s && this.DataContext is SheetViewModel vm) vm.NewEnemySkills.Remove(s);
+        }
+
+        private void BtnAddGenCyber_Click(object sender, RoutedEventArgs e)
+        {
+            string cyberName = CbGenCyber.Text?.Trim();
+            var vm = this.DataContext as SheetViewModel;
+            if (vm != null && !string.IsNullOrEmpty(cyberName) && !vm.NewEnemyCyberware.Contains(cyberName))
+            {
+                bool exists = CoreDataBase.AllCyberware.Any(c => c.Name.Equals(cyberName, StringComparison.OrdinalIgnoreCase));
+                if (exists)
+                {
+                    vm.NewEnemyCyberware.Add(cyberName);
+                    CbGenCyber.Text = "";
+                }
+                else MessageBox.Show("Такого импланта нет в базе! Проверьте правильность написания.", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void BtnRemoveGenCyber_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is string cyber && this.DataContext is SheetViewModel vm) vm.NewEnemyCyberware.Remove(cyber);
+        }
+
+        private void BtnEditEnemyPreset_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is EnemySaveData enemyData && this.DataContext is SheetViewModel vm)
+            {
+                TxtGenName.Text = enemyData.Name;
+                TxtGenHP.Text = enemyData.HP.ToString();
+                TxtGenHead.Text = enemyData.HeadArmor.ToString();
+                TxtGenBody.Text = enemyData.BodyArmor.ToString();
+                TxtGenWeapons.Text = enemyData.Weapons;
+                TxtGenGear.Text = enemyData.Gear;
+
+                if (enemyData.IsCNMode)
+                {
+                    RbGenCN.IsChecked = true;
+                    TxtGenCN.Text = enemyData.CombatNumber.ToString();
+                    TxtGenDeathSaveCN.Text = enemyData.BaseDeathSave.ToString();
+                    TxtGenMove.Text = enemyData.BaseMove.ToString();
+                }
+                else
+                {
+                    RbGenFull.IsChecked = true;
+                    StINT.Text = enemyData.Stats.ContainsKey("INT") ? enemyData.Stats["INT"].ToString() : "5";
+                    StREF.Text = enemyData.Stats.ContainsKey("REF") ? enemyData.Stats["REF"].ToString() : "5";
+                    StDEX.Text = enemyData.Stats.ContainsKey("DEX") ? enemyData.Stats["DEX"].ToString() : "5";
+                    StTECH.Text = enemyData.Stats.ContainsKey("TECH") ? enemyData.Stats["TECH"].ToString() : "5";
+                    StCOOL.Text = enemyData.Stats.ContainsKey("COOL") ? enemyData.Stats["COOL"].ToString() : "5";
+                    StWILL.Text = enemyData.Stats.ContainsKey("WILL") ? enemyData.Stats["WILL"].ToString() : "5";
+                    StLUCK.Text = enemyData.Stats.ContainsKey("LUCK") ? enemyData.Stats["LUCK"].ToString() : "5";
+                    StMOVE.Text = enemyData.Stats.ContainsKey("MOVE") ? enemyData.Stats["MOVE"].ToString() : "5";
+                    StBODY.Text = enemyData.Stats.ContainsKey("BODY") ? enemyData.Stats["BODY"].ToString() : "5";
+                    StEMP.Text = enemyData.Stats.ContainsKey("EMP") ? enemyData.Stats["EMP"].ToString() : "5";
+
+                    vm.NewEnemySkills.Clear();
+                    if (enemyData.Skills != null)
+                    {
+                        foreach (var kvp in enemyData.Skills) vm.NewEnemySkills.Add(new SkillSaveData { Name = kvp.Key, Total = kvp.Value });
+                    }
+                }
+
+                vm.NewEnemyCyberware.Clear();
+                if (!string.IsNullOrWhiteSpace(enemyData.Cyberware))
+                {
+                    var parts = enemyData.Cyberware.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var part in parts)
+                    {
+                        string cleanName = part.Trim();
+                        if (!string.IsNullOrWhiteSpace(cleanName)) vm.NewEnemyCyberware.Add(cleanName);
+                    }
+                }
+            }
+        }
+
+        private void BtnDeleteEnemyPreset_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.Tag is EnemySaveData enemyData && this.DataContext is SheetViewModel vm)
+            {
+                var res = MessageBox.Show($"Удалить пресет '{enemyData.Name}' из базы навсегда?", "ПОДТВЕРДИТЕ УДАЛЕНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (res == MessageBoxResult.Yes)
+                {
+                    string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
+                    string filePath = Path.Combine(folderPath, $"Enemy_{enemyData.Name.Replace(" ", "_")}.json");
+                    if (File.Exists(filePath))
+                    {
+                        try { File.Delete(filePath); } catch { }
+                    }
+                    vm.AvailableEnemies.Remove(enemyData);
+                }
+            }
+        }
+
+        private void BtnSaveNewEnemy_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as SheetViewModel;
+            if (vm == null) return;
+
+            if (string.IsNullOrWhiteSpace(TxtGenName.Text))
+            {
+                MessageBox.Show("Имя врага не может быть пустым!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var enemy = new EnemySaveData
+            {
+                Name = TxtGenName.Text.Trim(),
+                HP = int.TryParse(TxtGenHP.Text, out int hp) ? hp : 20,
+                HeadArmor = int.TryParse(TxtGenHead.Text, out int ha) ? ha : 0,
+                BodyArmor = int.TryParse(TxtGenBody.Text, out int ba) ? ba : 0,
+                IsCNMode = RbGenCN.IsChecked == true,
+                Weapons = TxtGenWeapons.Text,
+                Gear = TxtGenGear.Text,
+                Cyberware = string.Join(", ", vm.NewEnemyCyberware)
+            };
+
+            if (enemy.IsCNMode)
+            {
+                enemy.CombatNumber = int.TryParse(TxtGenCN.Text, out int cn) ? cn : 12;
+                enemy.BaseDeathSave = int.TryParse(TxtGenDeathSaveCN.Text, out int ds) ? ds : 5;
+                enemy.BaseMove = int.TryParse(TxtGenMove.Text, out int mv) ? mv : 5;
+            }
+            else
+            {
+                enemy.Stats["INT"] = int.Parse(StINT.Text);
+                enemy.Stats["REF"] = int.Parse(StREF.Text);
+                enemy.Stats["DEX"] = int.Parse(StDEX.Text);
+                enemy.Stats["TECH"] = int.Parse(StTECH.Text);
+                enemy.Stats["COOL"] = int.Parse(StCOOL.Text);
+                enemy.Stats["WILL"] = int.Parse(StWILL.Text);
+                enemy.Stats["LUCK"] = int.Parse(StLUCK.Text);
+                enemy.Stats["MOVE"] = int.Parse(StMOVE.Text);
+                enemy.Stats["BODY"] = int.Parse(StBODY.Text);
+                enemy.Stats["EMP"] = int.Parse(StEMP.Text);
+
+                enemy.BaseMove = enemy.Stats["MOVE"];
+                enemy.BaseDeathSave = enemy.Stats["BODY"];
+
+                foreach (var sk in vm.NewEnemySkills) enemy.Skills[sk.Name] = sk.Total;
+            }
+
+            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+
+            string filePath = Path.Combine(folderPath, $"Enemy_{enemy.Name.Replace(" ", "_")}.json");
+            var options = new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+            File.WriteAllText(filePath, JsonSerializer.Serialize(enemy, options), System.Text.Encoding.UTF8);
+
+            var existingItem = vm.AvailableEnemies.FirstOrDefault(x => x.Name.Equals(enemy.Name, StringComparison.OrdinalIgnoreCase));
+            if (existingItem != null) vm.AvailableEnemies.Remove(existingItem);
+            vm.AvailableEnemies.Add(enemy);
+
+            TxtGenName.Text = ""; TxtGenWeapons.Text = ""; TxtGenGear.Text = ""; CbGenCyber.Text = ""; vm.NewEnemySkills.Clear(); vm.NewEnemyCyberware.Clear();
+
+            MessageBox.Show($"Враг '{enemy.Name}' сохранен в базу!", "СОХРАНЕНО", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

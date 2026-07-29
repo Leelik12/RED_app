@@ -2,14 +2,32 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace CyberpunkRED_Generator
 {
+    public class RoleData : INotifyPropertyChanged
+    {
+        private string _name;
+        public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
+
+        private int _rank;
+        public int Rank { get => _rank; set { _rank = value; OnPropertyChanged(); } }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
     public class CharacterSaveData
     {
         public string Name { get; set; }
         public string Role { get; set; }
+        public List<RoleData> ActiveRoles { get; set; } = new List<RoleData>();
+        public bool IsGearSimpleMode { get; set; }
+        public string GearSimpleNames { get; set; }
+        public string GearSimpleNotes { get; set; }
+        public List<EnemySaveData> NPCs { get; set; } = new List<EnemySaveData>();
         public string RoleAbilityNotes { get; set; }
         public Dictionary<string, int> Stats { get; set; } = new Dictionary<string, int>();
         public Dictionary<string, int> SystemStats { get; set; } = new Dictionary<string, int>();

@@ -13,13 +13,40 @@ namespace CyberpunkRED_Generator
     public class SheetViewModel : INotifyPropertyChanged
     {
         public string Name { get; set; }
-        public string Role { get; set; }
+
+        // --- МУЛЬТИКЛАССИРОВАНИЕ ---
+        public ObservableCollection<RoleData> ActiveRoles { get; set; } = new ObservableCollection<RoleData>();
+        private int _currentRoleIndex = 0;
+
+        public RoleData CurrentActiveRole => ActiveRoles.Count > 0 ? ActiveRoles[_currentRoleIndex] : null;
+
+        // Поле Role теперь возвращает все роли через слеш, например "Соло/Фиксер"
+        public string Role => ActiveRoles.Count > 0 ? string.Join("/", ActiveRoles.Select(r => r.Name)) : "";
+
+        public int RoleRank
+        {
+            get => CurrentActiveRole?.Rank ?? 0;
+            set
+            {
+                if (CurrentActiveRole != null)
+                {
+                    CurrentActiveRole.Rank = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SoloPointsText));
+                    OnPropertyChanged(nameof(TechPointsText));
+                    OnPropertyChanged(nameof(MedtechPointsText));
+                    OnPropertyChanged(nameof(NetrunnerTotal));
+                    OnPropertyChanged(nameof(NetrunnerActions));
+                    RecalculatePenalties();
+                }
+            }
+        }
 
         public string RoleDescription
         {
             get
             {
-                switch (Role)
+                switch (CurrentActiveRole?.Name)
                 {
                     case "Рокербой": return "ХАРИЗМАТИЧЕСКОЕ ВЛИЯНИЕ\nВлияй на окружающих силой личности. Превращай людей в фанатов (Бросок: СЛ8 — 1 чел, СЛ10 — до 6 чел, СЛ12 — толпа).\n\nРанги 1-2 (Местные клубы): Убедить фаната на мелкую услугу (купить еду, подвезти).\nРанги 3-4 (Известные клубы): Фанат окажет крупную услугу. Группа будет тусоваться с тобой.\nРанги 5-6 (Крупные клубы): Фанат совершит мелкое преступление (кража, драка). Группа станет личной свитой.\nРанги 7-8 (Концертные залы): Фанат рискнёт жизнью. Группа пойдёт на мелкое преступление.\nРанг 9 (ТВ/Крупные залы): Фанат пойдёт на тяжкое преступление (избиение, грабеж). Группа устроит беспорядки.\nРанг 10 (Стадионы): Фанаты пожертвуют собой без вопросов. Группа рискует жизнями как твоя охрана. Частная армия.";
                     case "Нетраннер": return "ИНТЕРФЕЙС\nПозволяет заниматься нетраннингом, определяет количество сетевых действий в ход и даёт доступ к программам.\n\nСЕТЕВЫЕ ДЕЙСТВИЯ ЗА ХОД:\nРанг 1–3: 2 действия\nРанг 4–6: 3 действия\nРанг 7–9: 4 действия\nРанг 10: 5 действий";
@@ -33,27 +60,82 @@ namespace CyberpunkRED_Generator
             }
         }
 
-        private int _roleRank = 4;
-        public int RoleRank
+        public Visibility IsSoloVis => CurrentActiveRole?.Name == "Соло" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsTechVis => CurrentActiveRole?.Name == "Техник" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsMedtechVis => CurrentActiveRole?.Name == "Медтехник" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsNetrunnerVis => CurrentActiveRole?.Name == "Нетраннер" ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsTextRoleVis => (CurrentActiveRole?.Name != "Соло" && CurrentActiveRole?.Name != "Техник" && CurrentActiveRole?.Name != "Медтехник" && CurrentActiveRole?.Name != "Нетраннер") ? Visibility.Visible : Visibility.Collapsed;
+
+        public void ChangeRoleIndex(int newIndex)
         {
-            get => _roleRank;
-            set
-            {
-                _roleRank = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(SoloPointsText));
-                OnPropertyChanged(nameof(TechPointsText));
-                OnPropertyChanged(nameof(MedtechPointsText));
-                OnPropertyChanged(nameof(NetrunnerTotal)); // <--- Добавили
-                OnPropertyChanged(nameof(NetrunnerActions)); // <--- Добавили
-                RecalculatePenalties();
-            }
+            if (ActiveRoles.Count == 0) return;
+            _currentRoleIndex = newIndex;
+            if (_currentRoleIndex < 0) _currentRoleIndex = ActiveRoles.Count - 1;
+            if (_currentRoleIndex >= ActiveRoles.Count) _currentRoleIndex = 0;
+
+            OnPropertyChanged(nameof(CurrentActiveRole));
+            OnPropertyChanged(nameof(Role));
+            OnPropertyChanged(nameof(RoleRank));
+            OnPropertyChanged(nameof(RoleDescription));
+            OnPropertyChanged(nameof(IsSoloVis));
+            OnPropertyChanged(nameof(IsTechVis));
+            OnPropertyChanged(nameof(IsMedtechVis));
+            OnPropertyChanged(nameof(IsNetrunnerVis));
+            OnPropertyChanged(nameof(IsTextRoleVis));
+
+            // Обновляем счетчики очков конкретной роли
+            OnPropertyChanged(nameof(SoloPointsText));
+            OnPropertyChanged(nameof(TechPointsText));
+            OnPropertyChanged(nameof(MedtechPointsText));
+
+            // ИСПРАВЛЕНИЕ: Обновляем статы Нетраннера при переключении
+            OnPropertyChanged(nameof(NetrunnerTotal));
+            OnPropertyChanged(nameof(NetrunnerActions));
         }
-        public Visibility IsSoloVis => Role == "Соло" ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsTechVis => Role == "Техник" ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsMedtechVis => Role == "Медтехник" ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsNetrunnerVis => Role == "Нетраннер" ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsTextRoleVis => (Role != "Соло" && Role != "Техник" && Role != "Медтехник" && Role != "Нетраннер") ? Visibility.Visible : Visibility.Collapsed;
+
+        public void RemoveCurrentRole()
+        {
+            if (ActiveRoles.Count <= 1 || CurrentActiveRole == null) return;
+
+            string roleToRemove = CurrentActiveRole.Name;
+
+            // Обнуляем способности удаляемой роли, чтобы скрытые статы не влияли на математику
+            if (roleToRemove == "Соло")
+            {
+                SoloThreat = 0; SoloAwareness = 0; SoloDeflection = 0;
+                SoloFumble = 0; SoloInitiative = 0; SoloPrecision = 0;
+            }
+            else if (roleToRemove == "Техник")
+            {
+                TechField = 0; TechUpgrade = 0; TechFab = 0; TechInvent = 0;
+            }
+            else if (roleToRemove == "Медтехник")
+            {
+                MedSurgery = 0; MedPharma = 0; MedCryo = 0;
+            }
+
+            // Удаляем роль
+            ActiveRoles.RemoveAt(_currentRoleIndex);
+
+            // Переключаемся на предыдущую роль (чтобы индекс не вышел за пределы списка)
+            ChangeRoleIndex(Math.Max(0, _currentRoleIndex - 1));
+
+            // Пересчитываем скиллы, так как пассивные бонусы от роли могли пропасть
+            RecalculatePenalties();
+        }
+
+        // --- УПРОЩЕННОЕ СНАРЯЖЕНИЕ ---
+        private bool _isGearSimpleMode;
+        public bool IsGearSimpleMode { get => _isGearSimpleMode; set { _isGearSimpleMode = value; OnPropertyChanged(); OnPropertyChanged(nameof(GearListVis)); OnPropertyChanged(nameof(GearSimpleVis)); } }
+        public Visibility GearListVis => IsGearSimpleMode ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility GearSimpleVis => IsGearSimpleMode ? Visibility.Visible : Visibility.Collapsed;
+
+        private string _gearSimpleNames; public string GearSimpleNames { get => _gearSimpleNames; set { _gearSimpleNames = value; OnPropertyChanged(); } }
+        private string _gearSimpleNotes; public string GearSimpleNotes { get => _gearSimpleNotes; set { _gearSimpleNotes = value; OnPropertyChanged(); } }
+
+        // --- Вкладка NPC ---
+        public ObservableCollection<CombatantViewModel> NPCs { get; set; } = new ObservableCollection<CombatantViewModel>();
+        public ObservableCollection<EnemySaveData> AvailableEnemies { get; set; } = new ObservableCollection<EnemySaveData>();
 
         // --- СОЛО ---
         private int _soloThreat; public int SoloThreat { get => _soloThreat; set { _soloThreat = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); RecalculatePenalties(); } }
@@ -501,6 +583,9 @@ namespace CyberpunkRED_Generator
             OnPropertyChanged(nameof(MedSurgeryTotal));
             OnPropertyChanged(nameof(MedicalTechTotal));
 
+            OnPropertyChanged(nameof(NetrunnerTotal));
+            OnPropertyChanged(nameof(NetrunnerActions));
+
             UpdateDerivedCombatStats();
         }
 
@@ -549,6 +634,9 @@ namespace CyberpunkRED_Generator
                         if (skill.StatName == "EMP" || skill.StatName == "ЭМП") skill.StatValue = empStat.CurrentValue;
             }
         }
+        public ObservableCollection<SkillSaveData> NewEnemySkills { get; set; } = new ObservableCollection<SkillSaveData>();
+        public ObservableCollection<string> NewEnemyCyberware { get; set; } = new ObservableCollection<string>();
+        public List<string> AllCyberwareNames => CoreDataBase.AllCyberware.Select(c => c.Name).Distinct().OrderBy(n => n).ToList();
     }
     public class SheetStat : INotifyPropertyChanged
     {
@@ -836,12 +924,18 @@ namespace CyberpunkRED_Generator
     }
     public class ArmorData : INotifyPropertyChanged
     {
-        private string _headSp; public string HeadSp { get => _headSp; set { _headSp = value; OnPropertyChanged(); } }
+        private int _headSpCurrent; public int HeadSpCurrent { get => _headSpCurrent; set { _headSpCurrent = value; OnPropertyChanged(); } }
+        private int _headSpMax; public int HeadSpMax { get => _headSpMax; set { _headSpMax = value; OnPropertyChanged(); } }
         private string _headPenalty; public string HeadPenalty { get => _headPenalty; set { _headPenalty = value; OnPropertyChanged(); } }
-        private string _bodySp; public string BodySp { get => _bodySp; set { _bodySp = value; OnPropertyChanged(); } }
+
+        private int _bodySpCurrent; public int BodySpCurrent { get => _bodySpCurrent; set { _bodySpCurrent = value; OnPropertyChanged(); } }
+        private int _bodySpMax; public int BodySpMax { get => _bodySpMax; set { _bodySpMax = value; OnPropertyChanged(); } }
         private string _bodyPenalty; public string BodyPenalty { get => _bodyPenalty; set { _bodyPenalty = value; OnPropertyChanged(); } }
-        private string _shieldSp; public string ShieldSp { get => _shieldSp; set { _shieldSp = value; OnPropertyChanged(); } }
+
+        private int _shieldSpCurrent; public int ShieldSpCurrent { get => _shieldSpCurrent; set { _shieldSpCurrent = value; OnPropertyChanged(); } }
+        private int _shieldSpMax; public int ShieldSpMax { get => _shieldSpMax; set { _shieldSpMax = value; OnPropertyChanged(); } }
         private string _shieldPenalty; public string ShieldPenalty { get => _shieldPenalty; set { _shieldPenalty = value; OnPropertyChanged(); } }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }

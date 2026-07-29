@@ -1,16 +1,26 @@
 ﻿{
-  "Name": "Виталич",
+  "Name": "Кел (Хекс)",
   "Role": "Медтехник",
+  "ActiveRoles": [
+    {
+      "Name": "Медтехник",
+      "Rank": 4
+    }
+  ],
+  "IsGearSimpleMode": false,
+  "GearSimpleNames": "",
+  "GearSimpleNotes": "",
+  "NPCs": [],
   "RoleAbilityNotes": "",
   "Stats": {
-    "INT": 8,
+    "INT": 6,
     "REF": 8,
-    "DEX": 6,
+    "DEX": 7,
     "TECH": 8,
     "COOL": 6,
     "WILL": 6,
     "LUCK": 2,
-    "MOVE": 4,
+    "MOVE": 5,
     "BODY": 6,
     "EMP": 8
   },
@@ -21,8 +31,8 @@
     "Humanity": 80,
     "CurrentHumanity": 43,
     "MaxHumanity": 64,
-    "CurrentHP": 40,
-    "ImprovementPoints": 0,
+    "CurrentHP": 12,
+    "ImprovementPoints": 87,
     "Reputation": 0,
     "RoleRank": 4,
     "SoloThreat": 0,
@@ -35,10 +45,10 @@
     "TechUpgrade": 0,
     "TechFab": 0,
     "TechInvent": 0,
-    "MedSurgery": 2,
-    "MedPharma": 2,
+    "MedSurgery": 3,
+    "MedPharma": 1,
     "MedCryo": 0,
-    "CurrentLuck": 2,
+    "CurrentLuck": 0,
     "DS0": 0,
     "DS1": 0,
     "DS2": 0,
@@ -97,121 +107,124 @@
     {
       "Name": "Концентрация",
       "Level": 2,
-      "Total": 8
+      "Total": 6
     },
     {
       "Name": "Внимательность",
       "Level": 2,
-      "Total": 10
+      "Total": 6
     },
     {
       "Name": "Атлетика",
       "Level": 2,
-      "Total": 8
+      "Total": 7
     },
     {
       "Name": "Сопр. пыткам/наркотикам",
       "Level": 6,
-      "Total": 14
+      "Total": 12
     },
     {
       "Name": "Скрытность",
       "Level": 2,
-      "Total": 8
+      "Total": 7
     },
     {
       "Name": "Вождение",
-      "Level": 4,
-      "Total": 12
+      "Level": 2,
+      "Total": 8
     },
     {
       "Name": "Образование",
       "Level": 2,
-      "Total": 10
+      "Total": 6
     },
     {
       "Name": "Язык (Уличный Сленг)",
       "Level": 2,
-      "Total": 10
+      "Total": 6
     },
     {
-      "Name": "Язык (Родной): Французский",
+      "Name": "Язык (Родной): Немецкий",
       "Level": 4,
-      "Total": 12
+      "Total": 8
     },
     {
       "Name": "Знание местности (Твой дом)",
       "Level": 2,
-      "Total": 10
+      "Total": 6
     },
     {
       "Name": "Рукопашный бой",
-      "Level": 4,
-      "Total": 10
+      "Level": 6,
+      "Total": 11
     },
     {
       "Name": "Уклонение",
       "Level": 6,
-      "Total": 12
+      "Total": 11
     },
     {
       "Name": "Пистолеты",
       "Level": 6,
-      "Total": 14
+      "Total": 12
     },
     {
       "Name": "Тактическое оружие",
       "Level": 6,
-      "Total": 14
+      "Total": 12
     },
     {
       "Name": "Общение",
       "Level": 2,
-      "Total": 6
+      "Total": 4
     },
     {
       "Name": "Проницательность",
       "Level": 2,
-      "Total": 6
+      "Total": 4
     },
     {
       "Name": "Убеждение",
       "Level": 2,
-      "Total": 8
+      "Total": 6
     },
     {
       "Name": "Знание техники",
       "Level": 6,
-      "Total": 14
+      "Total": 12
     },
     {
       "Name": "Кибертехника",
       "Level": 6,
-      "Total": 14
+      "Total": 12
     },
     {
       "Name": "Электроника/Безопасность (x2)",
       "Level": 6,
-      "Total": 14
+      "Total": 12
     },
     {
       "Name": "Первая помощь",
       "Level": 2,
-      "Total": 12
+      "Total": 10
     },
     {
       "Name": "Парамедик (x2)",
       "Level": 4,
-      "Total": 14
+      "Total": 12
     }
   ],
   "Notes": "Фармацевтика: спидхил, Быстрый детоксикатор",
   "Armor": {
-    "HeadSp": "11",
+    "HeadSpCurrent": 0,
+    "HeadSpMax": 0,
     "HeadPenalty": null,
-    "BodySp": "11",
+    "BodySpCurrent": 0,
+    "BodySpMax": 0,
     "BodyPenalty": null,
-    "ShieldSp": null,
+    "ShieldSpCurrent": 0,
+    "ShieldSpMax": 0,
     "ShieldPenalty": null
   },
   "Weapons": [
@@ -220,17 +233,17 @@
       "Damage": "3d6",
       "AmmoCurrent": "8",
       "AmmoMax": "8",
-      "AmmoTotal": "42",
+      "AmmoTotal": "36",
       "Rof": "2",
       "Notes": null
     },
     {
-      "Name": null,
-      "Damage": null,
-      "AmmoCurrent": null,
-      "AmmoMax": null,
-      "AmmoTotal": null,
-      "Rof": null,
+      "Name": "2 средних пистолета",
+      "Damage": "2d6",
+      "AmmoCurrent": "8",
+      "AmmoMax": "8",
+      "AmmoTotal": "7",
+      "Rof": "2",
       "Notes": null
     },
     {
@@ -263,11 +276,11 @@
   ],
   "StyleNotes": "Низ,куртка,обувь,украшения - Urban Flash\r\nВерх - Businesswear\r\nЗеркальные очки - Bohemian",
   "Housing": "",
-  "Rent": "",
-  "Lifestyle": "",
+  "Rent": "Контейнер",
+  "Lifestyle": "Обычный полупубертат - 300",
   "ReputationEvents": "",
   "AmmoValue": "",
-  "CashValue": "750",
+  "CashValue": "350",
   "GearItems": [
     {
       "Name": "Легкий Бронекостюм",
@@ -282,39 +295,39 @@
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Спортивная большая сумка",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Фонарик",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Набор личной гигиены",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Набор отмычек",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Наручники",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Респиратор",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Мультитул",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Микробомба-убивающая щепка 100",
       "Notes": null
     },
     {
-      "Name": null,
+      "Name": "Редактор боли щепка",
       "Notes": null
     },
     {
