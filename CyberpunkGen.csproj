@@ -298,7 +298,6 @@
     <Compile Include="GMScreenWindow.xaml.cs">
       <DependentUpon>GMScreenWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainFunctions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

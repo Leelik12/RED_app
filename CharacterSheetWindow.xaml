@@ -311,7 +311,7 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBlock Text="Компенсация провала (1)" ToolTip="За 4 очка игнорирует критические провалы (выпавшие 1) при атаке (считается просто как 1)." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="Компенсация провала (4)" ToolTip="Стоит сразу 4 очка. Пока включена, ты игнорируешь критические провалы (выпавшие 1) при атаке; бросок всё равно считается как 1." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
                                                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                                                 <Button Content="-" Tag="Fumble" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
                                                                 <TextBlock Text="{Binding SoloFumble}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
@@ -351,7 +351,7 @@
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBlock Text="Полевая экспертиза (1)" ToolTip="Добавляет ранг ко всем Техническим навыкам. Позволяет временно починить предмет." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="Полевая экспертиза (1)" ToolTip="Добавляет ранг к проверкам: Основы техники, Кибертехника, Электроника/Безопасность, Оружейник, Автомеханика, Морские и Авиационные технологии. Позволяет временно починить предмет." Cursor="Help" Foreground="#E0E0E0" FontSize="11" VerticalAlignment="Center"/>
                                                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                                                 <Button Content="-" Tag="TechField" Click="BtnRoleMinus_Click" Style="{StaticResource TinyRoleBtn}"/>
                                                                 <TextBlock Text="{Binding TechField}" Width="20" TextAlignment="Center" Foreground="#00FFCC" FontSize="12" FontWeight="Bold"/>
@@ -1017,7 +1017,7 @@
                                                     <ColumnDefinition Width="110"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Text="Щит" Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Щит (ПЗ)" ToolTip="У щита ПЗ, а не ОС. Он работает как укрытие и не даёт штрафа брони (стр. 183)." Foreground="#FFFFFF" FontSize="13" VerticalAlignment="Center"/>
                                                 <Border Grid.Column="1" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                         <TextBox Text="{Binding Armor.ShieldSpCurrent, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" MinWidth="18"/>
@@ -1025,7 +1025,7 @@
                                                         <TextBox Text="{Binding Armor.ShieldSpMax, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC" MinWidth="18"/>
                                                     </StackPanel>
                                                 </Border>
-                                                <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0">
+                                                <Border Grid.Column="2" BorderBrush="#444444" BorderThickness="1" Margin="2,0" Visibility="Collapsed">
                                                     <TextBox Text="{Binding Armor.ShieldPenalty, UpdateSourceTrigger=PropertyChanged}" Foreground="#00FFCC" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" CaretBrush="#00FFCC"/>
                                                 </Border>
                                             </Grid>

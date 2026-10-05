@@ -148,7 +148,7 @@ namespace CyberpunkRED_Generator
                         viewModel.SoloThreat = _originalData.SystemStats.ContainsKey("SoloThreat") ? _originalData.SystemStats["SoloThreat"] : 0;
                         viewModel.SoloAwareness = _originalData.SystemStats.ContainsKey("SoloAwareness") ? _originalData.SystemStats["SoloAwareness"] : 0;
                         viewModel.SoloDeflection = _originalData.SystemStats.ContainsKey("SoloDeflection") ? _originalData.SystemStats["SoloDeflection"] : 0;
-                        viewModel.SoloFumble = _originalData.SystemStats.ContainsKey("SoloFumble") ? _originalData.SystemStats["SoloFumble"] : 0;
+                        viewModel.SoloFumble = _originalData.SystemStats.ContainsKey("SoloFumble") ? Math.Min(1, _originalData.SystemStats["SoloFumble"]) : 0;
                         viewModel.SoloInitiative = _originalData.SystemStats.ContainsKey("SoloInitiative") ? _originalData.SystemStats["SoloInitiative"] : 0;
                         viewModel.SoloPrecision = _originalData.SystemStats.ContainsKey("SoloPrecision") ? _originalData.SystemStats["SoloPrecision"] : 0;
 
@@ -232,6 +232,8 @@ namespace CyberpunkRED_Generator
                             viewModel.CyberwareBlocks.Add(new CyberwareBlockItem { Name = names[i], MaxSlots = slots[i], UsedSlots = 0, OptionsText = "" });
                     }
 
+                    RefreshInstalledCyberware(viewModel.CyberwareBlocks);
+
                     string[] statOrder = { "ИНТ", "РЕА", "ЛВК", "ТЕХ", "ХАР", "ВОЛЯ", "УДЧ", "СКО", "ТЕЛ", "ЭМП" };
                     foreach (string s in statOrder)
                     {
@@ -286,7 +288,7 @@ namespace CyberpunkRED_Generator
 
                     var col3Structure = new Dictionary<string, string[]> {
                         { "Социальные Навыки", new[] { "Подкуп", "Общение", "Проницательность", "Допрос", "Убеждение", "Уход за собой", "Знаток Улиц", "Торговля", "Гардероб и стиль" } },
-                        { "Технические Навыки", new[] { "Авиационные технологии", "Знание техники", "Кибертехника", "Подрывник (x2)", "Электроника/Безопасность (x2)", "Первая помощь", "Фальсификация", "Автомеханика", "Художественное ремесло", "Парамедик (x2)", "Кино- и фототехника", "Взлом замков", "Морские технологии", "Оружейник"} }
+                        { "Технические Навыки", new[] { "Авиационные технологии", "Знание техники", "Кибертехника", "Подрывник (x2)", "Электроника/Безопасность (x2)", "Первая помощь", "Фальсификация", "Автомеханика", "Художественное ремесло", "Парамедик (x2)", "Кино- и фототехника", "Взлом замков", "Карманник", "Морские технологии", "Оружейник"} }
                     };
 
                     viewModel.CenterSkillCategories = BuildColumn(col1Structure, _originalData);
@@ -316,9 +318,9 @@ namespace CyberpunkRED_Generator
                                 OriginalData = npcData,
                                 Name = npcData.Name,
                                 MaxHP = npcData.HP,
-                                CurrentHP = npcData.HP,
-                                HeadArmor = npcData.HeadArmor,
-                                BodyArmor = npcData.BodyArmor,
+                                CurrentHP = npcData.CurrentHP ?? npcData.HP,
+                                HeadArmor = npcData.CurrentHeadArmor ?? npcData.HeadArmor,
+                                BodyArmor = npcData.CurrentBodyArmor ?? npcData.BodyArmor,
                                 BaseMove = npcData.BaseMove,
                                 BaseDeathSave = npcData.BaseDeathSave,
                                 Weapons = npcData.Weapons,
@@ -343,6 +345,23 @@ namespace CyberpunkRED_Generator
                 this.Close();
             }
         }
+        // в сохранении установленные импланты лежат копиями; подтягиваем актуальные данные из базы (кастомные не трогаем)
+        private static void RefreshInstalledCyberware(IEnumerable<CyberwareBlockItem> blocks)
+        {
+            foreach (var block in blocks)
+            {
+                for (int i = 0; i < block.InstalledItems.Count; i++)
+                {
+                    var saved = block.InstalledItems[i];
+                    if (saved.IsCustom) continue;
+                    var def = CoreDataBase.AllCyberware.FirstOrDefault(c => c.Name == saved.Name && c.Category == saved.Category);
+                    if (def == null) continue;
+                    block.InstalledItems[i] = def;
+                    block.UsedSlots += def.Slots - saved.Slots;
+                }
+            }
+        }
+
         private void BtnAddGear_Click(object sender, RoutedEventArgs e)
         {
             var vm = this.DataContext as SheetViewModel;
@@ -369,7 +388,7 @@ namespace CyberpunkRED_Generator
                         var customSkills = charData.Skills.Where(s => s.Name.StartsWith(def.Name + ":")).ToList();
                         foreach (var custom in customSkills)
                         {
-                            string subName = custom.Name.Contains(":") ? custom.Name.Split(':')[1].Trim() : custom.Name;
+                            string subName = custom.Name.Contains(":") ? custom.Name.Substring(custom.Name.IndexOf(':') + 1).Trim() : custom.Name;
                             cat.Skills.Add(new SheetSkill
                             {
                                 Name = custom.Name,
@@ -423,7 +442,7 @@ namespace CyberpunkRED_Generator
             string subName = "";
             if (def.Name == "Язык (Родной)" && savedSkill != null && savedSkill.Name.Contains(":"))
             {
-                subName = savedSkill.Name.Split(':')[1].Trim();
+                subName = savedSkill.Name.Substring(savedSkill.Name.IndexOf(':') + 1).Trim();
             }
 
             return new SheetSkill
@@ -537,13 +556,13 @@ namespace CyberpunkRED_Generator
             // Логика Соло
             if (tag == "Threat" || tag == "Awareness" || tag == "Deflection" || tag == "Fumble" || tag == "Initiative" || tag == "Precision")
             {
-                int cost = tag == "Deflection" ? 2 : (tag == "Precision" ? 3 : 1);
+                int cost = tag == "Deflection" ? 2 : (tag == "Precision" ? 3 : (tag == "Fumble" ? 4 : 1));
                 if (vm.RoleRank - vm.SoloPointsUsed >= cost)
                 {
                     if (tag == "Threat") vm.SoloThreat++;
                     else if (tag == "Awareness") vm.SoloAwareness++;
                     else if (tag == "Deflection") vm.SoloDeflection++;
-                    else if (tag == "Fumble") vm.SoloFumble++;
+                    else if (tag == "Fumble" && vm.SoloFumble < 1) vm.SoloFumble++;
                     else if (tag == "Initiative") vm.SoloInitiative++;
                     else if (tag == "Precision") vm.SoloPrecision++;
                 }
@@ -551,12 +570,13 @@ namespace CyberpunkRED_Generator
             // Логика Техника
             else if (tag == "TechField" || tag == "TechUpgrade" || tag == "TechFab" || tag == "TechInvent")
             {
-                if (vm.RoleRank - vm.TechPointsUsed >= 1)
+                // за ранг — 1 очко в две разные специализации, значит в одной специализации не больше ранга
+                if (vm.TechPointsTotal - vm.TechPointsUsed >= 1)
                 {
-                    if (tag == "TechField") vm.TechField++;
-                    else if (tag == "TechUpgrade") vm.TechUpgrade++;
-                    else if (tag == "TechFab") vm.TechFab++;
-                    else if (tag == "TechInvent") vm.TechInvent++;
+                    if (tag == "TechField" && vm.TechField < vm.RoleRank) vm.TechField++;
+                    else if (tag == "TechUpgrade" && vm.TechUpgrade < vm.RoleRank) vm.TechUpgrade++;
+                    else if (tag == "TechFab" && vm.TechFab < vm.RoleRank) vm.TechFab++;
+                    else if (tag == "TechInvent" && vm.TechInvent < vm.RoleRank) vm.TechInvent++;
                 }
             }
             // Логика Медтехника
@@ -667,6 +687,13 @@ namespace CyberpunkRED_Generator
                     _originalData.GearItems = vm.GearItems.ToList();
 
                     // Сохраняем вкладку NPC
+                    foreach (var npc in vm.NPCs)
+                    {
+                        if (npc.OriginalData == null) continue;
+                        npc.OriginalData.CurrentHP = npc.CurrentHP;
+                        npc.OriginalData.CurrentHeadArmor = npc.HeadArmor;
+                        npc.OriginalData.CurrentBodyArmor = npc.BodyArmor;
+                    }
                     _originalData.NPCs = vm.NPCs.Select(npc => npc.OriginalData).ToList();
 
                     _originalData.CyberwareBlocks = vm.CyberwareBlocks.ToList();
@@ -687,7 +714,12 @@ namespace CyberpunkRED_Generator
                             if (skill.CanAddMultiple) continue;
                             if (skill.IsVariant && string.IsNullOrWhiteSpace(skill.SubName)) continue;
 
-                            if (skill.Level > 0 || skill.IsVariant || skill.BaseName == "Язык (Родной)")
+                            // базовый навык, опущенный ниже стартового уровня (2), иначе при загрузке вернётся к нему
+                            var skillDef = CoreDataBase.AllSkills.FirstOrDefault(d => d.Name == skill.BaseName);
+                            int defaultLevel = skillDef == null ? 0 : (skillDef.IsBasic ? 2 : skillDef.FreeLevels);
+                            bool belowDefault = !skill.IsVariant && skill.Level < defaultLevel;
+
+                            if (skill.Level > 0 || skill.IsVariant || skill.BaseName == "Язык (Родной)" || belowDefault)
                             {
                                 string exportName = skill.Name;
                                 if (skill.IsVariant && !string.IsNullOrWhiteSpace(skill.SubName))
@@ -699,7 +731,7 @@ namespace CyberpunkRED_Generator
                                     exportName = $"{skill.Name}: {skill.SubName.Trim()}";
                                 }
 
-                                _originalData.Skills.Add(new SkillSaveData { Name = exportName, Level = skill.Level, Total = skill.Base });
+                                _originalData.Skills.Add(new SkillSaveData { Name = exportName, Level = skill.Level, Total = skill.StatValue + skill.Level });
                             }
                         }
                     }
@@ -844,6 +876,30 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
+                // Опции конечностей и глаз ставятся только туда, где установлен базовый имплант.
+                // Исключение — мясная рука/нога: в неё можно поставить один имплант из списка, стандартная кисть/стопа не в счёт
+                string blockName = vm.CurrentCyberBlock.Name;
+                bool isLimbBlock = blockName.Contains("КИБЕРРУКА") || blockName.Contains("КИБЕРНОГА") || blockName.Contains("КИБЕРГЛАЗ");
+                if (isLimbBlock && !def.IsFoundation && !def.IsCustom && !vm.CurrentCyberBlock.IsInstalled)
+                {
+                    bool isMeatLimb = !blockName.Contains("ДОП.") && !blockName.Contains("КИБЕРГЛАЗ");
+                    if (!isMeatLimb || !CoreDataBase.MeatLimbCyberware.Contains(def.Name))
+                    {
+                        MessageBox.Show("Сначала установите базовый имплант в этот блок (киберглаз, киберруку или киберногу)!", "ОШИБКА СОВМЕСТИМОСТИ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    bool isStandard = def.Name == "Стандартная кисть" || def.Name == "Стандартная стопа";
+                    bool occupied = vm.CurrentCyberBlock.InstalledItems.Any(i => isStandard
+                        ? i.Name == def.Name
+                        : i.Name != "Стандартная кисть" && i.Name != "Стандартная стопа");
+                    if (occupied)
+                    {
+                        MessageBox.Show("В мясную конечность можно установить только один киберимплант (стандартная кисть/стопа не в счёт)!", "ОШИБКА СОВМЕСТИМОСТИ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+
                 // Поиск зависимостей по всему телу
                 if (!string.IsNullOrWhiteSpace(def.Requires) && def.Name != "Подкожный захват")
                 {
@@ -869,6 +925,17 @@ namespace CyberpunkRED_Generator
                 if (def.Name == "Эндоскелет ß (Бета)" && vm.CyberwareBlocks.Sum(b => b.InstalledItems.Count(i => i.Name == "Искусственные мышцы и усиленные кости")) < 2)
                 {
                     MessageBox.Show("Для установки Эндоскелета Бета требуется минимум 2 импланта 'Искусственные мышцы и усиленные кости'!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                int currentBody = vm.HexStats.FirstOrDefault(s => s.Name == "ТЕЛ" || s.Name == "BODY")?.CurrentValue ?? 0;
+                if (def.Name == "Эндоскелет ∑ (Сигма)" && currentBody < 6)
+                {
+                    MessageBox.Show("Для установки Эндоскелета Сигма требуется ТЕЛО 6!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (def.Name == "Эндоскелет ß (Бета)" && currentBody < 8)
+                {
+                    MessageBox.Show("Для установки Эндоскелета Бета требуется ТЕЛО 8!", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -998,6 +1065,17 @@ namespace CyberpunkRED_Generator
                 {
                     if (block.InstalledItems.Contains(def))
                     {
+                        // крепления боргирования держат дополнительные руки/глаза: убираем их вместе с креплением
+                        string[] extraNames = def.Name == "Искусственное плечевое крепление"
+                            ? new[] { "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)", "ДОП. ЛЕВАЯ КИБЕРРУКА (EXTRA ARM L)" }
+                            : def.Name == "Фасеточное крепление"
+                                ? new[] { "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)", "ДОП. КИБЕРГЛАЗ 2 (EXTRA OPTIC 2)", "ДОП. КИБЕРГЛАЗ 3 (EXTRA OPTIC 3)", "ДОП. КИБЕРГЛАЗ 4 (EXTRA OPTIC 4)", "ДОП. КИБЕРГЛАЗ 5 (EXTRA OPTIC 5)" }
+                                : new string[0];
+                        var extraBlocks = vm.CyberwareBlocks.Where(b => extraNames.Contains(b.Name)).ToList();
+                        if (extraBlocks.Any(b => b.InstalledItems.Count > 0)
+                            && MessageBox.Show("Вместе с креплением будут удалены дополнительные конечности и все их импланты. Продолжить?", "УДАЛЕНИЕ КРЕПЛЕНИЯ", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                            return;
+
                         if (def.IsFoundation) MessageBox.Show("Внимание: Вы удаляете базовый имплант. Зависимые опции могут перестать работать корректно!", "СИСТЕМНОЕ УВЕДОМЛЕНИЕ", MessageBoxButton.OK, MessageBoxImage.Information);
 
                         block.InstalledItems.Remove(def);
@@ -1018,6 +1096,8 @@ namespace CyberpunkRED_Generator
                                 }
                             }
                         }
+
+                        foreach (var extra in extraBlocks) vm.CyberwareBlocks.Remove(extra);
 
                         vm.RecalculatePenalties();
                         break;
@@ -1088,7 +1168,7 @@ namespace CyberpunkRED_Generator
                 Name = vm.NewCyberName,
                 Category = vm.CurrentCyberBlock.Name,
                 Description = vm.NewCyberDesc ?? "",
-                HumanityLoss = vm.NewCyberHL ?? "0",
+                HumanityLoss = string.IsNullOrWhiteSpace(vm.NewCyberHL) ? "0" : vm.NewCyberHL.Trim(),
                 Slots = int.TryParse(vm.NewCyberSlots, out int s) ? s : 1,
                 IsFoundation = vm.NewCyberIsFoundation,
                 IsPaired = vm.NewCyberIsPaired,
@@ -1130,6 +1210,14 @@ namespace CyberpunkRED_Generator
             if (availableRoles.Count == 0)
             {
                 MessageBox.Show("Вы уже взяли все возможные роли!", "ИНФО", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // новую роль можно взять, только когда последняя взятая дошла до ранга 4 (стр. 145)
+            var lastRole = vm.ActiveRoles.LastOrDefault();
+            if (lastRole != null && lastRole.Rank < 4)
+            {
+                MessageBox.Show($"Новую роль можно взять, когда последняя роль ({lastRole.Name}) достигнет 4 ранга. Сейчас ранг {lastRole.Rank}.", "МУЛЬТИКЛАСС НЕДОСТУПЕН", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -1192,7 +1280,7 @@ namespace CyberpunkRED_Generator
             {
                 var combatant = new CombatantViewModel
                 {
-                    OriginalData = enemyData,
+                    OriginalData = enemyData.Clone(),
                     Name = enemyData.Name,
                     MaxHP = enemyData.HP,
                     CurrentHP = enemyData.HP,
@@ -1218,6 +1306,7 @@ namespace CyberpunkRED_Generator
         private void BtnOpenEnemyManager_Click(object sender, RoutedEventArgs e)
         {
             LoadEnemiesFromFolder();
+            _editingEnemyName = null;
             RbGenCN.IsChecked = true;
             if (this.DataContext is SheetViewModel vm)
             {
@@ -1316,10 +1405,14 @@ namespace CyberpunkRED_Generator
             if ((sender as Button)?.Tag is string cyber && this.DataContext is SheetViewModel vm) vm.NewEnemyCyberware.Remove(cyber);
         }
 
+        // имя пресета, открытого на редактирование (чтобы при переименовании предложить удалить старый)
+        private string _editingEnemyName;
+
         private void BtnEditEnemyPreset_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.Tag is EnemySaveData enemyData && this.DataContext is SheetViewModel vm)
             {
+                _editingEnemyName = enemyData.Name;
                 TxtGenName.Text = enemyData.Name;
                 TxtGenHP.Text = enemyData.HP.ToString();
                 TxtGenHead.Text = enemyData.HeadArmor.ToString();
@@ -1375,8 +1468,7 @@ namespace CyberpunkRED_Generator
                 var res = MessageBox.Show($"Удалить пресет '{enemyData.Name}' из базы навсегда?", "ПОДТВЕРДИТЕ УДАЛЕНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (res == MessageBoxResult.Yes)
                 {
-                    string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
-                    string filePath = Path.Combine(folderPath, $"Enemy_{enemyData.Name.Replace(" ", "_")}.json");
+                    string filePath = UIHelpers.EnemyFilePath(enemyData.Name);
                     if (File.Exists(filePath))
                     {
                         try { File.Delete(filePath); } catch { }
@@ -1417,16 +1509,16 @@ namespace CyberpunkRED_Generator
             }
             else
             {
-                enemy.Stats["INT"] = int.Parse(StINT.Text);
-                enemy.Stats["REF"] = int.Parse(StREF.Text);
-                enemy.Stats["DEX"] = int.Parse(StDEX.Text);
-                enemy.Stats["TECH"] = int.Parse(StTECH.Text);
-                enemy.Stats["COOL"] = int.Parse(StCOOL.Text);
-                enemy.Stats["WILL"] = int.Parse(StWILL.Text);
-                enemy.Stats["LUCK"] = int.Parse(StLUCK.Text);
-                enemy.Stats["MOVE"] = int.Parse(StMOVE.Text);
-                enemy.Stats["BODY"] = int.Parse(StBODY.Text);
-                enemy.Stats["EMP"] = int.Parse(StEMP.Text);
+                enemy.Stats["INT"] = UIHelpers.ParseIntOr(StINT.Text, 5);
+                enemy.Stats["REF"] = UIHelpers.ParseIntOr(StREF.Text, 5);
+                enemy.Stats["DEX"] = UIHelpers.ParseIntOr(StDEX.Text, 5);
+                enemy.Stats["TECH"] = UIHelpers.ParseIntOr(StTECH.Text, 5);
+                enemy.Stats["COOL"] = UIHelpers.ParseIntOr(StCOOL.Text, 5);
+                enemy.Stats["WILL"] = UIHelpers.ParseIntOr(StWILL.Text, 5);
+                enemy.Stats["LUCK"] = UIHelpers.ParseIntOr(StLUCK.Text, 5);
+                enemy.Stats["MOVE"] = UIHelpers.ParseIntOr(StMOVE.Text, 5);
+                enemy.Stats["BODY"] = UIHelpers.ParseIntOr(StBODY.Text, 5);
+                enemy.Stats["EMP"] = UIHelpers.ParseIntOr(StEMP.Text, 5);
 
                 enemy.BaseMove = enemy.Stats["MOVE"];
                 enemy.BaseDeathSave = enemy.Stats["BODY"];
@@ -1437,13 +1529,23 @@ namespace CyberpunkRED_Generator
             string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
-            string filePath = Path.Combine(folderPath, $"Enemy_{enemy.Name.Replace(" ", "_")}.json");
+            string filePath = UIHelpers.EnemyFilePath(enemy.Name);
             var options = new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
             File.WriteAllText(filePath, JsonSerializer.Serialize(enemy, options), System.Text.Encoding.UTF8);
 
             var existingItem = vm.AvailableEnemies.FirstOrDefault(x => x.Name.Equals(enemy.Name, StringComparison.OrdinalIgnoreCase));
             if (existingItem != null) vm.AvailableEnemies.Remove(existingItem);
             vm.AvailableEnemies.Add(enemy);
+
+            // пресет переименовали: предлагаем убрать старый, а не оставлять дубль
+            if (_editingEnemyName != null && !_editingEnemyName.Equals(enemy.Name, StringComparison.OrdinalIgnoreCase)
+                && MessageBox.Show($"Имя изменено. Удалить старый пресет '{_editingEnemyName}'?", "ПЕРЕИМЕНОВАНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try { File.Delete(UIHelpers.EnemyFilePath(_editingEnemyName)); } catch { }
+                var old = vm.AvailableEnemies.FirstOrDefault(x => x.Name.Equals(_editingEnemyName, StringComparison.OrdinalIgnoreCase));
+                if (old != null) vm.AvailableEnemies.Remove(old);
+            }
+            _editingEnemyName = null;
 
             TxtGenName.Text = ""; TxtGenWeapons.Text = ""; TxtGenGear.Text = ""; CbGenCyber.Text = ""; vm.NewEnemySkills.Clear(); vm.NewEnemyCyberware.Clear();
 

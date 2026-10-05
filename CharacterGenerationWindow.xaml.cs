@@ -19,6 +19,8 @@ namespace CyberpunkRED_Generator
         private bool _isLoaded = false;
 
         private List<ComboBox> _dynamicRoleComboBoxes = new List<ComboBox>();
+        private Dictionary<ComboBox, RoleLifepathTable> _roleTables = new Dictionary<ComboBox, RoleLifepathTable>();
+        private Dictionary<ComboBox, TextBlock> _roleTitles = new Dictionary<ComboBox, TextBlock>();
         private List<SkillCategory> _categories;
         private const int MAX_SKILL_POINTS = 86;
 
@@ -79,6 +81,24 @@ namespace CyberpunkRED_Generator
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
+            if (CbRole.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите роль персонажа.", "РОЛЬ НЕ ВЫБРАНА", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // нераспределённые очки не блокируют создание, но предупреждаем
+            int statLeft = RbCalc.IsChecked == true ? GetMaxPoints() - GetTotalPointsSpent() : 0;
+            int skillLeft = MAX_SKILL_POINTS - GetSpentPoints();
+            if (statLeft > 0 || skillLeft > 0)
+            {
+                var warn = new StringBuilder("Остались нераспределённые очки:\n");
+                if (statLeft > 0) warn.AppendLine($"• характеристики: {statLeft}");
+                if (skillLeft > 0) warn.AppendLine($"• навыки: {skillLeft}");
+                warn.Append("\nВсё равно создать персонажа?");
+                if (MessageBox.Show(warn.ToString(), "НЕ ВСЕ ОЧКИ ПОТРАЧЕНЫ", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+            }
+
             try
             {
                 var charData = new CharacterSaveData();
@@ -122,7 +142,7 @@ namespace CyberpunkRED_Generator
                 // ролевой путь
                 foreach (var cb in _dynamicRoleComboBoxes)
                 {
-                    if (!string.IsNullOrWhiteSpace(cb.Text) && cb.Tag != null)
+                    if (cb.Visibility == Visibility.Visible && !string.IsNullOrWhiteSpace(cb.Text) && cb.Tag != null)
                     {
                         charData.RoleLifepath[cb.Tag.ToString()] = cb.Text;
                     }
@@ -181,7 +201,7 @@ namespace CyberpunkRED_Generator
 
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
-                string fileName = $"Character_{charData.Name}_{charData.Role}_{timestamp}.json";
+                string fileName = $"Character_{UIHelpers.SafeFileName(charData.Name)}_{UIHelpers.SafeFileName(charData.Role)}_{timestamp}.json";
                 string filePath = Path.Combine(folderPath, fileName);
 
                 // настройки json для правильного отображения русского языка и красивых отступов
@@ -365,6 +385,8 @@ namespace CyberpunkRED_Generator
         {
             PanelQuestions.Children.Clear();
             _dynamicRoleComboBoxes.Clear();
+            _roleTables.Clear();
+            _roleTitles.Clear();
 
             if (!CoreDataBase.RoleLifepaths.ContainsKey(role)) return;
 
@@ -376,6 +398,8 @@ namespace CyberpunkRED_Generator
                 cb.SelectionChanged += (s, e) => UpdateRoleLog();
                 cb.AddHandler(System.Windows.Controls.Primitives.TextBoxBase.TextChangedEvent, new System.Windows.Controls.TextChangedEventHandler((s, ev) => UpdateRoleLog()));
                 _dynamicRoleComboBoxes.Add(cb);
+                _roleTables[cb] = table;
+                _roleTitles[cb] = tb;
                 PanelQuestions.Children.Add(tb);
                 PanelQuestions.Children.Add(cb);
             }
@@ -388,14 +412,33 @@ namespace CyberpunkRED_Generator
                 if (cb.Items.Count > 0) cb.SelectedIndex = _rnd.Next(0, cb.Items.Count);
         }
 
+        // Зависимые таблицы (например, «Почему ушел из группы?») показываются только при нужном ответе в родительской
+        private void UpdateRoleVisibility()
+        {
+            foreach (var cb in _dynamicRoleComboBoxes)
+            {
+                var table = _roleTables[cb];
+                bool visible = true;
+                if (!string.IsNullOrEmpty(table.DependsOn))
+                {
+                    var parent = _dynamicRoleComboBoxes.FirstOrDefault(p => (string)p.Tag == table.DependsOn);
+                    string parentValue = parent?.SelectedItem as string ?? parent?.Text;
+                    visible = parent != null && parent.Visibility == Visibility.Visible && table.ShowIf.Contains(parentValue);
+                }
+                cb.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+                _roleTitles[cb].Visibility = cb.Visibility;
+            }
+        }
+
         private void UpdateRoleLog()
         {
+            UpdateRoleVisibility();
             if (!_isLoaded || TxtRoleLog == null || CbRole.SelectedItem == null) return;
             StringBuilder log = new StringBuilder();
             log.AppendLine($"> АНАЛИЗ КАРЬЕРЫ: {CbRole.Text.ToUpper()}\n");
 
             foreach (var cb in _dynamicRoleComboBoxes)
-                if (!string.IsNullOrWhiteSpace(cb.Text)) log.AppendLine($"  - {cb.Tag}:\n    [{cb.Text}]\n");
+                if (cb.Visibility == Visibility.Visible && !string.IsNullOrWhiteSpace(cb.Text)) log.AppendLine($"  - {cb.Tag}:\n    [{cb.Text}]\n");
 
             log.AppendLine("> СТАТУС: ПРОФИЛЬ УТВЕРЖДЕН.");
             TxtRoleLog.Text = log.ToString();
@@ -665,7 +708,7 @@ namespace CyberpunkRED_Generator
             prompt.AppendLine("=== РОЛЕВОЙ ЖИЗНЕННЫЙ ПУТЬ ===");
             foreach (var cb in _dynamicRoleComboBoxes)
             {
-                if (!string.IsNullOrWhiteSpace(cb.Text)) prompt.AppendLine($"- {cb.Tag}: {cb.Text}");
+                if (cb.Visibility == Visibility.Visible && !string.IsNullOrWhiteSpace(cb.Text)) prompt.AppendLine($"- {cb.Tag}: {cb.Text}");
             }
             prompt.AppendLine();
 

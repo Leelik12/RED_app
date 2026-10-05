@@ -9,6 +9,22 @@ namespace CyberpunkRED_Generator
 {
     public static class UIHelpers
     {
+        // имя для файла: недопустимые символы (\ / : * ? " < > |) заменяются на «_»
+        public static string SafeFileName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return "Без_имени";
+            var bad = System.IO.Path.GetInvalidFileNameChars();
+            var sb = new StringBuilder();
+            foreach (char c in name.Trim()) sb.Append(Array.IndexOf(bad, c) >= 0 ? '_' : c);
+            string res = sb.ToString().TrimEnd('.', ' ');
+            return res.Length == 0 ? "Без_имени" : res;
+        }
+
+        public static string EnemyFilePath(string name)
+            => System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies", $"Enemy_{SafeFileName(name).Replace(" ", "_")}.json");
+
+        public static int ParseIntOr(string text, int fallback) => int.TryParse(text, out int v) ? v : fallback;
+
         public static void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]+$");

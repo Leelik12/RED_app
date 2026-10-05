@@ -23,6 +23,10 @@ namespace CyberpunkRED_Generator
         // Поле Role теперь возвращает все роли через слеш, например "Соло/Фиксер"
         public string Role => ActiveRoles.Count > 0 ? string.Join("/", ActiveRoles.Select(r => r.Name)) : "";
 
+        // Проверка роли и её ранга с учётом мультикласса (Role может быть "Соло/Фиксер")
+        public bool HasRole(string roleName) => ActiveRoles.Any(r => r.Name == roleName);
+        public int GetRoleRank(string roleName) => ActiveRoles.FirstOrDefault(r => r.Name == roleName)?.Rank ?? 0;
+
         public int RoleRank
         {
             get => CurrentActiveRole?.Rank ?? 0;
@@ -48,12 +52,12 @@ namespace CyberpunkRED_Generator
             {
                 switch (CurrentActiveRole?.Name)
                 {
-                    case "Рокербой": return "ХАРИЗМАТИЧЕСКОЕ ВЛИЯНИЕ\nВлияй на окружающих силой личности. Превращай людей в фанатов (Бросок: СЛ8 — 1 чел, СЛ10 — до 6 чел, СЛ12 — толпа).\n\nРанги 1-2 (Местные клубы): Убедить фаната на мелкую услугу (купить еду, подвезти).\nРанги 3-4 (Известные клубы): Фанат окажет крупную услугу. Группа будет тусоваться с тобой.\nРанги 5-6 (Крупные клубы): Фанат совершит мелкое преступление (кража, драка). Группа станет личной свитой.\nРанги 7-8 (Концертные залы): Фанат рискнёт жизнью. Группа пойдёт на мелкое преступление.\nРанг 9 (ТВ/Крупные залы): Фанат пойдёт на тяжкое преступление (избиение, грабеж). Группа устроит беспорядки.\nРанг 10 (Стадионы): Фанаты пожертвуют собой без вопросов. Группа рискует жизнями как твоя охрана. Частная армия.";
+                    case "Рокербой": return "ХАРИЗМАТИЧЕСКОЕ ВЛИЯНИЕ\nВлияй на окружающих силой личности. Превращай людей в фанатов (Бросок: СЛ8 — 1 чел, СЛ10 — до 6 чел, СЛ12 — толпа).\n\nРанги 1-2 (Местные клубы): Убедить фаната на мелкую услугу (купить еду, подвезти).\nРанги 3-4 (Известные клубы): Фанат окажет крупную услугу. Группа будет тусоваться с тобой.\nРанги 5-6 (Крупные клубы): Фанат совершит мелкое преступление (кража, драка). Группа станет личной свитой.\nРанги 7-8 (Концертные залы): Фанат рискнёт жизнью. Группа пойдёт на мелкое преступление.\nРанг 9 (ТВ/Крупные залы): Фанат и группа до 6 человек пойдут на тяжкое преступление (кража дорогой вещи, избиение). Толпа фанатов устроит беспорядки, разрушит имущество и даже убьёт.\nРанг 10 (Стадионы): Фанаты пожертвуют собой без вопросов. Группа рискует жизнями как твоя охрана. Частная армия.";
                     case "Нетраннер": return "ИНТЕРФЕЙС\nПозволяет заниматься нетраннингом, определяет количество сетевых действий в ход и даёт доступ к программам.\n\nСЕТЕВЫЕ ДЕЙСТВИЯ ЗА ХОД:\nРанг 1–3: 2 действия\nРанг 4–6: 3 действия\nРанг 7–9: 4 действия\nРанг 10: 5 действий";
-                    case "Медиа": return "АВТОРИТЕТНОСТЬ\nДоступ к источникам и убеждение аудитории. Ты пассивно подхватываешь слухи (СЛ 7-13).\n\nУбедительность: Шанс того, что тебе поверят (бросок 1d10 <= Убедительность). Твердые доказательства дают +1/2.\nРанги 1-2: Местные связи. Убедительность 2/10. Влияние на мелких злодеев.\nРанги 3-4: Городские лидеры. Убедительность 3/10. Торжество локальной справедливости.\nРанги 5-6: Крупные игроки. Убедительность 4/10. Влияние на весь город.\nРанги 7-8: Президенты корп. Убедительность 5/10. Влияние на штат.\nРанг 9: Политики штата. Убедительность 6/10. Влияние на страну.\nРанг 10: Мировые лидеры. Убедительность 7/10. Свержение мегакорпораций и мировых правительств.";
-                    case "Законник": return "ПОДКРЕПЛЕНИЕ\nПризыв сослуживцев. Брось 1d10 <= ранга. При успехе брось 1d6 на раунды до прибытия (выпадет 6 — прибудет отряд выше рангом).\n\nРанги 1-2: 4 наемных копа (ОС 7, ПЗ 20).\nРанги 3-4: 4 патрульных на авто (ОС 7, ПЗ 25).\nРанги 5-7: 2 шерифа/штурмовика в тяж. броне (ОС 13, ПЗ 35).\nРанг 8: Маршал Зоны на супербайке (ОС 15, ПЗ 50, гранатомёт).\nРанг 9: C-SWAT/Психоотряд на AV-4 (ОС 18, ПЗ 35, ракетницы).\nРанг 10: Агенты ФБР/Интерпола на AV-4. Остаются помогать в расследовании дела.";
-                    case "Корпорат": return "КОМАНДНАЯ РАБОТА\nКорпоративные блага и команда подчиненных (проверка лояльности подчиненных 1d6 <= их лояльности).\n\nРанг 1: Комплект элитной одежды.\nРанг 2: Бесплатный корпоративный конапт.\nРанг 3: 1 член команды (подчинённый).\nРанг 5: 2 члена команды.\nРанг 6: Медстраховка Trauma Team Silver.\nРанг 7: Улучшение жилья до дома в бивервилле.\nРанг 8: Медстраховка Trauma Team Executive.\nРанг 9: 3 члена команды.\nРанг 10: Люксовый пентхаус или роскошный особняк.";
-                    case "Фиксер": return "ДЕЛОВАЯ ХВАТКА\nСвязи, сделки и культурная гибкость.\n\nОХВАТ РЫНКА (доступ к скрытым товарам):\nРанги 1-2: Повседневные вещи.\nРанги 3-4: Дорогие предметы.\nРанги 5-6: Очень дорогие + организация Ночного Рынка.\nРанги 7-8: Роскошь.\nРанг 9: Супер роскошь + тайный рынок для боссов криминала.\nРанг 10: Уникальные товары.\n\nТОРГ: Наценки/скидки (10-20%), бонусный предмет при покупке 5-и одинаковых.\nГИБКОСТЬ: Автоматическое знание языков и культур местных банд/элит.";
+                    case "Медиа": return "АВТОРИТЕТНОСТЬ\nДоступ к источникам и убеждение аудитории. Ты пассивно подхватываешь слухи (СЛ 7-13).\n\nУбедительность: Шанс того, что тебе поверят (бросок 1d10 <= Убедительность). Одно понятное проверяемое доказательство даёт +1, больше 4 — +2; бонусы складываются (до +3). УДЧ тратить нельзя.\nРанги 1-2: Местные связи. Убедительность 2/10. Влияние на мелких злодеев.\nРанги 3-4: Городские лидеры. Убедительность 3/10. Торжество локальной справедливости.\nРанги 5-6: Крупные игроки. Убедительность 4/10. Влияние на весь город.\nРанги 7-8: Президенты корп. Убедительность 5/10. Влияние на штат.\nРанг 9: Политики штата. Убедительность 6/10. Влияние на страну.\nРанг 10: Мировые лидеры. Убедительность 7/10. Свержение мегакорпораций и мировых правительств.";
+                    case "Законник": return "ПОДКРЕПЛЕНИЕ\nПризыв сослуживцев. Действием брось 1d10 <= ранга. При успехе брось 1d6 — столько раундов до прибытия. Выпала 6 — прибудет отряд следующего уровня (на 10 ранге — две группы).\n\nБП = боевой показатель, СКО/ТЕЛ — оба значения.\nРанги 1-2: 4 наёмных копа пешком (БП 8, ОС 7, ПЗ 20, СКО/ТЕЛ 4).\nРанги 3-4: 4 патрульных на двух авто (БП 10, ОС 7, ПЗ 25, СКО/ТЕЛ 5).\nРанги 5-7: 2 шерифа на скоростном авто, тяж. бронекуртка (БП 14, ОС 13, ПЗ 35, СКО/ТЕЛ 4).\nРанг 8: Маршал Зоны на супербайке (БП 16, ОС 15, ПЗ 50, СКО/ТЕЛ 6, гранатомёт).\nРанг 9: C-SWAT на AV-4 (БП 15, ОС 18, ПЗ 35, СКО/ТЕЛ 4, ракетницы).\nРанг 10: Агенты ФБР/Интерпола на AV-4 (БП 14, ОС 11, ПЗ 35, СКО/ТЕЛ 6). Остаются помогать в расследовании дела.";
+                    case "Корпорат": return "КОМАНДНАЯ РАБОТА\nКорпоративные блага и команда подчиненных (проверка лояльности подчинённого: 1d6 меньше его лояльности).\n\nРанг 1: Комплект элитной одежды.\nРанг 2: Бесплатный корпоративный конапт.\nРанг 3: 1 член команды (подчинённый).\nРанг 5: 2 члена команды.\nРанг 6: Медстраховка Trauma Team Silver.\nРанг 7: Улучшение жилья до дома в бивервилле.\nРанг 8: Медстраховка Trauma Team Executive.\nРанг 9: 3 члена команды.\nРанг 10: Люксовый пентхаус или роскошный особняк.";
+                    case "Фиксер": return "ДЕЛОВАЯ ХВАТКА\nСвязи, сделки и культурная гибкость.\n\nОХВАТ (высшая категория предметов, которую всегда можно достать поштучно):\nРанги 1-2: Дёшево и повседневно.\nРанги 3-4: До «дорого».\nРанги 5-6: Раз в месяц, вместе с фиксерами своего ранга, можно организовать Ночной рынок: на нём доступно всё до «супер роскоши».\nРанги 7-8: До «очень дорого».\nРанг 9: До «роскоши» + Полуночный рынок внутри Ночного (верхушка криминального мира).\nРанг 10: До «супер роскоши».\n\nТОРГ (КРУТ + Торговля + ранг + 1d10; при успехе одна сделка уровня твоего ранга или ниже):\nРанги 1-2: ±10% к рыночной цене при покупке и продаже.\nРанги 3-4: При покупке 5 и более одинаковых предметов — ещё один бесплатно.\nРанги 5-6: +20% к оплате за работу на человека.\nРанги 7-8: Роскошь и супер роскошь — половина сейчас, половина через месяц.\nРанг 9: ±20% к рыночной цене.\nРанг 10: Двойная оплата за опасную работу.\n\nГИБКОСТЬ (культуры и языки):\nРанги 1-2: Твой район и все местные банды.\nРанги 3-4: 1 культура + её язык на уровне 4.\nРанги 5-6: 3 культуры + их языки на уровне 4.\nРанги 7-8: 6 культур + их языки на уровне 4.\nРанг 9: Ещё и корпорации и правительственные структуры.\nРанг 10: Любые группы, даже закрытые (тайные общества, секты).";
                     case "Кочевник": return "МОТО\nСемья на колёсах. Добавляет ранг Мото к проверкам: Вождение, Пилотирование, Судовождение, Авиатехника, Автомеханика, Судоремонт.\n\nСЕМЕЙНЫЙ АВТОПАРК:\nКаждый раз повышая ранг, выбери одно:\n1) Добавить 1 стандартный транспорт (ранга Мото или ниже) в свой пул.\n2) Установить 1 улучшение (броню, оружие, NOS и т.д.) на уже доступный транспорт.\n\nКочевник использует 1 семейный транспорт за раз (замена к следующему утру). Семья чинит разбитый транспорт за неделю (и штраф 500eb). На 10 ранге можно выводить весь свой автопарк одновременно.";
                     default: return "";
                 }
@@ -144,7 +148,7 @@ namespace CyberpunkRED_Generator
         private int _soloFumble; public int SoloFumble { get => _soloFumble; set { _soloFumble = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); } }
         private int _soloInitiative; public int SoloInitiative { get => _soloInitiative; set { _soloInitiative = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); RecalculatePenalties(); } }
         private int _soloPrecision; public int SoloPrecision { get => _soloPrecision; set { _soloPrecision = value; OnPropertyChanged(); OnPropertyChanged(nameof(SoloPointsText)); } }
-        public int SoloPointsUsed => SoloThreat * 1 + SoloAwareness * 1 + SoloDeflection * 2 + SoloFumble * 1 + SoloInitiative * 1 + SoloPrecision * 3;
+        public int SoloPointsUsed => SoloThreat * 1 + SoloAwareness * 1 + SoloDeflection * 2 + SoloFumble * 4 + SoloInitiative * 1 + SoloPrecision * 3;
         public string SoloPointsText => $"СВОБОДНЫХ ОЧКОВ: {RoleRank - SoloPointsUsed}";
 
         // --- ТЕХНИК ---
@@ -153,7 +157,9 @@ namespace CyberpunkRED_Generator
         private int _techFab; public int TechFab { get => _techFab; set { _techFab = value; OnPropertyChanged(); OnPropertyChanged(nameof(TechPointsText)); } }
         private int _techInvent; public int TechInvent { get => _techInvent; set { _techInvent = value; OnPropertyChanged(); OnPropertyChanged(nameof(TechPointsText)); } }
         public int TechPointsUsed => TechField + TechUpgrade + TechFab + TechInvent;
-        public string TechPointsText => $"СВОБОДНЫХ ОЧКОВ: {RoleRank - TechPointsUsed}";
+        // за каждый ранг Создателя — по 1 очку в две разные специализации (стр. 148)
+        public int TechPointsTotal => RoleRank * 2;
+        public string TechPointsText => $"СВОБОДНЫХ ОЧКОВ: {TechPointsTotal - TechPointsUsed}";
 
         // --- МЕДТЕХНИК ---
         private int _medSurgery; public int MedSurgery { get => _medSurgery; set { _medSurgery = value; OnPropertyChanged(); OnPropertyChanged(nameof(MedtechPointsText)); OnPropertyChanged(nameof(MedSurgeryTotal)); RecalculatePenalties(); } }
@@ -169,7 +175,8 @@ namespace CyberpunkRED_Generator
         public int MedSurgeryTotal => BaseTech + (MedSurgery * 2);
         public int MedicalTechTotal => BaseTech + MedPharma + MedCryo;
         // --- НЕТРАННЕР ---
-        public int NetrunnerTotal => (HexStats?.FirstOrDefault(s => s.Name == "ИНТ" || s.Name == "INT")?.CurrentValue ?? 0) + RoleRank;
+        // проверки нетраннинга: Интерфейс + 1d10, без характеристики (стр. 199)
+        public int NetrunnerTotal => RoleRank;
         public int NetrunnerActions
         {
             get
@@ -246,7 +253,19 @@ namespace CyberpunkRED_Generator
         }
 
         private int _maxHP;
-        public int MaxHP { get => _maxHP; set { if (_maxHP == value) return; _maxHP = value; OnPropertyChanged(); RecalculatePenalties(); } }
+        public int MaxHP
+        {
+            get => _maxHP;
+            set
+            {
+                if (_maxHP == value) return;
+                _maxHP = value;
+                // текущие ПЗ не могут быть выше максимума (например, после снятия импланта, дающего ТЕЛ)
+                if (_currentHP > _maxHP) { _currentHP = _maxHP; OnPropertyChanged(nameof(CurrentHP)); }
+                OnPropertyChanged();
+                RecalculatePenalties();
+            }
+        }
 
         private int _baseDeathSave;
         public int BaseDeathSave { get => _baseDeathSave; set { if (_baseDeathSave == value) return; _baseDeathSave = value; OnPropertyChanged(); RecalculatePenalties(); } }
@@ -305,7 +324,7 @@ namespace CyberpunkRED_Generator
             if (refStat != null)
             {
                 int baseInit = refStat.CurrentValue;
-                if (Role == "Соло") baseInit += SoloInitiative;
+                if (HasRole("Соло")) baseInit += SoloInitiative;
                 bool hasKerenzikov = CyberwareBlocks?.Any(b => b.InstalledItems.Any(i => i.Name == "Керензиков")) == true;
                 bool hasSandevistan = CyberwareBlocks?.Any(b => b.InstalledItems.Any(i => i.Name == "Сандевистан")) == true;
 
@@ -358,16 +377,15 @@ namespace CyberpunkRED_Generator
         private void UpdateArmorPenalty()
         {
             if (HexStats == null) return;
-            int hp = 0, bp = 0, sp = 0;
+            int hp = 0, bp = 0;
             string headStr = Armor?.HeadPenalty?.Replace("-", "")?.Trim();
             string bodyStr = Armor?.BodyPenalty?.Replace("-", "")?.Trim();
-            string shieldStr = Armor?.ShieldPenalty?.Replace("-", "")?.Trim();
 
             int.TryParse(headStr, out hp);
             int.TryParse(bodyStr, out bp);
-            int.TryParse(shieldStr, out sp);
 
-            int maxPenalty = Math.Max(hp, Math.Max(bp, sp));
+            // штраф даёт только броня на голове и теле, у щита штрафа нет (стр. 183)
+            int maxPenalty = Math.Max(hp, bp);
 
             ApplyStatPenalty("РЕА", "REF", maxPenalty);
             ApplyStatPenalty("ЛВК", "DEX", maxPenalty);
@@ -447,7 +465,7 @@ namespace CyberpunkRED_Generator
             int dsPenalty = 0;
 
             if (CurrentHP >= MaxHP) { WoundStateText = "НЕТ"; WoundTooltipText = "Персонаж полностью здоров."; }
-            else if (CurrentHP > threshold) { WoundStateText = "ЛЕГКОЕ"; WoundTooltipText = "СЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 10"; }
+            else if (CurrentHP >= threshold) { WoundStateText = "ЛЕГКОЕ"; WoundTooltipText = "СЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 10"; }
             else if (CurrentHP > 0)
             {
                 WoundStateText = "ТЯЖЕЛОЕ";
@@ -501,29 +519,31 @@ namespace CyberpunkRED_Generator
             }
 
             // <--- СРАЗУ ПОСЛЕ ЦИКЛА ДОБАВЛЯЕМ ЛОГИКУ БОНУСОВ РОЛЕЙ --->
-            if (Role == "Фиксер")
+            if (HasRole("Фиксер"))
             {
-                ApplyRoleModToSkill("Торговля", RoleRank);
-                ApplyRoleModToSkill("Знаток Улиц", RoleRank);
+                // по книге ранг Деловой хватки добавляется только в бросок торга (КРУТ + Торговля + ранг), показываем его в Торговле
+                ApplyRoleModToSkill("Торговля", GetRoleRank("Фиксер"));
             }
-            else if (Role == "Кочевник")
+            if (HasRole("Кочевник"))
             {
-                ApplyRoleModToSkill("Авиационные технологии", RoleRank);
-                ApplyRoleModToSkill("Автомеханика", RoleRank);
-                ApplyRoleModToSkill("Морские технологии", RoleRank);
+                int motoRank = GetRoleRank("Кочевник");
+                ApplyRoleModToSkill("Авиационные технологии", motoRank);
+                ApplyRoleModToSkill("Автомеханика", motoRank);
+                ApplyRoleModToSkill("Морские технологии", motoRank);
 
-                ApplyRoleModToSkill("Вождение", RoleRank);
-                ApplyRoleModToSkill("Пилотирование (x2)", RoleRank);
-                ApplyRoleModToSkill("Судоходство", RoleRank);
+                ApplyRoleModToSkill("Вождение", motoRank);
+                ApplyRoleModToSkill("Пилотирование (x2)", motoRank);
+                ApplyRoleModToSkill("Судоходство", motoRank);
             }
-            else if (Role == "Соло")
+            if (HasRole("Соло"))
             {
                 ApplyRoleModToSkill("Внимательность", SoloThreat);
             }
-            else if (Role == "Техник")
+            if (HasRole("Техник"))
             {
                 ApplyRoleModToSkill("Знание техники", TechField);
                 ApplyRoleModToSkill("Кибертехника", TechField);
+                ApplyRoleModToSkill("Электроника/Безопасность (x2)", TechField);
                 ApplyRoleModToSkill("Автомеханика", TechField);
                 ApplyRoleModToSkill("Морские технологии", TechField);
                 ApplyRoleModToSkill("Авиационные технологии", TechField);
@@ -665,8 +685,13 @@ namespace CyberpunkRED_Generator
 
             int val = BaseValue - ArmorPenalty + ImplantModifier + WoundPenalty;
 
-            // ско не может опуститься ниже 1 из-за ранений/брони
-            if ((Name == "СКО" || Name == "MOVE") && val < 1) val = 1;
+            // ско не опускается ниже 1 из-за ранений и травм, а броня может довести его до 0 (стр. 183)
+            if (Name == "СКО" || Name == "MOVE")
+            {
+                val = BaseValue + ImplantModifier + WoundPenalty;
+                if (WoundPenalty < 0 && val < 1) val = 1;
+                val = Math.Max(0, val - ArmorPenalty);
+            }
 
             CurrentValue = val;
         }

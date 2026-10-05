@@ -1,0 +1,23 @@
+# Корник Cyberpunk RED (оригиналы PDF, не для репозитория)
+/Основная книга правил Cyberpunk Red v1.3.pdf
+/cyberpunkredcorerulebook.pdf
+
+# Текстовые версии корника — генерируются Rulebook/build_rulebook.py
+/Rulebook/ru/
+/Rulebook/en/
+/Rulebook/CHAPTERS.md
+__pycache__/
+
+# Сборка и служебные файлы Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# NuGet-пакеты восстанавливаются по packages.config
+packages/
+
+# Релизы собираются вручную отдельно
+Релизы/
+Releases/

@@ -32,6 +32,29 @@ namespace CyberpunkRED_Generator
         public string Gear { get; set; }
         public string Cyberware { get; set; }
 
+        // состояние NPC на листе персонажа (у пресета не заполняется)
+        public int? CurrentHP { get; set; }
+        public int? CurrentHeadArmor { get; set; }
+        public int? CurrentBodyArmor { get; set; }
+
+        // отдельная копия пресета для NPC, чтобы одинаковые враги не делили состояние
+        public EnemySaveData Clone() => new EnemySaveData
+        {
+            Name = Name,
+            HP = HP,
+            HeadArmor = HeadArmor,
+            BodyArmor = BodyArmor,
+            IsCNMode = IsCNMode,
+            CombatNumber = CombatNumber,
+            BaseDeathSave = BaseDeathSave,
+            BaseMove = BaseMove,
+            Stats = new Dictionary<string, int>(Stats ?? new Dictionary<string, int>()),
+            Skills = new Dictionary<string, int>(Skills ?? new Dictionary<string, int>()),
+            Weapons = Weapons,
+            Gear = Gear,
+            Cyberware = Cyberware
+        };
+
         public Visibility IsCNVis => IsCNMode ? Visibility.Visible : Visibility.Collapsed;
         public Visibility IsFullVis => !IsCNMode ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -161,9 +184,13 @@ namespace CyberpunkRED_Generator
         private string _selectedInjuryToAdd;
         public string SelectedInjuryToAdd { get => _selectedInjuryToAdd; set { _selectedInjuryToAdd = value; OnPropertyChanged(); } }
 
-        public int CurrentMove => Math.Max(1, BaseMove - ActiveInjuries.Sum(i => i.MovePenalty));
-        public int CurrentDeathSave => BaseDeathSave + ActiveInjuries.Sum(i => i.DeathSavePenalty);
-        public int ActionPenalty => ActiveInjuries.Sum(i => i.AllActionsPenalty);
+        // штрафы от состояния ранения по ПЗ (стр. 187): тяжёлое — меньше половины ПЗ (округляя вверх), смертельное — меньше 1 ПЗ
+        private int WoundActionPenalty => CurrentHP < 1 ? 4 : (CurrentHP < (int)Math.Ceiling(MaxHP / 2.0) ? 2 : 0);
+        private int WoundMovePenalty => CurrentHP < 1 ? 6 : 0;
+
+        public int CurrentMove => Math.Max(1, BaseMove - WoundMovePenalty - ActiveInjuries.Sum(i => i.MovePenalty));
+        public int CurrentDeathSave => Math.Max(0, BaseDeathSave - ActiveInjuries.Sum(i => i.DeathSavePenalty));
+        public int ActionPenalty => WoundActionPenalty + ActiveInjuries.Sum(i => i.AllActionsPenalty);
         public Visibility PenaltyVis => ActionPenalty > 0 ? Visibility.Visible : Visibility.Collapsed;
 
         public CombatantViewModel()
@@ -348,7 +375,15 @@ namespace CyberpunkRED_Generator
         private void BtnAblateBody_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c && c.BodyArmor > 0) c.BodyArmor--; }
         private void BtnDamage_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c) c.CurrentHP--; }
         private void BtnHeal_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c) c.CurrentHP++; }
-        private void BtnRemoveCombatant_Click(object sender, RoutedEventArgs e) { if ((sender as Button)?.Tag is CombatantViewModel c) Combatants.Remove(c); }
+        private void BtnRemoveCombatant_Click(object sender, RoutedEventArgs e)
+        {
+            if (!((sender as Button)?.Tag is CombatantViewModel c)) return;
+            int idx = Combatants.IndexOf(c);
+            if (idx < 0) return;
+            Combatants.RemoveAt(idx);
+            // чтобы очередь хода не сбивалась: удалённый до текущего (или текущий) сдвигает индекс назад
+            if (idx <= _currentTurnIndex) _currentTurnIndex--;
+        }
 
         private void BtnAddGenCyber_Click(object sender, RoutedEventArgs e)
         {
@@ -437,6 +472,7 @@ namespace CyberpunkRED_Generator
         {
             LoadEnemiesFromFolder();
             RbGenCN.IsChecked = true;
+            _editingEnemyName = null;
             NewEnemySkills.Clear();
             NewEnemyCyberware.Clear();
             EnemyManagerOverlay.Visibility = Visibility.Visible;
@@ -509,10 +545,14 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        // имя пресета, открытого на редактирование (чтобы при переименовании предложить удалить старый)
+        private string _editingEnemyName;
+
         private void BtnEditEnemyPreset_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.Tag is EnemySaveData enemyData)
             {
+                _editingEnemyName = enemyData.Name;
                 TxtGenName.Text = enemyData.Name;
                 TxtGenHP.Text = enemyData.HP.ToString();
                 TxtGenHead.Text = enemyData.HeadArmor.ToString();
@@ -641,16 +681,16 @@ namespace CyberpunkRED_Generator
             }
             else
             {
-                enemy.Stats["INT"] = int.Parse(StINT.Text);
-                enemy.Stats["REF"] = int.Parse(StREF.Text);
-                enemy.Stats["DEX"] = int.Parse(StDEX.Text);
-                enemy.Stats["TECH"] = int.Parse(StTECH.Text);
-                enemy.Stats["COOL"] = int.Parse(StCOOL.Text);
-                enemy.Stats["WILL"] = int.Parse(StWILL.Text);
-                enemy.Stats["LUCK"] = int.Parse(StLUCK.Text);
-                enemy.Stats["MOVE"] = int.Parse(StMOVE.Text);
-                enemy.Stats["BODY"] = int.Parse(StBODY.Text);
-                enemy.Stats["EMP"] = int.Parse(StEMP.Text);
+                enemy.Stats["INT"] = UIHelpers.ParseIntOr(StINT.Text, 5);
+                enemy.Stats["REF"] = UIHelpers.ParseIntOr(StREF.Text, 5);
+                enemy.Stats["DEX"] = UIHelpers.ParseIntOr(StDEX.Text, 5);
+                enemy.Stats["TECH"] = UIHelpers.ParseIntOr(StTECH.Text, 5);
+                enemy.Stats["COOL"] = UIHelpers.ParseIntOr(StCOOL.Text, 5);
+                enemy.Stats["WILL"] = UIHelpers.ParseIntOr(StWILL.Text, 5);
+                enemy.Stats["LUCK"] = UIHelpers.ParseIntOr(StLUCK.Text, 5);
+                enemy.Stats["MOVE"] = UIHelpers.ParseIntOr(StMOVE.Text, 5);
+                enemy.Stats["BODY"] = UIHelpers.ParseIntOr(StBODY.Text, 5);
+                enemy.Stats["EMP"] = UIHelpers.ParseIntOr(StEMP.Text, 5);
 
                 enemy.BaseMove = enemy.Stats["MOVE"];
                 enemy.BaseDeathSave = enemy.Stats["BODY"];
@@ -661,8 +701,7 @@ namespace CyberpunkRED_Generator
             string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
-            string fileName = $"Enemy_{enemy.Name.Replace(" ", "_")}.json";
-            string filePath = Path.Combine(folderPath, fileName);
+            string filePath = UIHelpers.EnemyFilePath(enemy.Name);
             var options = new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
             File.WriteAllText(filePath, JsonSerializer.Serialize(enemy, options), System.Text.Encoding.UTF8);
 
@@ -672,6 +711,17 @@ namespace CyberpunkRED_Generator
                 AvailableEnemies.Remove(existingItem);
             }
             AvailableEnemies.Add(enemy);
+
+            // пресет переименовали: предлагаем убрать старый, а не оставлять дубль
+            if (_editingEnemyName != null && !_editingEnemyName.Equals(enemy.Name, StringComparison.OrdinalIgnoreCase)
+                && MessageBox.Show($"Имя изменено. Удалить старый пресет '{_editingEnemyName}'?", "ПЕРЕИМЕНОВАНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try { File.Delete(UIHelpers.EnemyFilePath(_editingEnemyName)); } catch { }
+                var old = AvailableEnemies.FirstOrDefault(x => x.Name.Equals(_editingEnemyName, StringComparison.OrdinalIgnoreCase));
+                if (old != null) AvailableEnemies.Remove(old);
+            }
+            _editingEnemyName = null;
+
             TxtGenName.Text = ""; TxtGenWeapons.Text = ""; TxtGenGear.Text = ""; CbGenCyber.Text = ""; NewEnemySkills.Clear(); NewEnemyCyberware.Clear();
 
             MessageBox.Show($"Враг '{enemy.Name}' сохранен в базу!", "СОХРАНЕНО", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -684,9 +734,7 @@ namespace CyberpunkRED_Generator
                 var res = MessageBox.Show($"Удалить пресет '{enemyData.Name}' из базы навсегда?", "ПОДТВЕРДИТЕ УДАЛЕНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (res == MessageBoxResult.Yes)
                 {
-                    string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Enemies");
-                    string fileName = $"Enemy_{enemyData.Name.Replace(" ", "_")}.json";
-                    string filePath = Path.Combine(folderPath, fileName);
+                    string filePath = UIHelpers.EnemyFilePath(enemyData.Name);
 
                     if (File.Exists(filePath))
                     {
