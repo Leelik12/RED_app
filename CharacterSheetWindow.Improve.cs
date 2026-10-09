@@ -45,7 +45,7 @@ namespace CyberpunkRED_Generator
             {
                 Content = text,
                 Foreground = border,
-                Background = new SolidColorBrush(Color.FromRgb(26, 26, 26)),
+                Background = Theme.Get("Raised"),
                 BorderBrush = border,
                 BorderThickness = new Thickness(1),
                 Padding = new Thickness(10, 4, 10, 4),
@@ -61,21 +61,11 @@ namespace CyberpunkRED_Generator
         {
             var cyan = Theme.Accent();
             var red = Theme.Danger();
-            var gray = new SolidColorBrush(Color.FromRgb(153, 153, 153));
-            var white = new SolidColorBrush(Color.FromRgb(224, 224, 224));
-            var yellow = new SolidColorBrush(Color.FromRgb(255, 204, 0));
+            var gray = Theme.Get("Muted");
+            var white = Theme.Get("Text");
+            var yellow = Theme.Get("Warn");
 
-            var win = new Window
-            {
-                Title = "ПРОКАЧКА ПЕРСОНАЖА",
-                Owner = this,
-                Width = 760,
-                Height = 820,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Background = new SolidColorBrush(Color.FromRgb(5, 5, 5)),
-                FontFamily = new FontFamily("Consolas")
-            };
-            win.Resources = this.Resources;
+            var win = Ui.Dialog(this, "ПРОКАЧКА ПЕРСОНАЖА", 760, 820);
 
             var purchases = new List<ImprovePurchase>();
 
@@ -92,7 +82,7 @@ namespace CyberpunkRED_Generator
 
             var searchPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 8) };
             searchPanel.Children.Add(MakeText("ПОИСК НАВЫКА: ", red, 13, FontWeights.Bold));
-            var search = new TextBox { Width = 260, Background = Brushes.Black, Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3) };
+            var search = new TextBox { Width = 260, Background = Theme.Get("Back"), Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3) };
             searchPanel.Children.Add(search);
             var hint = MakeText("   Правило: уровни не пропускаются, максимум 10", gray, 12);
             searchPanel.Children.Add(hint);
@@ -285,8 +275,17 @@ namespace CyberpunkRED_Generator
             search.TextChanged += (s, e) => { rebuild(); scroll.ScrollToTop(); };
 
             refresh();
-            win.ShowDialog();
-            QueueCommit();
+
+            // диалог живёт во вкладке: очки или роли могли поменяться на листе, пока он был открыт — пересобираем список
+            System.ComponentModel.PropertyChangedEventHandler onVm = (sx, ex) =>
+            {
+                if (ex.PropertyName == nameof(SheetViewModel.ImprovementPoints)) win.Dispatcher.BeginInvoke(new Action(() => refresh()));
+            };
+            vm.PropertyChanged += onVm;
+            root.IsVisibleChanged += (sx, ex) => { if (root.IsVisible) refresh(); };
+            win.Closing += (sx, ex) => vm.PropertyChanged -= onVm;
+            win.Closing += (sx, ex) => QueueCommit();
+            Ui.Present(win);
         }
 
         private void SetRoleRank(SheetViewModel vm, RoleData role, int rank)

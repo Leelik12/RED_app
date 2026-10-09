@@ -185,6 +185,27 @@ namespace CyberpunkRED_Generator
             catch { }
         }
 
+        // файл создан старой версией: перед первым сохранением в новом формате оставляем исходник рядом в Backups
+        private bool _migrationNoted;
+        private void NoteMigration(int fromVersion)
+        {
+            if (_originalData != null && SaveSchema.IsFromNewerVersion(_originalData) && !_migrationNoted)
+            {
+                _migrationNoted = true;
+                MessageBox.Show("Этот персонаж сохранён более новой версией программы. Часть данных может не отобразиться, а при сохранении — потеряться.\nСделайте копию файла перед правками.", "НОВЫЙ ФОРМАТ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (fromVersion >= SaveSchema.Current || _migrationNoted || string.IsNullOrEmpty(_currentFilePath) || _loadedFromRecovery) return;
+            _migrationNoted = true;
+            try
+            {
+                Directory.CreateDirectory(BackupsDir);
+                string dst = Path.Combine(BackupsDir, $"{FileKey(_currentFilePath)}.premigration_v{fromVersion}.json");
+                if (!File.Exists(dst)) File.Copy(_currentFilePath, dst);
+            }
+            catch (Exception ex) { ErrorLog.Write("migration", ex); }
+        }
+
         // перед перезаписью файла кладём его копию в Backups (не чаще раза в 10 минут), храним последние 15
         private void BackupExistingFile()
         {

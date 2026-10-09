@@ -21,6 +21,7 @@ namespace CyberpunkRED_Generator
         public string Poor, Standard, Excellent;   // примеры брендов по качеству
         public int[] Clips;          // стандартный / расширенный / барабан
         public bool FixedQuality;    // экзотика: качество не выбирается
+        public string Source = Packs.CoreName;   // книга: «Корник» или название DLC
 
         public bool IsMelee => Group == "Холодное";
         public bool IsExotic => Group == "Экзотическое";
@@ -35,6 +36,7 @@ namespace CyberpunkRED_Generator
         public bool IsShield;
         public bool IsSuit;          // костюм Bodyweight: голова и тело сразу
         public string Info;
+        public string Source = Packs.CoreName;
     }
 
     public class GearDef
@@ -43,6 +45,7 @@ namespace CyberpunkRED_Generator
         public string Group;         // Снаряжение / Боеприпасы / Приспособления
         public int Cost;
         public string Info;
+        public string Source = Packs.CoreName;
     }
 
     public static class GearCatalog

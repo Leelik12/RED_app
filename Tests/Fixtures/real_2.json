@@ -1,0 +1,172 @@
+﻿{
+  "Name": "grgtrg",
+  "Role": "Рокербой",
+  "ActiveRoles": [],
+  "IsGearSimpleMode": false,
+  "GearSimpleNames": null,
+  "GearSimpleNotes": null,
+  "NPCs": [],
+  "RoleAbilityNotes": null,
+  "Stats": {
+    "INT": 2,
+    "REF": 2,
+    "DEX": 2,
+    "TECH": 2,
+    "COOL": 2,
+    "WILL": 2,
+    "LUCK": 2,
+    "MOVE": 2,
+    "BODY": 2,
+    "EMP": 2
+  },
+  "SystemStats": {
+    "HP": 20,
+    "WoundedThreshold": 10,
+    "DeathSave": 2,
+    "Humanity": 20
+  },
+  "Lifepath": {
+    "Культурное происхождение": "Северная Америка",
+    "Личность": "Застенчивый и скрытный",
+    "Стиль одежды": "Generic Chic (стандартный, яркий, модульный) ",
+    "Прическа": "Ирокез",
+    "Отличительная черта": "Татуировки",
+    "Ценность": "Деньги",
+    "Отношение к людям": "Я остаюсь нейтральным",
+    "Самый ценный человек": "Родители",
+    "Самая ценная вещь": "Оружие",
+    "Семейное происхождение": "Руководители корпорации",
+    "Окружение детства": "Бегал по улицам без какого-либо надзора взрослых.",
+    "Трагедия в семье": "Твоя семья потеряла всё из-за предательства.",
+    "Цель в жизни": "Избавиться от дурной репутации."
+  },
+  "RoleLifepath": {
+    "Какой ты Рокербой?": "Музыкант",
+    "Ты в группе или выступаешь соло?": "Выступаю соло",
+    "Ты когда-нибудь был в группе?": "Да, раньше был в группе",
+    "Почему ушел из группы?": "Ты был придурком и остальная часть группа проголосовала за твой уход",
+    "Где ты выступаешь?": "Альтернативные кафе",
+    "Кто пытается тебе помешать?": "Старый член группы, который думает, что ты запятнал репутацию"
+  },
+  "Friends": [],
+  "Enemies": [],
+  "TragicLoves": [],
+  "Skills": [
+    {
+      "Name": "Внимательность",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Концентрация",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Атлетика",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Скрытность",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Знание местности (Твой дом)",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Образование",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Язык (Уличный Сленг)",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Язык (Родной)",
+      "Level": 4,
+      "Total": 6
+    },
+    {
+      "Name": "Рукопашный бой",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Уклонение",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Общение",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Проницательность",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Убеждение",
+      "Level": 2,
+      "Total": 4
+    },
+    {
+      "Name": "Первая помощь",
+      "Level": 2,
+      "Total": 4
+    }
+  ],
+  "Notes": null,
+  "Armor": {
+    "HeadName": null,
+    "BodyName": null,
+    "ShieldName": null,
+    "HeadSpCurrent": 0,
+    "HeadSpMax": 0,
+    "HeadPenalty": null,
+    "BodySpCurrent": 0,
+    "BodySpMax": 0,
+    "BodyPenalty": null,
+    "ShieldSpCurrent": 0,
+    "ShieldSpMax": 0,
+    "ShieldPenalty": null
+  },
+  "Weapons": [],
+  "StyleNotes": null,
+  "Housing": null,
+  "Rent": null,
+  "Lifestyle": null,
+  "ReputationEvents": null,
+  "AmmoValue": null,
+  "CashValue": null,
+  "GearItems": [],
+  "CustomCyberwareList": [],
+  "CyberwareBlocks": [],
+  "CriticalInjuries": null,
+  "Addictions": null,
+  "ImprovementLog": [],
+  "Net": {
+    "DeckName": null,
+    "DeckSlots": 0,
+    "HasDeckArm": false,
+    "HasBodyweight": false,
+    "Notes": null,
+    "Programs": [],
+    "Hardware": []
+  },
+  "Finance": {
+    "LifestyleName": null,
+    "HousingName": null,
+    "HousingOwned": false,
+    "MonthsPaid": 0,
+    "Log": []
+  },
+  "CriticalInjuriesList": []
+}

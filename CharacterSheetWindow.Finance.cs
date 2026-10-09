@@ -68,30 +68,24 @@ namespace CyberpunkRED_Generator
             return true;
         }
 
+        private ToolWindow _financeWindow;
+
+        // «Финансы и жильё» — вкладка рабочей области; открытая заново пересобирается с актуальными числами листа
         private void ShowFinanceDialog()
         {
             if (!(DataContext is SheetViewModel vm)) return;
             CloseOverlays();
+            _financeWindow?.Close();
             if (vm.Finance == null) vm.Finance = new FinanceData();
             var f = vm.Finance;
 
             var cyan = Theme.Accent();
             var red = Theme.Danger();
-            var gray = new SolidColorBrush(Color.FromRgb(153, 153, 153));
-            var white = new SolidColorBrush(Color.FromRgb(224, 224, 224));
-            var yellow = new SolidColorBrush(Color.FromRgb(255, 204, 0));
+            var gray = Theme.Get("Muted");
+            var white = Theme.Get("Text");
+            var yellow = Theme.Get("Warn");
 
-            var win = new Window
-            {
-                Title = "ФИНАНСЫ",
-                Owner = this,
-                Width = 900,
-                Height = 760,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Background = new SolidColorBrush(Color.FromRgb(5, 5, 5)),
-                FontFamily = new FontFamily("Consolas")
-            };
-            win.Resources = this.Resources;
+            var win = Ui.Dialog(this, "ФИНАНСЫ", 900, 760);
 
             var root = new StackPanel { Margin = new Thickness(14) };
             var cash = MakeText("", cyan, 28, FontWeights.Bold);
@@ -100,8 +94,8 @@ namespace CyberpunkRED_Generator
             // операция
             root.Children.Add(MakeText("ОПЕРАЦИЯ", red, 14, FontWeights.Bold));
             var opRow = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 4, 0, 6) };
-            var amount = new TextBox { Width = 90, Background = Brushes.Black, Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3), ToolTip = "Сумма в eb" };
-            var note = new TextBox { Width = 330, Background = Brushes.Black, Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3), Margin = new Thickness(6, 0, 6, 0), ToolTip = "За что" };
+            var amount = new TextBox { Width = 90, Background = Theme.Get("Back"), Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3), ToolTip = "Сумма в eb" };
+            var note = new TextBox { Width = 330, Background = Theme.Get("Back"), Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3), Margin = new Thickness(6, 0, 6, 0), ToolTip = "За что" };
             var btnIn = MakeButton("+ ДОХОД", cyan); btnIn.Margin = new Thickness(0, 0, 6, 0);
             var btnOut = MakeButton("− РАСХОД", red);
             opRow.Children.Add(MakeText("Сумма: ", gray, 12)); opRow.Children.Add(amount);
@@ -115,6 +109,19 @@ namespace CyberpunkRED_Generator
             var btnSvc = MakeButton("ОПЛАТИТЬ УСЛУГУ", yellow); btnSvc.Margin = new Thickness(8, 0, 0, 0);
             svcRow.Children.Add(MakeText("Услуга: ", gray, 12)); svcRow.Children.Add(svc); svcRow.Children.Add(btnSvc);
             root.Children.Add(svcRow);
+
+            // найти вещь через Фиксера или Техника («Экономика 101», Чёрный хром)
+            var findRow = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 12) };
+            var findCost = new TextBox { Width = 90, Background = Theme.Get("Back"), Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3), ToolTip = "Цена вещи в eb" };
+            var findDv = MakeText("", yellow, 13, FontWeights.Bold); findDv.Margin = new Thickness(10, 0, 0, 0);
+            findCost.TextChanged += (s, e) =>
+            {
+                if (!FinanceCatalog.TryParseMoney(findCost.Text, out int c) || c <= 0) { findDv.Text = ""; return; }
+                int? dv = FinanceCatalog.StreetwiseDv(c);
+                findDv.Text = dv.HasValue ? "Знаток улиц СЛ" + dv.Value + " — найти Фиксера или Техника под вещь" : "Дешевле 500eb: проверка не нужна";
+            };
+            findRow.Children.Add(MakeText("Найти вещь у Фиксера, цена: ", gray, 12)); findRow.Children.Add(findCost); findRow.Children.Add(findDv);
+            root.Children.Add(findRow);
 
             // образ жизни и жильё
             root.Children.Add(MakeText("ОБРАЗ ЖИЗНИ И ЖИЛЬЁ (счёт в начале каждого месяца)", red, 14, FontWeights.Bold));
@@ -158,7 +165,7 @@ namespace CyberpunkRED_Generator
                 var ls = FinanceCatalog.Lifestyles[Math.Max(0, lsBox.SelectedIndex)];
                 var hs = FinanceCatalog.Housing[Math.Max(0, hsBox.SelectedIndex)];
                 int total = FinanceCatalog.MonthlyBill(ls, hs, owned.IsChecked == true);
-                info.Text = ls.Info + "\n" + hs.Info;
+                info.Text = ls.Info + "\n" + hs.Info + (Packs.IsEnabled("bc") && !string.IsNullOrEmpty(ls.Details) ? "\n\nЧто входит в образ жизни («Чёрный хром»): " + ls.Details : "");
                 bill.Text = $"СЧЁТ ЗА МЕСЯЦ: {FinanceCatalog.FormatMoney(total)}eb  (образ жизни {ls.Cost}eb" + (owned.IsChecked == true ? ", жильё куплено)" : hs.Provided ? ", жильё от корпорации)" : $", аренда {hs.Rent}eb)");
                 bill.Foreground = total > c ? red : yellow;
                 btnBuy.IsEnabled = hs.Buy > 0 && owned.IsChecked != true; btnBuy.Opacity = btnBuy.IsEnabled ? 1 : 0.4;
@@ -211,7 +218,9 @@ namespace CyberpunkRED_Generator
             };
 
             refresh();
-            win.ShowDialog();
+            _financeWindow = win;
+            win.Closing += (s, e) => { if (_financeWindow == win) _financeWindow = null; };
+            Ui.Present(win);
         }
     }
 }

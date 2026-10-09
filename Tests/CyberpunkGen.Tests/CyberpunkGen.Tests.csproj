@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>CyberpunkGen.Tests</RootNamespace>
+    <!-- тесты собираются поверх исходников логики, а не exe: так не мешает упаковка Costura -->
+    <Root>$(MSBuildThisFileDirectory)..\..\</Root>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(Root)*.cs" Exclude="$(Root)CharacterSheetWindow*.cs;$(Root)GMScreenWindow*.cs;$(Root)MainWindow*.cs;$(Root)CharacterGenerationWindow*.cs;$(Root)PdfWriter.cs" LinkBase="App" />
+    <EmbeddedResource Include="$(Root)Data\items.json" LogicalName="Data.items.json" />
+    <EmbeddedResource Include="$(Root)Data\npcs.json" LogicalName="Data.npcs.json" />
+    <EmbeddedResource Include="$(Root)Data\map.json" LogicalName="Data.map.json" />
+    <EmbeddedResource Include="$(Root)Data\loc_en.json" LogicalName="Data.loc_en.json" />
+    <None Include="$(Root)Tests\Fixtures\*.json" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Net.Http" />
+    <PackageReference Include="System.Text.Json" Version="10.0.9" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+</Project>

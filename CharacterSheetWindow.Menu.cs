@@ -6,55 +6,34 @@ using System.Windows.Media;
 
 namespace CyberpunkRED_Generator
 {
-    // выпадающее меню «МЕНЮ» в верхней панели листа
+    // пункты меню листа; показываются в выдвижной панели (CharacterSheetWindow.Tabs.cs)
     public partial class CharacterSheetWindow
     {
-        private readonly List<KeyValuePair<string, Action>> _menuItems = new List<KeyValuePair<string, Action>>();
+        public class MenuEntry { public string Title, Group; public Action Action; }
+        private static readonly string[] MenuGroups = { "ПЕРСОНАЖ", "КАТАЛОГИ", "ИГРА", "ФАЙЛ", "ПРОГРАММА" };
+        private readonly List<MenuEntry> _menuItems = new List<MenuEntry>();
 
         private void InitMenu()
         {
-            RegisterMenuItem("💰 Финансы и жильё", ShowFinanceDialog);
-            RegisterMenuItem("📖 Каталог оружия", () => OpenCatalog(0));
-            RegisterMenuItem("📖 Каталог брони", () => OpenCatalog(1));
-            RegisterMenuItem("📖 Каталог снаряжения", () => OpenCatalog(2));
+            RegisterMenuItem("💰 Финансы и жильё", ShowFinanceDialog, "ПЕРСОНАЖ");
+            RegisterMenuItem("🚗 Транспорт", () => VehiclesView.ShowWindow(this, DataContext as SheetViewModel), "ПЕРСОНАЖ");
+            RegisterMenuItem("🏚 Штаб-квартира", () => HqView.ShowWindow(this, DataContext as SheetViewModel), "ПЕРСОНАЖ");
+            RegisterMenuItem("🏠 Жильё", () => HousingView.ShowWindow(this, DataContext as SheetViewModel), "ПЕРСОНАЖ");
+            RegisterMenuItem("📱 Агенты", () => AgentsView.ShowWindow(this, DataContext as SheetViewModel), "ПЕРСОНАЖ");
+            RegisterMenuItem("📜 Правила (выдержки)", () => RulesView.ShowWindow(this), "КАТАЛОГИ");
+            RegisterMenuItem("📖 Каталог оружия", () => OpenCatalog(0), "КАТАЛОГИ");
+            RegisterMenuItem("📖 Каталог брони", () => OpenCatalog(1), "КАТАЛОГИ");
+            RegisterMenuItem("📖 Каталог снаряжения", () => OpenCatalog(2), "КАТАЛОГИ");
+            RegisterMenuItem("🃏 Таро Найт-Сити", () => TarotView.ShowWindow(this), "ИГРА");
+            RegisterMenuItem("♻ Сбор обломков", () => SalvageView.ShowWindow(this), "ИГРА");
+            RegisterMenuItem("🛠 Панкноут", () => PunknautView.ShowWindow(this), "ИГРА");
             InitExportMenu();
+            InitBorgMenu();
+            InitJournal();
             InitSettingsMenu();
         }
 
-        private void RegisterMenuItem(string title, Action action)
-            => _menuItems.Add(new KeyValuePair<string, Action>(title, action));
-
-        private void BtnMenu_Click(object sender, RoutedEventArgs e)
-        {
-            var btn = sender as Button;
-            if (btn == null) return;
-
-            var menu = new ContextMenu
-            {
-                Background = new SolidColorBrush(Color.FromRgb(10, 10, 10)),
-                BorderBrush = Theme.Danger(),
-                BorderThickness = new Thickness(2),
-                FontFamily = new FontFamily("Consolas"),
-                PlacementTarget = btn,
-                Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom
-            };
-
-            foreach (var item in _menuItems)
-            {
-                var action = item.Value;
-                var mi = new MenuItem
-                {
-                    Header = item.Key,
-                    Foreground = Theme.Accent(),
-                    Background = new SolidColorBrush(Color.FromRgb(10, 10, 10)),
-                    FontSize = 15,
-                    FontWeight = FontWeights.Bold,
-                    Padding = new Thickness(12, 8, 12, 8)
-                };
-                mi.Click += (s, ev) => action();
-                menu.Items.Add(mi);
-            }
-            menu.IsOpen = true;
-        }
+        private void RegisterMenuItem(string title, Action action, string group = "ПРОЧЕЕ")
+            => _menuItems.Add(new MenuEntry { Title = title, Action = action, Group = group });
     }
 }

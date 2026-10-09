@@ -277,6 +277,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DetailedStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DetailedStyle2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GMScreenWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -286,13 +294,84 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="CharacterSheetWindow.Safety.cs" />
-    <Compile Include="CharacterSheetWindow.Improve.cs" />
-    <Compile Include="CharacterSheetWindow.Search.cs" />
+    <Compile Include="CharacterSheetWindow.Improve.cs" />
+
+    <Compile Include="CharacterSheetWindow.Search.cs" />
+
     <Compile Include="CharacterSheetWindow.Menu.cs" />
+    <Compile Include="CharacterSheetWindow.Borg.cs" />
     <Compile Include="CharacterSheetWindow.Catalog.cs" />
     <Compile Include="GearCatalog.cs" />
     <Compile Include="NetData.cs" />
     <Compile Include="AppSettings.cs" />
+    <Compile Include="AppInfo.cs" />
+    <Compile Include="Updates.cs" />
+    <Compile Include="SettingsView.cs" />
+    <Compile Include="Journal.cs" />
+    <Compile Include="Effects.cs" />
+    <Compile Include="NightMarket.cs" />
+    <Compile Include="NightMarketView.cs" />
+    <Compile Include="EffectsView.cs" />
+    <Compile Include="CharacterSheetWindow.Journal.cs" />
+    <Compile Include="JournalView.cs" />
+    <Compile Include="CharacterSheetWindow.Tabs.cs" />
+    <Compile Include="CharacterSheetWindow.Style.cs" />
+    <Compile Include="SheetStyleConverters.cs" />
+    <Compile Include="Packs.cs" />
+    <Compile Include="Npcs.cs" />
+    <Compile Include="CoreDataBase.Cyberware.cs" />
+    <Compile Include="CoreDataBase.Injuries.cs" />
+    <Compile Include="CoreDataBase.Skills.cs" />
+    <Compile Include="CoreDataBase.RoleLifepaths.cs" />
+    <EmbeddedResource Include="Content\night_city_map.jpg" Condition="Exists('Content\night_city_map.jpg')">
+      <LogicalName>Content.night_city_map.jpg</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\items.json">
+      <LogicalName>Data.items.json</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\npcs.json">
+      <LogicalName>Data.npcs.json</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\map.json">
+      <LogicalName>Data.map.json</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\loc_en.json">
+      <LogicalName>Data.loc_en.json</LogicalName>
+    </EmbeddedResource>
+    <Compile Include="Map.cs" />
+    <Compile Include="MapView.cs" />
+    <Compile Include="Loc.cs" />
+    <Compile Include="Twists.cs" />
+    <Compile Include="TwistsView.cs" />
+    <Compile Include="CombatSave.cs" />
+    <Compile Include="Encounters.cs" />
+    <Compile Include="GMScreenWindow.Combat.cs" />
+    <Compile Include="UiKit.cs" />
+    <Compile Include="Agents.cs" />
+    <Compile Include="AgentsView.cs" />
+    <Compile Include="Hq.cs" />
+    <Compile Include="HqView.cs" />
+    <Compile Include="Borg.cs" />
+    <Compile Include="Drinks.cs" />
+    <Compile Include="DrinksView.cs" />
+    <Compile Include="Tarot.cs" />
+    <Compile Include="TarotView.cs" />
+    <Compile Include="RulesData.cs" />
+    <Compile Include="RulesView.cs" />
+    <Compile Include="Weather.cs" />
+    <Compile Include="WeatherView.cs" />
+    <Compile Include="Salvage.cs" />
+    <Compile Include="SalvageView.cs" />
+    <Compile Include="Punknaut.cs" />
+    <Compile Include="PunknautView.cs" />
+    <Compile Include="HousingView.cs" />
+    <Compile Include="Chase.cs" />
+    <Compile Include="ChaseView.cs" />
+    <Compile Include="Vehicles.cs" />
+    <Compile Include="VehiclesView.cs" />
+    <Compile Include="GMModels.cs" />
+    <Compile Include="SaveMigrations.cs" />
+    <Compile Include="ErrorLog.cs" />
     <Compile Include="CharacterSheetWindow.Settings.cs" />
     <Compile Include="PdfWriter.cs" />
     <Compile Include="CharacterSheetWindow.Export.cs" />

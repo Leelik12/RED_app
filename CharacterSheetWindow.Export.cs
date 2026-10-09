@@ -27,8 +27,8 @@ namespace CyberpunkRED_Generator
 
         private void InitExportMenu()
         {
-            RegisterMenuItem("📄 Экспорт в PDF…", () => ShowExportDialog(false));
-            RegisterMenuItem("🖨 Печать…", () => ShowExportDialog(true));
+            RegisterMenuItem("📄 Экспорт в PDF…", () => ShowExportDialog(false), "ФАЙЛ");
+            RegisterMenuItem("🖨 Печать…", () => ShowExportDialog(true), "ФАЙЛ");
         }
 
         private void ShowExportDialog(bool print)
@@ -38,19 +38,9 @@ namespace CyberpunkRED_Generator
 
             var cyan = Theme.Accent();
             var red = Theme.Danger();
-            var gray = new SolidColorBrush(Color.FromRgb(153, 153, 153));
+            var gray = Theme.Get("Muted");
 
-            var win = new Window
-            {
-                Title = print ? "ПЕЧАТЬ ЛИСТА" : "ЭКСПОРТ В PDF",
-                Owner = this,
-                Width = 460,
-                SizeToContent = SizeToContent.Height,
-                ResizeMode = ResizeMode.NoResize,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Background = new SolidColorBrush(Color.FromRgb(5, 5, 5)),
-                FontFamily = new FontFamily("Consolas")
-            };
+            var win = Ui.Dialog(this, print ? "ПЕЧАТЬ ЛИСТА" : "ЭКСПОРТ В PDF", 460, 460);
 
             var root = new StackPanel { Margin = new Thickness(16) };
             root.Children.Add(MakeText("СТРАНИЦЫ", red, 14, FontWeights.Bold));
@@ -117,7 +107,7 @@ namespace CyberpunkRED_Generator
                 if (print) PrintSheet(pages, ecoOn);
                 else SavePdfWithDialog(pages, ecoOn, vm);
             };
-            win.ShowDialog();
+            Ui.Present(win);
         }
 
         private void SavePdfWithDialog(List<int> pages, bool eco, SheetViewModel vm)
@@ -175,6 +165,23 @@ namespace CyberpunkRED_Generator
             return 3;
         }
 
+        // ScrollViewer'ы вкладки, в которых реально есть что прокручивать (внутренние полоски списков не считаем)
+        private static List<ScrollViewer> FindScrollers(DependencyObject root)
+        {
+            var found = new List<ScrollViewer>();
+            if (root == null) return found;
+            var stack = new Stack<DependencyObject>();
+            stack.Push(root);
+            while (stack.Count > 0)
+            {
+                var o = stack.Pop();
+                if (o is ScrollViewer sv && sv.ScrollableHeight > 8 && sv.ViewportHeight > 40) found.Add(sv);
+                int n = (o is Visual || o is System.Windows.Media.Media3D.Visual3D) ? VisualTreeHelper.GetChildrenCount(o) : 0;
+                for (int k = 0; k < n; k++) stack.Push(VisualTreeHelper.GetChild(o, k));
+            }
+            return found;
+        }
+
         // рисует выбранные вкладки (индексы 0–4) в картинки; выбранная вкладка и панель кнопок возвращаются на место
         public List<BitmapSource> RenderSheetPages(IList<int> tabs, bool eco, double scale)
         {
@@ -182,6 +189,10 @@ namespace CyberpunkRED_Generator
             int saved = SheetTabControl.SelectedIndex;
             var barVisibility = TopBar.Visibility;
             TopBar.Visibility = Visibility.Hidden;
+            var miniVisibility = MiniSheet.Visibility;
+            MiniSheet.Visibility = Visibility.Hidden;
+            bool side = _sideActive;
+            if (side) SetLayoutGeometry(false);
             try
             {
                 foreach (int tab in tabs)
@@ -192,22 +203,35 @@ namespace CyberpunkRED_Generator
                     Dispatcher.Invoke(() => { }, DispatcherPriority.Render);
                     SheetCanvas.UpdateLayout();
 
-                    int w = (int)(ExportBaseWidth * scale), h = (int)(ExportBaseHeight * scale);
-                    var dv = new DrawingVisual();
-                    using (var dc = dv.RenderOpen())
+                    // вкладка с прокруткой (длинная биография и т. п.) уходит в несколько страниц: каждая — следующий экран прокрутки
+                    var scrollers = FindScrollers(SheetTabControl.SelectedContent as DependencyObject);
+                    int extra = scrollers.Count == 0 ? 0 : Math.Min(5, scrollers.Max(sv => (int)Math.Ceiling(sv.ScrollableHeight / Math.Max(1, sv.ViewportHeight))));
+                    for (int part = 0; part <= extra; part++)
                     {
-                        dc.DrawRectangle(new SolidColorBrush(Color.FromRgb(5, 5, 5)), null, new Rect(0, 0, w, h));
-                        dc.DrawRectangle(new VisualBrush(SheetCanvas) { Stretch = Stretch.Fill }, null, new Rect(0, 0, w, h));
+                        foreach (var sv in scrollers) sv.ScrollToVerticalOffset(Math.Min(sv.ScrollableHeight, part * sv.ViewportHeight));
+                        SheetCanvas.UpdateLayout();
+                        Dispatcher.Invoke(() => { }, DispatcherPriority.Render);
+
+                        int w = (int)(ExportBaseWidth * scale), h = (int)(ExportBaseHeight * scale);
+                        var dv = new DrawingVisual();
+                        using (var dc = dv.RenderOpen())
+                        {
+                            dc.DrawRectangle(new SolidColorBrush(Color.FromRgb(5, 5, 5)), null, new Rect(0, 0, w, h));
+                            dc.DrawRectangle(new VisualBrush(SheetCanvas) { Stretch = Stretch.Fill }, null, new Rect(0, 0, w, h));
+                        }
+                        var rtb = new RenderTargetBitmap(w, h, 96, 96, PixelFormats.Pbgra32);
+                        rtb.Render(dv);
+                        rtb.Freeze();
+                        result.Add(eco ? MakeEco(rtb) : (BitmapSource)rtb);
                     }
-                    var rtb = new RenderTargetBitmap(w, h, 96, 96, PixelFormats.Pbgra32);
-                    rtb.Render(dv);
-                    rtb.Freeze();
-                    result.Add(eco ? MakeEco(rtb) : (BitmapSource)rtb);
+                    foreach (var sv in scrollers) sv.ScrollToVerticalOffset(0);
                 }
             }
             finally
             {
+                if (side) SetLayoutGeometry(true);
                 TopBar.Visibility = barVisibility;
+                MiniSheet.Visibility = miniVisibility;
                 SheetTabControl.SelectedIndex = saved;
             }
             return result;

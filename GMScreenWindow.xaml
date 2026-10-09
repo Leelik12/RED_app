@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:CyberpunkRED_Generator"
-        Title="ТЕРМИНАЛ ГЕЙМ-МАСТЕРА" Height="1080" Width="1920" Background="#050505" WindowState="Maximized" WindowStartupLocation="CenterScreen" FontFamily="Consolas">
+        Title="ТЕРМИНАЛ ГЕЙМ-МАСТЕРА" Height="1080" Width="1920" Background="{DynamicResource BackBrush}" WindowState="Maximized" WindowStartupLocation="CenterScreen" FontFamily="{DynamicResource UiFont}">
 
     <Window.Resources>
         <local:MultiParamConverter x:Key="MultiParamConverter"/>
@@ -14,7 +14,7 @@
             <Setter Property="Padding" Value="8,4"/>
         </Style>
         <Style x:Key="RedHeaderText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#050505"/>
+            <Setter Property="Foreground" Value="{DynamicResource OnAccentBrush}"/>
             <Setter Property="FontWeight" Value="Heavy"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -23,7 +23,7 @@
 
         <Style x:Key="CyberButton" TargetType="Button">
             <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
-            <Setter Property="Foreground" Value="#050505"/>
+            <Setter Property="Foreground" Value="{DynamicResource OnAccentBrush}"/>
             <Setter Property="FontWeight" Value="Heavy"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -32,7 +32,7 @@
         </Style>
 
         <Style TargetType="ScrollBar">
-            <Setter Property="Background" Value="#050505"/>
+            <Setter Property="Background" Value="{DynamicResource BackBrush}"/>
             <Setter Property="Width" Value="6"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -62,22 +62,22 @@
         </Style>
 
         <Style TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="#0A0A0A"/>
+            <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
             <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Padding" Value="6,4"/>
             <Style.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource DangerColor}"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#050505"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource OnAccentColor}"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource DangerColor}"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#050505"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource OnAccentColor}"/>
             </Style.Resources>
         </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
-            <Setter Property="Background" Value="#111111"/>
-            <Setter Property="BorderBrush" Value="#444444"/>
+            <Setter Property="Background" Value="{DynamicResource RaisedBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Template">
@@ -97,7 +97,7 @@
                             <TextBox x:Name="PART_EditableTextBox" Visibility="Hidden" IsReadOnly="{TemplateBinding IsReadOnly}" Background="Transparent" Foreground="{TemplateBinding Foreground}" BorderThickness="0" Margin="6,0,30,0" VerticalAlignment="Center" HorizontalAlignment="Stretch" CaretBrush="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}"/>
                             <Popup Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
                                 <Grid SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="300">
-                                    <Border Background="#0A0A0A" BorderThickness="1" BorderBrush="{DynamicResource DangerBrush}"/>
+                                    <Border Background="{DynamicResource PanelBrush}" BorderThickness="1" BorderBrush="{DynamicResource DangerBrush}"/>
                                     <ScrollViewer Margin="1" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
@@ -116,7 +116,7 @@
         </Style>
 
         <Style TargetType="ToolTip">
-            <Setter Property="Background" Value="#050505"/>
+            <Setter Property="Background" Value="{DynamicResource BackBrush}"/>
             <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -126,7 +126,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">
                         <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="2">
-                            <TextBlock Text="{TemplateBinding Content}" TextWrapping="Wrap" FontSize="14" FontFamily="Consolas"/>
+                            <TextBlock Text="{TemplateBinding Content}" TextWrapping="Wrap" FontSize="14" FontFamily="{DynamicResource UiFont}"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -142,7 +142,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Background="#0A0A0A" BorderBrush="{DynamicResource DangerBrush}" BorderThickness="2" Margin="0,0,15,0">
+                    <Border Grid.Column="0" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource DangerBrush}" BorderThickness="2" Margin="0,0,15,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -156,53 +156,62 @@
                         </Border>
 
                         <StackPanel Margin="15">
-                            <Button Content="ДОБАВИТЬ ПЕРСОНАЖА" Background="#111111" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="10" FontWeight="Bold" Margin="0,0,0,10" Cursor="Hand" Click="BtnAddPlayer_Click"/>
-                            <Button Content="БАЗА ПРОТИВНИКОВ" Style="{StaticResource CyberButton}" Margin="0,0,0,20" Click="BtnOpenEnemyManager_Click"/>
+                            <Button Content="ДОБАВИТЬ ПЕРСОНАЖА" Background="{DynamicResource RaisedBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="10" FontWeight="Bold" Margin="0,0,0,10" Cursor="Hand" Click="BtnAddPlayer_Click"/>
+                            <Button Content="БАЗА ПРОТИВНИКОВ" Style="{StaticResource CyberButton}" Margin="0,0,0,10" Click="BtnOpenEnemyManager_Click"/>
+                            <Button Content="ГЕНЕРАТОР СТОЛКНОВЕНИЯ" Background="{DynamicResource RaisedBrush}" Foreground="{DynamicResource WarnBrush}" BorderBrush="{DynamicResource WarnBrush}" BorderThickness="1" Padding="10" FontWeight="Bold" Margin="0,0,0,10" Cursor="Hand" Click="BtnEncounter_Click"/>
+                            <UniformGrid Columns="2" Margin="0,0,0,20">
+                                <Button Content="СОХРАНИТЬ БОЙ" Background="{DynamicResource RaisedBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="6" FontWeight="Bold" Margin="0,0,3,0" Cursor="Hand" Click="BtnSaveCombat_Click"/>
+                                <Button Content="ЗАГРУЗИТЬ БОЙ" Background="{DynamicResource RaisedBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="6" FontWeight="Bold" Margin="3,0,0,0" Cursor="Hand" Click="BtnLoadCombat_Click"/>
+                            </UniformGrid>
 
-                            <Button Content="СОРТИРОВАТЬ ИНИЦИАТИВУ" Background="#333333" Foreground="#FFFFFF" BorderThickness="0" Padding="10" FontWeight="Bold" Margin="0,0,0,20" Cursor="Hand" Click="BtnSortInitiative_Click"/>
+                            <Button x:Name="BtnGmTools" Content="🧰 ИНСТРУМЕНТЫ ГМА ▾" Background="{DynamicResource RaisedBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="10" FontWeight="Bold" Margin="0,0,0,10" Cursor="Hand" Click="BtnGmTools_Click"/>
+                            <Button Content="ПОГОДА НАЙТ-СИТИ" Background="{DynamicResource RaisedBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="10" FontWeight="Bold" Margin="0,0,0,10" Cursor="Hand" Click="BtnWeather_Click"/>
+                            <Button Content="ТАРО НАЙТ-СИТИ" Background="{DynamicResource RaisedBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="10" FontWeight="Bold" Margin="0,0,0,10" Cursor="Hand" Click="BtnTarot_Click"/>
+                            <Button Content="СОРТИРОВАТЬ ИНИЦИАТИВУ" Background="{DynamicResource LineBrush}" Foreground="{DynamicResource BrightBrush}" BorderThickness="0" Padding="10" FontWeight="Bold" Margin="0,0,0,20" Cursor="Hand" Click="BtnSortInitiative_Click"/>
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Margin="15">
-                        <Border Background="#1A1A1A" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="2" Padding="10" Margin="0,0,0,15">
+                        <Border Background="{DynamicResource RaisedBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="2" Padding="10" Margin="0,0,0,15">
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock x:Name="TxtRoundCounter" Text="РАУНД: 1" Foreground="{DynamicResource AccentBrush}" FontSize="24" FontWeight="Heavy" HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="TxtTimeCounter" Text="Прошло времени: 0 сек." Foreground="#999999" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                <TextBlock x:Name="TxtTimeCounter" Text="Прошло времени: 0 сек." Foreground="{DynamicResource MutedBrush}" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                             </StackPanel>
                         </Border>
 
-                        <Button Content="СЛЕДУЮЩИЙ ХОД >>" Background="{DynamicResource AccentBrush}" Foreground="#000000" FontWeight="Heavy" FontSize="22" BorderThickness="0" Padding="15" Cursor="Hand" Click="BtnNextTurn_Click" Margin="0,0,0,10"/>
+                        <Button Content="СЛЕДУЮЩИЙ ХОД >>" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource OnAccentBrush}" FontWeight="Heavy" FontSize="22" BorderThickness="0" Padding="15" Cursor="Hand" Click="BtnNextTurn_Click" Margin="0,0,0,10"/>
+                        <Button Content="⚙ НАСТРОЙКИ И ТЕМА" Background="Transparent" Foreground="{DynamicResource MutedBrush}" FontWeight="Bold" Cursor="Hand" Margin="0,0,0,6" Click="BtnSettings_Click"/>
                         <Button Content="ВЫЙТИ В МЕНЮ" Background="Transparent" Foreground="{DynamicResource DangerBrush}" FontWeight="Bold" Cursor="Hand" Click="BtnExit_Click"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <Border Grid.Column="1" Background="#0A0A0A" BorderBrush="#444444" BorderThickness="2">
+            <Border Grid.Column="1" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Style="{StaticResource RedHeader}" BorderThickness="0,0,0,2" BorderBrush="#444444" Background="#111111">
-                        <TextBlock Text="ТРЕКЕР ИНИЦИАТИВЫ" Foreground="#FFFFFF" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                    <Border Style="{StaticResource RedHeader}" BorderThickness="0,0,0,2" BorderBrush="{DynamicResource LineBrush}" Background="{DynamicResource RaisedBrush}">
+                        <TextBlock Text="ТРЕКЕР ИНИЦИАТИВЫ" Foreground="{DynamicResource BrightBrush}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     </Border>
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="15">
                         <ItemsControl ItemsSource="{Binding Combatants}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Margin="0,0,0,10" Padding="10" Background="#111111" BorderThickness="2">
+                                    <Border Margin="0,0,0,10" Padding="10" Background="{DynamicResource RaisedBrush}" BorderThickness="2">
                                         <Border.Style>
                                             <Style TargetType="Border">
-                                                <Setter Property="BorderBrush" Value="#333333"/>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsPlayer}" Value="True">
                                                         <Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsActiveTurn}" Value="True">
                                                         <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
-                                                        <Setter Property="Background" Value="#051A1A"/>
+                                                        <Setter Property="Background" Value="{DynamicResource TintBrush}"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -220,13 +229,13 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <StackPanel Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0">
-                                                    <TextBlock Text="ИНИЦ." Foreground="#777777" FontSize="12" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                                    <TextBox Text="{Binding Initiative, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#000000" Foreground="{DynamicResource AccentBrush}" FontSize="22" FontWeight="Bold" BorderBrush="#444444" BorderThickness="1" TextAlignment="Center" Width="45" Padding="0,2"/>
+                                                    <TextBlock Text="ИНИЦ." Foreground="{DynamicResource MutedBrush}" FontSize="12" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Initiative, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource AccentBrush}" FontSize="22" FontWeight="Bold" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" TextAlignment="Center" Width="45" Padding="0,2"/>
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,20,0">
-                                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="#FFFFFF" FontSize="18" FontWeight="Heavy" BorderThickness="0" TextWrapping="Wrap"/>
-                                                    <TextBlock Text="{Binding CombatStatsDisplay}" Foreground="#E0E0E0" FontSize="13" FontWeight="Bold" Margin="0,2,0,6" TextWrapping="Wrap"/>
+                                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="{DynamicResource BrightBrush}" FontSize="18" FontWeight="Heavy" BorderThickness="0" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding CombatStatsDisplay}" Foreground="{DynamicResource TextBrush}" FontSize="13" FontWeight="Bold" Margin="0,2,0,6" TextWrapping="Wrap"/>
 
                                                     <ItemsControl ItemsSource="{Binding DisplaySkills}">
                                                         <ItemsControl.ItemsPanel>
@@ -245,32 +254,32 @@
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="2" VerticalAlignment="Top" Margin="0,5,20,0">
-                                                    <TextBlock Text="ЗДОРОВЬЕ (ПЗ)" Foreground="#777777" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="ЗДОРОВЬЕ (ПЗ)" Foreground="{DynamicResource MutedBrush}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
                                                         <Button Content="+" Background="{DynamicResource DangerBrush}" Foreground="Black" Width="22" Height="22" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Tag="{Binding}" Click="BtnHeal_Click" ToolTip="Исцелить 1 ПЗ"/>
                                                         <TextBox Text="{Binding CurrentHP, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="{DynamicResource DangerBrush}" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="38"/>
-                                                        <TextBlock Text="/" Foreground="#777777" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0"/>
-                                                        <TextBox Text="{Binding MaxHP, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="#777777" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="38"/>
+                                                        <TextBlock Text="/" Foreground="{DynamicResource MutedBrush}" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0"/>
+                                                        <TextBox Text="{Binding MaxHP, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="{DynamicResource MutedBrush}" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="38"/>
                                                         <Button Content="-" Background="{DynamicResource DangerBrush}" Foreground="Black" Width="22" Height="22" FontWeight="Bold" BorderThickness="0" Cursor="Hand" Tag="{Binding}" Click="BtnDamage_Click" ToolTip="Нанести 1 урон"/>
                                                     </StackPanel>
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="3" VerticalAlignment="Top" Margin="0,5,20,0">
-                                                    <TextBlock Text="ОС (ГОЛОВА)" Foreground="#777777" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="ОС (ГОЛОВА)" Foreground="{DynamicResource MutedBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,8">
-                                                        <TextBox Text="{Binding HeadArmor, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
-                                                        <Button Content="-1 ОС" Background="#333333" Foreground="{DynamicResource AccentBrush}" BorderThickness="0" Padding="6,2" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnAblateHead_Click"/>
+                                                        <TextBox Text="{Binding HeadArmor, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="{DynamicResource BrightBrush}" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
+                                                        <Button Content="-1 ОС" Background="{DynamicResource LineBrush}" Foreground="{DynamicResource AccentBrush}" BorderThickness="0" Padding="6,2" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnAblateHead_Click"/>
                                                     </StackPanel>
 
-                                                    <TextBlock Text="ОС (ТЕЛО)" Foreground="#777777" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="ОС (ТЕЛО)" Foreground="{DynamicResource MutedBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                                        <TextBox Text="{Binding BodyArmor, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
-                                                        <Button Content="-1 ОС" Background="#333333" Foreground="{DynamicResource AccentBrush}" BorderThickness="0" Padding="6,2" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnAblateBody_Click"/>
+                                                        <TextBox Text="{Binding BodyArmor, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="Transparent" Foreground="{DynamicResource BrightBrush}" FontSize="20" FontWeight="Bold" BorderThickness="0" TextAlignment="Center" Width="35"/>
+                                                        <Button Content="-1 ОС" Background="{DynamicResource LineBrush}" Foreground="{DynamicResource AccentBrush}" BorderThickness="0" Padding="6,2" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnAblateBody_Click"/>
                                                     </StackPanel>
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="4" VerticalAlignment="Top" Margin="0,5,15,0">
-                                                    <TextBlock Text="{Binding CurrentMove, StringFormat='ТЕКУЩЕЕ СКО: {0}'}" Foreground="#FFFFFF" FontSize="14" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding CurrentMove, StringFormat='ТЕКУЩЕЕ СКО: {0}'}" Foreground="{DynamicResource BrightBrush}" FontSize="14" FontWeight="Bold"/>
                                                     <TextBlock Text="{Binding CurrentDeathSave, StringFormat='СПАСБРОСОК: {0}'}" Foreground="{DynamicResource DangerBrush}" FontSize="14" FontWeight="Bold" Margin="0,4,0,0"/>
                                                 </StackPanel>
 
@@ -285,20 +294,20 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <StackPanel Grid.Column="0" Margin="0,0,5,0">
-                                                    <TextBlock Text="ОРУЖИЕ:" Foreground="#999999" FontSize="10" FontWeight="Bold"/>
-                                                    <TextBox Text="{Binding Weapons, UpdateSourceTrigger=PropertyChanged}" Background="#050505" Foreground="{DynamicResource AccentBrush}" BorderBrush="#333" BorderThickness="1" Padding="4" TextWrapping="Wrap" AcceptsReturn="True" Height="70" VerticalScrollBarVisibility="Auto"/>
+                                                    <TextBlock Text="ОРУЖИЕ:" Foreground="{DynamicResource MutedBrush}" FontSize="10" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Weapons, UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="4" TextWrapping="Wrap" AcceptsReturn="True" Height="70" VerticalScrollBarVisibility="Auto"/>
                                                 </StackPanel>
                                                 <StackPanel Grid.Column="1" Margin="5,0,5,0">
-                                                    <TextBlock Text="СНАРЯЖЕНИЕ / БРОНЯ:" Foreground="#999999" FontSize="10" FontWeight="Bold"/>
-                                                    <TextBox Text="{Binding Gear, UpdateSourceTrigger=PropertyChanged}" Background="#050505" Foreground="#E0E0E0" BorderBrush="#333" BorderThickness="1" Padding="4" TextWrapping="Wrap" AcceptsReturn="True" Height="70" VerticalScrollBarVisibility="Auto"/>
+                                                    <TextBlock Text="СНАРЯЖЕНИЕ / БРОНЯ:" Foreground="{DynamicResource MutedBrush}" FontSize="10" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Gear, UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource TextBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="4" TextWrapping="Wrap" AcceptsReturn="True" Height="70" VerticalScrollBarVisibility="Auto"/>
                                                 </StackPanel>
                                                 <StackPanel Grid.Column="2" Margin="5,0,0,0">
-                                                    <TextBlock Text="КИБЕРИМПЛАНТЫ:" Foreground="#999999" FontSize="10" FontWeight="Bold"/>
-                                                    <ScrollViewer Height="70" VerticalScrollBarVisibility="Auto" Background="#050505" BorderBrush="#333" BorderThickness="1" Padding="2">
+                                                    <TextBlock Text="КИБЕРИМПЛАНТЫ:" Foreground="{DynamicResource MutedBrush}" FontSize="10" FontWeight="Bold"/>
+                                                    <ScrollViewer Height="70" VerticalScrollBarVisibility="Auto" Background="{DynamicResource BackBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Padding="2">
                                                         <ItemsControl ItemsSource="{Binding ParsedCyberware}">
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Border Background="#1A1A1A" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Margin="0,0,0,4" Padding="4" ToolTip="{Binding TooltipText}" ToolTipService.InitialShowDelay="150" Cursor="Help">
+                                                                    <Border Background="{DynamicResource RaisedBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Margin="0,0,0,4" Padding="4" ToolTip="{Binding TooltipText}" ToolTipService.InitialShowDelay="150" Cursor="Help">
                                                                         <TextBlock Text="{Binding Name}" Foreground="{DynamicResource AccentBrush}" FontSize="11" FontWeight="Bold" TextWrapping="Wrap"/>
                                                                     </Border>
                                                                 </DataTemplate>
@@ -306,6 +315,17 @@
                                                         </ItemsControl>
                                                     </ScrollViewer>
                                                 </StackPanel>
+                                            </Grid>
+
+                                            <Grid Margin="0,0,0,8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="СОСТОЯНИЯ:" Foreground="{DynamicResource WarnBrush}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <TextBox Grid.Column="1" Text="{Binding Conditions, UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource WarnBrush}" BorderBrush="{DynamicResource LineBrush}" CaretBrush="{DynamicResource WarnBrush}" FontSize="12" Padding="2" ToolTip="Оглушён, горит, прижат… — заметка ГМа; можно писать вручную"/>
+                                                <Button Grid.Column="2" Content="+ СОСТОЯНИЕ ▾" Background="{DynamicResource LineBrush}" Foreground="{DynamicResource WarnBrush}" FontWeight="Bold" Padding="10,0" Margin="10,0,0,0" Cursor="Hand" Tag="{Binding}" Click="BtnAddCondition_Click"/>
                                             </Grid>
 
                                             <StackPanel x:Name="BottomBlock">
@@ -316,8 +336,8 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <TextBlock Text="КРИТИЧЕСКИЕ ТРАВМЫ:" Foreground="{DynamicResource DangerBrush}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                                    <ComboBox Grid.Column="1" ItemsSource="{Binding AvailableInjuries}" SelectedItem="{Binding SelectedInjuryToAdd, UpdateSourceTrigger=PropertyChanged}" Background="#0A0A0A" Foreground="{DynamicResource DangerBrush}" Height="22"/>
-                                                    <Button Grid.Column="2" Content="+ ДОБАВИТЬ" Background="{DynamicResource DangerBrush}" Foreground="#000" FontWeight="Bold" Padding="10,0" Margin="10,0,0,0" Cursor="Hand" Tag="{Binding}" Click="BtnAddCritToCombatant_Click"/>
+                                                    <ComboBox Grid.Column="1" ItemsSource="{Binding AvailableInjuries}" SelectedItem="{Binding SelectedInjuryToAdd, UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource PanelBrush}" Foreground="{DynamicResource DangerBrush}" Height="22"/>
+                                                    <Button Grid.Column="2" Content="+ ДОБАВИТЬ" Background="{DynamicResource DangerBrush}" Foreground="{DynamicResource OnAccentBrush}" FontWeight="Bold" Padding="10,0" Margin="10,0,0,0" Cursor="Hand" Tag="{Binding}" Click="BtnAddCritToCombatant_Click"/>
                                                 </Grid>
 
                                                 <ItemsControl ItemsSource="{Binding ActiveInjuries}" Margin="0,5,0,0">
@@ -330,7 +350,7 @@
                                                                         <ColumnDefinition Width="Auto"/>
                                                                     </Grid.ColumnDefinitions>
                                                                     <TextBlock Text="{Binding Name}" Foreground="{DynamicResource DangerBrush}" FontSize="12" VerticalAlignment="Center"/>
-                                                                    <Button Grid.Column="1" Content="Удалить" Background="Transparent" Foreground="#999" BorderThickness="0" Cursor="Hand" FontSize="11" Click="BtnRemoveCritFromCombatant_Click">
+                                                                    <Button Grid.Column="1" Content="Удалить" Background="Transparent" Foreground="{DynamicResource MutedBrush}" BorderThickness="0" Cursor="Hand" FontSize="11" Click="BtnRemoveCritFromCombatant_Click">
                                                                         <Button.Tag>
                                                                             <MultiBinding Converter="{StaticResource MultiParamConverter}">
                                                                                 <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
@@ -363,8 +383,8 @@
             </Border>
         </Grid>
 
-        <Border x:Name="EnemyManagerOverlay" Background="#E5050505" Visibility="Collapsed" Panel.ZIndex="100">
-            <Border Background="#0A0A0A" BorderBrush="{DynamicResource DangerBrush}" BorderThickness="2" Width="1200" Height="850" CornerRadius="4" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border x:Name="EnemyManagerOverlay" Background="{DynamicResource OverlayBrush}" Visibility="Collapsed" Panel.ZIndex="100">
+            <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource DangerBrush}" BorderThickness="2" Width="1200" Height="850" CornerRadius="4" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="45"/>
@@ -374,7 +394,7 @@
                     <Border Grid.Row="0" Style="{StaticResource RedHeader}">
                         <Grid>
                             <TextBlock Text="БАЗА ПРОТИВНИКОВ И ГЕНЕРАТОР" Style="{StaticResource RedHeaderText}" HorizontalAlignment="Left"/>
-                            <Button Content="X" Foreground="#050505" Background="Transparent" BorderThickness="0" FontWeight="Bold" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Center" Cursor="Hand" Click="BtnCloseEnemyManager_Click"/>
+                            <Button Content="X" Foreground="{DynamicResource OnAccentBrush}" Background="Transparent" BorderThickness="0" FontWeight="Bold" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Center" Cursor="Hand" Click="BtnCloseEnemyManager_Click"/>
                         </Grid>
                     </Border>
 
@@ -394,13 +414,15 @@
                             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
                                 <TextBlock Text="ДОСТУПНЫЕ ПРЕСЕТЫ" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
                                 <TextBlock Text="   ПОИСК: " Foreground="{DynamicResource DangerBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
-                                <TextBox x:Name="TxtEnemySearch" Width="220" Background="#000000" Foreground="{DynamicResource AccentBrush}" BorderBrush="#444444" CaretBrush="{DynamicResource AccentBrush}" FontSize="13" Padding="3" VerticalAlignment="Center" TextChanged="TxtEnemySearch_TextChanged"/>
+                                <TextBox x:Name="TxtEnemySearch" Width="220" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource LineBrush}" CaretBrush="{DynamicResource AccentBrush}" FontSize="13" Padding="3" VerticalAlignment="Center" TextChanged="TxtEnemySearch_TextChanged"/>
+                                <TextBlock Text="   КОЛ-ВО: " Foreground="{DynamicResource DangerBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TxtSpawnCount" Text="1" Width="44" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource LineBrush}" CaretBrush="{DynamicResource AccentBrush}" FontSize="13" Padding="3" VerticalAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" ToolTip="Сколько копий добавить в бой; несколько — с нумерацией (Бандит 1, Бандит 2…)"/>
                             </StackPanel>
                             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                                 <ItemsControl ItemsSource="{Binding AvailableEnemies}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Background="#111111" BorderBrush="#333333" BorderThickness="1" Margin="0,0,0,5" Padding="10">
+                                            <Border Background="{DynamicResource RaisedBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Margin="0,0,0,5" Padding="10">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*"/>
@@ -409,15 +431,15 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <StackPanel Grid.Column="0">
-                                                        <TextBlock Text="{Binding Name}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="14" TextWrapping="Wrap"/>
+                                                        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource BrightBrush}" FontWeight="Bold" FontSize="14" TextWrapping="Wrap"/>
                                                         <TextBlock Text="{Binding HP, StringFormat='ПЗ: {0}'}" Foreground="{DynamicResource DangerBrush}" FontSize="12"/>
                                                         <TextBlock Text="Боевой Номер (Упрощенный)" Foreground="{DynamicResource AccentBrush}" FontSize="11" Visibility="{Binding IsCNVis}"/>
-                                                        <TextBlock Text="Полные Статы (Развернутый)" Foreground="#E0E0E0" FontSize="11" Visibility="{Binding IsFullVis}"/>
+                                                        <TextBlock Text="Полные Статы (Развернутый)" Foreground="{DynamicResource TextBrush}" FontSize="11" Visibility="{Binding IsFullVis}"/>
                                                     </StackPanel>
 
-                                                    <Button Grid.Column="1" Content="РЕДАКТ." Foreground="#E0E0E0" Background="#333333" BorderThickness="0" Padding="10,5" Margin="0,0,5,0" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnEditEnemyPreset_Click" VerticalAlignment="Center"/>
+                                                    <Button Grid.Column="1" Content="РЕДАКТ." Foreground="{DynamicResource TextBrush}" Background="{DynamicResource LineBrush}" BorderThickness="0" Padding="10,5" Margin="0,0,5,0" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnEditEnemyPreset_Click" VerticalAlignment="Center"/>
                                                     <Button Grid.Column="2" Content="УДАЛИТЬ" Foreground="{DynamicResource DangerBrush}" Background="Transparent" BorderThickness="0" Padding="10,5" Margin="0,0,5,0" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnDeleteEnemyPreset_Click" VerticalAlignment="Center"/>
-                                                    <Button Grid.Column="3" Content="ДОБАВИТЬ" Foreground="#000000" Background="{DynamicResource AccentBrush}" BorderThickness="0" Padding="10,5" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnSpawnEnemy_Click" VerticalAlignment="Center"/>
+                                                    <Button Grid.Column="3" Content="ДОБАВИТЬ" Foreground="{DynamicResource OnAccentBrush}" Background="{DynamicResource AccentBrush}" BorderThickness="0" Padding="10,5" FontWeight="Bold" Cursor="Hand" Tag="{Binding}" Click="BtnSpawnEnemy_Click" VerticalAlignment="Center"/>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
@@ -426,17 +448,17 @@
                             </ScrollViewer>
                         </Grid>
 
-                        <Border Grid.Column="2" BorderBrush="{DynamicResource DangerBrush}" BorderThickness="1" Background="#111111" Padding="15">
+                        <Border Grid.Column="2" BorderBrush="{DynamicResource DangerBrush}" BorderThickness="1" Background="{DynamicResource RaisedBrush}" Padding="15">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <StackPanel>
                                     <TextBlock Text="СОЗДАТЬ НОВОГО ВРАГА" Foreground="{DynamicResource DangerBrush}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
-                                    <TextBlock Text="Имя / Тип (напр. 'Бустергангер'):" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <TextBox x:Name="TxtGenName" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" Padding="5" Margin="0,0,0,15"/>
+                                    <TextBlock Text="Имя / Тип (напр. 'Бустергангер'):" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5"/>
+                                    <TextBox x:Name="TxtGenName" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource BrightBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="14" Padding="5" Margin="0,0,0,15"/>
 
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                                         <RadioButton x:Name="RbGenCN" Content="Боевой Номер (БН)" Foreground="{DynamicResource AccentBrush}" FontSize="14" FontWeight="Bold" IsChecked="True" Checked="GenMode_Changed" Margin="0,0,20,0"/>
-                                        <RadioButton x:Name="RbGenFull" Content="Полный Расчет (Статы + Навыки)" Foreground="#FFFFFF" FontSize="14" FontWeight="Bold" Checked="GenMode_Changed"/>
+                                        <RadioButton x:Name="RbGenFull" Content="Полный Расчет (Статы + Навыки)" Foreground="{DynamicResource BrightBrush}" FontSize="14" FontWeight="Bold" Checked="GenMode_Changed"/>
                                     </StackPanel>
 
                                     <Grid x:Name="PanelGenCN" Margin="0,0,0,15">
@@ -449,64 +471,64 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0">
                                             <TextBlock Text="Боевой Номер (БН):" Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenCN" Text="12" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="{DynamicResource AccentBrush}" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenCN" Text="12" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="2">
                                             <TextBlock Text="Спасбросок смерти (База):" Foreground="{DynamicResource DangerBrush}" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenDeathSaveCN" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="{DynamicResource DangerBrush}" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBox x:Name="TxtGenDeathSaveCN" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource DangerBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="4">
-                                            <TextBlock Text="СКО (Move):" Foreground="#FFFFFF" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenMove" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBlock Text="СКО (Move):" Foreground="{DynamicResource BrightBrush}" Margin="0,0,0,5"/>
+                                            <TextBox x:Name="TxtGenMove" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource BrightBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
 
                                     <StackPanel x:Name="PanelGenFull" Visibility="Collapsed" Margin="0,0,0,15">
-                                        <TextBlock Text="ХАРАКТЕРИСТИКИ:" Foreground="#E0E0E0" Margin="0,0,0,5" FontWeight="Bold"/>
+                                        <TextBlock Text="ХАРАКТЕРИСТИКИ:" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,5" FontWeight="Bold"/>
                                         <UniformGrid Columns="5" Margin="0,0,0,15">
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="ИНТ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StINT" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="ИНТ" Foreground="{DynamicResource MutedBrush}" FontSize="11" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StINT" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource BrightBrush}" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="РЕА" Foreground="#0FC" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StREF" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="РЕА" Foreground="{DynamicResource AccentBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StREF" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="ЛВК" Foreground="#0FC" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StDEX" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="ЛВК" Foreground="{DynamicResource AccentBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StDEX" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="ТЕХ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StTECH" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="ТЕХ" Foreground="{DynamicResource MutedBrush}" FontSize="11" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StTECH" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource BrightBrush}" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="ХАР" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StCOOL" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="ХАР" Foreground="{DynamicResource MutedBrush}" FontSize="11" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StCOOL" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource BrightBrush}" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="ВОЛЯ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StWILL" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="ВОЛЯ" Foreground="{DynamicResource MutedBrush}" FontSize="11" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StWILL" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource BrightBrush}" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="УДЧ" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StLUCK" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="УДЧ" Foreground="{DynamicResource MutedBrush}" FontSize="11" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StLUCK" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource BrightBrush}" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="СКО" Foreground="#FFF" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StMOVE" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="СКО" Foreground="{DynamicResource BrightBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StMOVE" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource BrightBrush}" FontWeight="Bold" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="ТЕЛ" Foreground="#F33" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StBODY" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#F33" FontWeight="Bold" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="ТЕЛ" Foreground="{DynamicResource DangerBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StBODY" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource DangerBrush}" FontWeight="Bold" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                             <StackPanel Margin="2">
-                                                <TextBlock Text="ЭМП" Foreground="#777" FontSize="11" HorizontalAlignment="Center"/>
-                                                <TextBox x:Name="StEMP" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050" Foreground="#FFF" TextAlignment="Center" BorderBrush="#333"/>
+                                                <TextBlock Text="ЭМП" Foreground="{DynamicResource MutedBrush}" FontSize="11" HorizontalAlignment="Center"/>
+                                                <TextBox x:Name="StEMP" Text="5" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource TintBrush}" Foreground="{DynamicResource BrightBrush}" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}"/>
                                             </StackPanel>
                                         </UniformGrid>
 
-                                        <TextBlock Text="ДОБАВИТЬ НАВЫК:" Foreground="#E0E0E0" Margin="0,0,0,5" FontWeight="Bold"/>
+                                        <TextBlock Text="ДОБАВИТЬ НАВЫК:" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,5" FontWeight="Bold"/>
                                         <CheckBox x:Name="ChkSkillIsTotal" Content="Указать финальный результат (Навык + СТАТ)" Foreground="{DynamicResource AccentBrush}" FontSize="12" Margin="0,0,0,5" Cursor="Hand"/>
                                         <Grid Margin="0,0,0,10">
                                             <Grid.ColumnDefinitions>
@@ -516,24 +538,24 @@
                                                 <ColumnDefinition Width="10"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
-                                            <ComboBox x:Name="CbGenSkills" ItemsSource="{Binding AllSkillNames}" Background="#0A0A0A" Foreground="#FFF" BorderBrush="#444" Height="26"/>
-                                            <TextBox x:Name="TxtGenSkillLevel" Grid.Column="2" Text="10" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#0A0A0A" Foreground="#0FC" FontWeight="Bold" TextAlignment="Center" BorderBrush="#444" Height="26"/>
-                                            <Button Grid.Column="4" Content="+" Foreground="#0FC" Background="Transparent" FontWeight="Bold" FontSize="18" Cursor="Hand" BorderThickness="0" Click="BtnAddGenSkill_Click"/>
+                                            <ComboBox x:Name="CbGenSkills" ItemsSource="{Binding AllSkillNames}" Background="{DynamicResource PanelBrush}" Foreground="{DynamicResource BrightBrush}" BorderBrush="{DynamicResource LineBrush}" Height="26"/>
+                                            <TextBox x:Name="TxtGenSkillLevel" Grid.Column="2" Text="10" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource PanelBrush}" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" TextAlignment="Center" BorderBrush="{DynamicResource LineBrush}" Height="26"/>
+                                            <Button Grid.Column="4" Content="+" Foreground="{DynamicResource AccentBrush}" Background="Transparent" FontWeight="Bold" FontSize="18" Cursor="Hand" BorderThickness="0" Click="BtnAddGenSkill_Click"/>
                                         </Grid>
 
                                         <ItemsControl ItemsSource="{Binding NewEnemySkills}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border BorderBrush="#333" BorderThickness="0,0,0,1" Padding="2" Margin="0,2">
+                                                    <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,0,1" Padding="2" Margin="0,2">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBlock Text="{Binding Name}" Foreground="#E0E0E0" VerticalAlignment="Center"/>
-                                                            <TextBlock Grid.Column="1" Text="{Binding Total, StringFormat='Ур: {0}'}" Foreground="#0FC" FontWeight="Bold" Margin="10,0" VerticalAlignment="Center"/>
-                                                            <Button Grid.Column="2" Content="x" Foreground="#F33" Background="Transparent" BorderThickness="0" Cursor="Hand" Tag="{Binding}" Click="BtnRemoveGenSkill_Click"/>
+                                                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding Total, StringFormat='Ур: {0}'}" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" Margin="10,0" VerticalAlignment="Center"/>
+                                                            <Button Grid.Column="2" Content="x" Foreground="{DynamicResource DangerBrush}" Background="Transparent" BorderThickness="0" Cursor="Hand" Tag="{Binding}" Click="BtnRemoveGenSkill_Click"/>
                                                         </Grid>
                                                     </Border>
                                                 </DataTemplate>
@@ -550,40 +572,40 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0">
-                                            <TextBlock Text="ОС Головы:" Foreground="#999999" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenHead" Text="7" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBlock Text="ОС Головы:" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5"/>
+                                            <TextBox x:Name="TxtGenHead" Text="7" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource BrightBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="2">
-                                            <TextBlock Text="ОС Тела:" Foreground="#999999" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenBody" Text="7" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBlock Text="ОС Тела:" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5"/>
+                                            <TextBox x:Name="TxtGenBody" Text="7" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource BrightBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="4">
-                                            <TextBlock Text="Здоровье (ПЗ):" Foreground="#999999" Margin="0,0,0,5"/>
-                                            <TextBox x:Name="TxtGenHP" Text="30" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="#050505" Foreground="{DynamicResource DangerBrush}" BorderBrush="#444444" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
+                                            <TextBlock Text="Здоровье (ПЗ):" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5"/>
+                                            <TextBox x:Name="TxtGenHP" Text="30" PreviewTextInput="NumberValidationTextBox" TextChanged="NumberLimitTextBox_TextChanged" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource DangerBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="14" FontWeight="Bold" Padding="5" TextAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
 
-                                    <TextBlock Text="Оружие:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <TextBox x:Name="TxtGenWeapons" Background="#050505" Foreground="#FFFFFF" BorderBrush="#444444" BorderThickness="1" FontSize="12" Margin="0,0,0,10" Padding="5" Height="40" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                    <TextBlock Text="Оружие:" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5"/>
+                                    <TextBox x:Name="TxtGenWeapons" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource BrightBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="12" Margin="0,0,0,10" Padding="5" Height="40" AcceptsReturn="True" TextWrapping="Wrap"/>
 
-                                    <TextBlock Text="Снаряжение:" Foreground="#999999" Margin="0,0,0,5"/>
-                                    <TextBox x:Name="TxtGenGear" Background="#050505" Foreground="#E0E0E0" BorderBrush="#444444" BorderThickness="1" FontSize="12" Margin="0,0,0,10" Padding="5" Height="40" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                    <TextBlock Text="Снаряжение:" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5"/>
+                                    <TextBox x:Name="TxtGenGear" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource TextBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" FontSize="12" Margin="0,0,0,10" Padding="5" Height="40" AcceptsReturn="True" TextWrapping="Wrap"/>
 
-                                    <TextBlock Text="КИБЕРИМПЛАНТЫ:" Foreground="#999999" Margin="0,0,0,5"/>
+                                    <TextBlock Text="КИБЕРИМПЛАНТЫ:" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5"/>
                                     <Grid Margin="0,0,0,5">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="10"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <ComboBox x:Name="CbGenCyber" ItemsSource="{Binding AllCyberwareNames}" IsEditable="True" Background="#050505" Foreground="#FFF" BorderBrush="#444444" BorderThickness="1" Height="26" Padding="5,0"/>
+                                        <ComboBox x:Name="CbGenCyber" ItemsSource="{Binding AllCyberwareNames}" IsEditable="True" Background="{DynamicResource BackBrush}" Foreground="{DynamicResource BrightBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" Height="26" Padding="5,0"/>
                                         <Button Grid.Column="2" Content="+" Foreground="{DynamicResource AccentBrush}" Background="Transparent" FontWeight="Bold" FontSize="18" Cursor="Hand" BorderThickness="0" Click="BtnAddGenCyber_Click"/>
                                     </Grid>
 
                                     <ItemsControl ItemsSource="{Binding NewEnemyCyberware}" Margin="0,0,0,15">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Border Background="#1A1A1A" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="4" Margin="0,2">
+                                                <Border Background="{DynamicResource RaisedBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" Padding="4" Margin="0,2">
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"/>

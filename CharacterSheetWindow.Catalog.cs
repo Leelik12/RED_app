@@ -15,10 +15,23 @@ namespace CyberpunkRED_Generator
         private void BtnCatalogArmor_Click(object sender, RoutedEventArgs e) => OpenCatalog(1);
         private void BtnCatalogGear_Click(object sender, RoutedEventArgs e) => OpenCatalog(2);
 
+        private const string CatalogTitle = "КАТАЛОГ СНАРЯЖЕНИЯ";
+        private ToolWindow _catalogWindow;
+        private Action<int> _catalogSetTab;
+
+        // каталог открывается вкладкой в рабочей области листа; уже открытый переключается на нужный раздел
         private void OpenCatalog(int tab)
         {
             if (!(DataContext is SheetViewModel vm)) return;
             CloseOverlays();
+            if (_catalogWindow != null && _catalogSetTab != null)
+            {
+                _catalogSetTab(tab);
+                var stub = Ui.Dialog(this, CatalogTitle, 100, 100);
+                stub.Content = new Grid();
+                Ui.Present(stub);
+                return;
+            }
             ShowCatalogDialog(vm, tab);
         }
 
@@ -103,22 +116,12 @@ namespace CyberpunkRED_Generator
         {
             var cyan = Theme.Accent();
             var red = Theme.Danger();
-            var gray = new SolidColorBrush(Color.FromRgb(153, 153, 153));
-            var white = new SolidColorBrush(Color.FromRgb(224, 224, 224));
-            var yellow = new SolidColorBrush(Color.FromRgb(255, 204, 0));
-            var dark = new SolidColorBrush(Color.FromRgb(10, 10, 10));
+            var gray = Theme.Get("Muted");
+            var white = Theme.Get("Text");
+            var yellow = Theme.Get("Warn");
+            var dark = Theme.Get("Panel");
 
-            var win = new Window
-            {
-                Title = "КАТАЛОГ СНАРЯЖЕНИЯ",
-                Owner = this,
-                Width = 980,
-                Height = 700,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Background = new SolidColorBrush(Color.FromRgb(5, 5, 5)),
-                FontFamily = new FontFamily("Consolas")
-            };
-            win.Resources = this.Resources;
+            var win = Ui.Dialog(this, CatalogTitle, 980, 700);
 
             int tab = startTab;
             object selected = null;
@@ -136,8 +139,11 @@ namespace CyberpunkRED_Generator
 
             var searchPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 8) };
             searchPanel.Children.Add(MakeText("ПОИСК: ", red, 13, FontWeights.Bold));
-            var search = new TextBox { Width = 280, Background = Brushes.Black, Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3) };
+            var search = new TextBox { Width = 280, Background = Theme.Get("Back"), Foreground = cyan, BorderBrush = gray, CaretBrush = cyan, Padding = new Thickness(3) };
             searchPanel.Children.Add(search);
+            searchPanel.Children.Add(MakeText("   ИСТОЧНИК: ", red, 13, FontWeights.Bold));
+            var cbSource = new ComboBox { Width = 260, Margin = new Thickness(0, 0, 0, 0) };
+            searchPanel.Children.Add(cbSource);
             Grid.SetRow(searchPanel, 1);
 
             var body = new Grid();
@@ -169,23 +175,39 @@ namespace CyberpunkRED_Generator
             Action fillList = null;
 
             Func<string, bool> match = text => { string q = search.Text.Trim(); return q.Length == 0 || (text ?? "").IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0; };
+            const string AllSources = "Все источники";
+            Func<string, bool> fromSource = src => cbSource.SelectedItem == null || (string)cbSource.SelectedItem == AllSources || (string)cbSource.SelectedItem == src;
+            Func<string, string> tag = src => src == Packs.CoreName ? "" : "[" + src + "] ";
+            bool fillingSources = false;
+            Action fillSources = () =>
+            {
+                fillingSources = true;
+                string keep = cbSource.SelectedItem as string;
+                var names = (tab == 0 ? GearCatalog.Weapons.Select(w => w.Source) : tab == 1 ? GearCatalog.Armor.Select(a => a.Source) : GearCatalog.Gear.Select(g => g.Source)).Distinct().ToList();
+                names.Sort((a, b) => a == Packs.CoreName ? -1 : b == Packs.CoreName ? 1 : string.Compare(a, b, StringComparison.CurrentCultureIgnoreCase));
+                cbSource.Items.Clear();
+                cbSource.Items.Add(AllSources);
+                foreach (var n in names) cbSource.Items.Add(n);
+                cbSource.SelectedItem = keep != null && cbSource.Items.Contains(keep) ? keep : AllSources;
+                fillingSources = false;
+            };
 
             fillList = () =>
             {
                 listBox.Items.Clear();
                 for (int i = 0; i < tabButtons.Length; i++)
                 {
-                    tabButtons[i].Background = i == tab ? new SolidColorBrush(Color.FromRgb(0, 70, 58)) : new SolidColorBrush(Color.FromRgb(26, 26, 26));
+                    tabButtons[i].Background = i == tab ? Theme.Get("Tint") : Theme.Get("Raised");
                 }
                 if (tab == 0)
-                    foreach (var w in GearCatalog.Weapons.Where(w => match(w.Name) || match(w.Standard) || match(w.Group)))
-                        listBox.Items.Add(new ListBoxItem { Content = $"[{w.Group}] {w.Name}", Tag = w, Foreground = w.IsExotic ? yellow : white });
+                    foreach (var w in GearCatalog.Weapons.Where(w => fromSource(w.Source) && (match(w.Name) || match(w.Standard) || match(w.Group))))
+                        listBox.Items.Add(new ListBoxItem { Content = $"{tag(w.Source)}[{w.Group}] {w.Name}", Tag = w, Foreground = w.IsExotic ? yellow : white });
                 else if (tab == 1)
-                    foreach (var a in GearCatalog.Armor.Where(a => match(a.Name)))
-                        listBox.Items.Add(new ListBoxItem { Content = $"{a.Name}  —  {(a.IsShield ? a.SP + " ПЗ" : "ОС " + a.SP)}", Tag = a, Foreground = white });
+                    foreach (var a in GearCatalog.Armor.Where(a => fromSource(a.Source) && match(a.Name)))
+                        listBox.Items.Add(new ListBoxItem { Content = $"{tag(a.Source)}{a.Name}  —  {(a.IsShield ? a.SP + " ПЗ" : "ОС " + a.SP)}", Tag = a, Foreground = white });
                 else
-                    foreach (var g in GearCatalog.Gear.Where(g => match(g.Name) || match(g.Group)))
-                        listBox.Items.Add(new ListBoxItem { Content = $"[{g.Group}] {g.Name}", Tag = g, Foreground = white });
+                    foreach (var g in GearCatalog.Gear.Where(g => fromSource(g.Source) && (match(g.Name) || match(g.Group))))
+                        listBox.Items.Add(new ListBoxItem { Content = $"{tag(g.Source)}[{g.Group}] {g.Name}", Tag = g, Foreground = white });
                 selected = null;
                 showDetail();
             };
@@ -207,6 +229,7 @@ namespace CyberpunkRED_Generator
                 if (selected is WeaponDef wd)
                 {
                     p.Children.Add(MakeText(wd.Name, cyan, 18, FontWeights.Bold));
+                    if (wd.Source != Packs.CoreName) p.Children.Add(MakeText("Источник: " + wd.Source, yellow, 12));
                     var stats = MakeText($"Урон {wd.Damage}   СКОР {(wd.Rof > 0 ? wd.Rof.ToString() : "—")}   Рук: {wd.Hands}" + (wd.Mag > 0 ? $"   Магазин {wd.Mag} ({wd.AmmoKind})" : ""), white, 14);
                     stats.TextWrapping = TextWrapping.Wrap; stats.Margin = new Thickness(0, 6, 0, 6);
                     p.Children.Add(stats);
@@ -258,6 +281,7 @@ namespace CyberpunkRED_Generator
                 else if (selected is ArmorDef ad)
                 {
                     p.Children.Add(MakeText(ad.Name, cyan, 18, FontWeights.Bold));
+                    if (ad.Source != Packs.CoreName) p.Children.Add(MakeText("Источник: " + ad.Source, yellow, 12));
                     var st = MakeText((ad.IsShield ? $"ПЗ {ad.SP}" : $"ОС {ad.SP}") + (ad.Penalty > 0 ? $"   Штраф: −{ad.Penalty} РЕА, ЛВК и СКО" : "   Штрафа нет") + "   Цена: " + GearCatalog.CostText(ad.Cost), white, 14);
                     st.TextWrapping = TextWrapping.Wrap; st.Margin = new Thickness(0, 6, 0, 6);
                     p.Children.Add(st);
@@ -288,6 +312,7 @@ namespace CyberpunkRED_Generator
                 else if (selected is GearDef gd)
                 {
                     p.Children.Add(MakeText(gd.Name, cyan, 18, FontWeights.Bold));
+                    if (gd.Source != Packs.CoreName) p.Children.Add(MakeText("Источник: " + gd.Source, yellow, 12));
                     var st = MakeText(gd.Group + "   Цена: " + GearCatalog.CostText(gd.Cost), white, 14);
                     st.Margin = new Thickness(0, 6, 0, 6); p.Children.Add(st);
                     if (!string.IsNullOrEmpty(gd.Info)) { var t = MakeText(gd.Info, gray, 13); t.TextWrapping = TextWrapping.Wrap; p.Children.Add(t); }
@@ -301,12 +326,18 @@ namespace CyberpunkRED_Generator
             for (int i = 0; i < tabButtons.Length; i++)
             {
                 int idx = i;
-                tabButtons[i].Click += (s, e) => { tab = idx; fillList(); };
+                tabButtons[i].Click += (s, e) => { tab = idx; fillSources(); fillList(); };
             }
             search.TextChanged += (s, e) => fillList();
+            cbSource.SelectionChanged += (s, e) => { if (!fillingSources) fillList(); };
+            fillSources();
 
             fillList();
-            win.ShowDialog();
+
+            _catalogWindow = win;
+            _catalogSetTab = idx => { tab = idx; fillSources(); fillList(); };
+            win.Closing += (s, e) => { _catalogWindow = null; _catalogSetTab = null; };
+            Ui.Present(win);
         }
     }
 }

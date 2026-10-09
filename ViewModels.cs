@@ -310,6 +310,10 @@ namespace CyberpunkRED_Generator
         private string _selectedInjuryToAdd; public string SelectedInjuryToAdd { get => _selectedInjuryToAdd; set { _selectedInjuryToAdd = value; OnPropertyChanged(); } }
         private string _addictions; public string Addictions { get => _addictions; set { _addictions = value; OnPropertyChanged(); } }
 
+        private string _chassis;
+        public string Chassis { get => _chassis; set { _chassis = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsBorg)); } }
+        public bool IsBorg => !string.IsNullOrEmpty(_chassis);
+
         private string _notes; public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
         private string _roleAbilityNotes; public string RoleAbilityNotes { get => _roleAbilityNotes; set { _roleAbilityNotes = value; OnPropertyChanged(); } }
 
@@ -376,6 +380,11 @@ namespace CyberpunkRED_Generator
         public ObservableCollection<WeaponData> Weapons { get; set; }
         public NetrunData Net { get; set; } = new NetrunData();
         public FinanceData Finance { get; set; } = new FinanceData();
+        public AgentState Agent { get; set; } = new AgentState();
+        public HqData Hq { get; set; } = new HqData();
+        public JournalData Journal { get; set; } = new JournalData();
+        public EffectsData Effects { get; set; } = new EffectsData();
+        public ObservableCollection<OwnedVehicle> Vehicles { get; set; } = new ObservableCollection<OwnedVehicle>();
         public List<SheetSkillCategory> CenterSkillCategories { get; set; }
         public List<SheetSkillCategory> RightSkillCategories1 { get; set; }
         public List<SheetSkillCategory> RightSkillCategories2 { get; set; }
@@ -451,6 +460,9 @@ namespace CyberpunkRED_Generator
 
                 if (installedCyberware.Any(c => c.Name == "Эндоскелет ∑ (Сигма)")) effectiveBody = 12;
                 if (installedCyberware.Any(c => c.Name == "Эндоскелет ß (Бета)")) effectiveBody = 14;
+                if (installedCyberware.Any(c => c.Name == "Эндоскелет Ω (Омега)")) effectiveBody = 16;
+                var borgChassis = Borg.Find(Chassis);
+                if (borgChassis != null) effectiveBody = Math.Max(borgChassis.EndoBody, effectiveBody);
 
                 bodyStat.ImplantModifier = effectiveBody - baseBody;
 
@@ -462,8 +474,15 @@ namespace CyberpunkRED_Generator
             int baseEmp = Stats != null && Stats.ContainsKey("EMP") ? Stats["EMP"] : (Stats != null && Stats.ContainsKey("ЭМП") ? Stats["ЭМП"] : 5);
             int maxHum = baseEmp * 10;
 
+            var chassisInfo = Borg.Find(Chassis);
+            if (IsBorg)
+            {
+                maxHum -= Borg.BiosystemMaxHumanityLoss;
+                if (chassisInfo != null) maxHum -= chassisInfo.MaxHumanityLoss;
+            }
             foreach (var cw in installedCyberware)
             {
+                if (IsBorg && Borg.IsFreeInBorg(cw)) continue;
                 if (cw.HumanityLoss != "0" && cw.HumanityLoss != "0 (—)")
                 {
                     maxHum -= cw.Category.Contains("БОРГИРОВАНИЕ") ? 4 : 2;
@@ -476,7 +495,7 @@ namespace CyberpunkRED_Generator
             if (audioBlock != null)
             {
                 bool hasArray = installedCyberware.Any(c => c.Name == "Сенсорный массив");
-                audioBlock.MaxSlots = hasArray ? 8 : 3;
+                audioBlock.MaxSlots = (hasArray ? 8 : 3) * (audioBlock.BorgDoubled ? 2 : 1);
             }
 
             int threshold = (int)Math.Ceiling(MaxHP / 2.0);
@@ -503,6 +522,22 @@ namespace CyberpunkRED_Generator
             {
                 WoundStateText = "СМЕРТЕЛЬНОЕ"; woundSkillPenalty += 4; woundMovePenalty += 6;
                 WoundTooltipText = "ЭФФЕКТ: -4 к действиям, -6 СКО.\nСЛОЖНОСТЬ СТАБИЛИЗАЦИИ: 15";
+            }
+
+            // ПКТ: иммунитет к штрафам навыков и статов от состояний ранения (спасброски остаются)
+            if (IsBorg)
+            {
+                if (woundSkillPenalty > 0 || woundMovePenalty > 0) WoundTooltipText = "ПКТ: штрафы состояния ранения не действуют.\n" + WoundTooltipText;
+                woundSkillPenalty = 0;
+                woundMovePenalty = 0;
+            }
+
+            // ПКТ: внутренняя гидравлика поднимает РЕА, ЛВК и СКО до 4/6/8
+            int hydraulics = IsBorg ? Math.Max(Borg.Find(Chassis)?.HydraulicFloor ?? 0, Borg.HydraulicFloor(installedCyberware.Select(c => c.Name))) : 0;
+            foreach (var pair in new[] { new[] { "РЕА", "REF" }, new[] { "ЛВК", "DEX" }, new[] { "СКО", "MOVE" } })
+            {
+                var st = HexStats.FirstOrDefault(s => s.Name == pair[0] || s.Name == pair[1]);
+                if (st != null) st.ImplantModifier = hydraulics > st.BaseValue ? hydraulics - st.BaseValue : 0;
             }
 
             // === ПЕРЕМЕЩЕННАЯ ЛОГИКА ТРАВМ (Считаем ВСЕ штрафы до применения к навыкам) ===
@@ -912,6 +947,7 @@ namespace CyberpunkRED_Generator
         public string HumanityLoss { get; set; }
         public int Slots { get; set; } = 1;
 
+        public string Source { get; set; } = Packs.CoreName;   // «Корник» или название DLC
         public bool IsCustom { get; set; } = false;
         public bool IsFoundation { get; set; } = false;
         public bool IsPaired { get; set; } = false;
@@ -934,6 +970,7 @@ namespace CyberpunkRED_Generator
 
         private int _usedSlots; public int UsedSlots { get => _usedSlots; set { _usedSlots = value; OnPropertyChanged(); OnPropertyChanged(nameof(SlotsText)); } }
         private int _maxSlots; public int MaxSlots { get => _maxSlots; set { _maxSlots = value; OnPropertyChanged(); OnPropertyChanged(nameof(SlotsText)); } }
+        public bool BorgDoubled { get; set; }   // слоты удвоены при переходе в корпус ПКТ
         private string _optionsText; public string OptionsText { get => _optionsText; set { _optionsText = value; OnPropertyChanged(); } }
         public string SlotsText => $"свободно {MaxSlots - UsedSlots}/{MaxSlots}";
 

@@ -21,6 +21,9 @@ namespace CyberpunkRED_Generator
     }
     public class CharacterSaveData
     {
+        // версия формата файла: 0 — файл от 1.9 и старше (поля нет), дальше см. SaveSchema
+        public int SchemaVersion { get; set; }
+        public string AppVersion { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
         public List<RoleData> ActiveRoles { get; set; } = new List<RoleData>();
@@ -51,6 +54,12 @@ namespace CyberpunkRED_Generator
         public List<CyberwareDef> CustomCyberwareList { get; set; } = new List<CyberwareDef>();
         public List<CyberpunkRED_Generator.CyberwareBlockItem> CyberwareBlocks { get; set; } = new List<CyberpunkRED_Generator.CyberwareBlockItem>();
         public string CriticalInjuries { get; set; }
+        public List<CyberpunkRED_Generator.OwnedVehicle> Vehicles { get; set; } = new List<CyberpunkRED_Generator.OwnedVehicle>();
+        public CyberpunkRED_Generator.HqData Hq { get; set; } = new CyberpunkRED_Generator.HqData();
+        public CyberpunkRED_Generator.JournalData Journal { get; set; } = new CyberpunkRED_Generator.JournalData();
+        public CyberpunkRED_Generator.EffectsData Effects { get; set; } = new CyberpunkRED_Generator.EffectsData();
+        public CyberpunkRED_Generator.AgentState Agent { get; set; } = new CyberpunkRED_Generator.AgentState();
+        public string Chassis { get; set; }   // корпус ПКТ (DLC «Переходи на Металл»); пусто — мясное тело
         public string Addictions { get; set; }
         public List<string> ImprovementLog { get; set; } = new List<string>();
         public CyberpunkRED_Generator.NetrunData Net { get; set; } = new CyberpunkRED_Generator.NetrunData();

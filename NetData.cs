@@ -60,6 +60,7 @@ namespace CyberpunkRED_Generator
 
     public class NetItemDef
     {
+        public string Source;  // пакет DLC, из которого пришёл предмет (пусто — корник)
         public string Kind;    // Программа / Чёрный лёд / Железо / Кибердека
         public string Name, Class, Effect;
         public int Atk, Def, Rez, Per, Spd, Slots = 1, Cost;

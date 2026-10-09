@@ -13,5 +13,12 @@ namespace CyberpunkGen
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            CyberpunkRED_Generator.ErrorLog.Install(this);
+            CyberpunkRED_Generator.Packs.Apply();
+            CyberpunkRED_Generator.Loc.Install();
+        }
     }
 }

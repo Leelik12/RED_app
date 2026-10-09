@@ -24,3 +24,10 @@ Releases/
 
 # Пользовательские настройки (создаётся рядом с программой)
 settings.json
+
+# DLC: исходные PDF и их текстовые версии (генерируются Rulebook/build_dlc.py)
+/DLC/
+/Rulebook/dlc/
+
+# Встроенная библиотека правил, собирается Rulebook/build_library.py
+/Content/

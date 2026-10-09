@@ -13,12 +13,12 @@ namespace CyberpunkRED_Generator
     {
         private const string NetRoleName = "Нетраннер";
 
-        private static readonly Brush NetCyan = Theme.Accent();
-        private static readonly Brush NetRed = Theme.Danger();
-        private static readonly Brush NetGray = new SolidColorBrush(Color.FromRgb(153, 153, 153));
-        private static readonly Brush NetWhite = new SolidColorBrush(Color.FromRgb(224, 224, 224));
-        private static readonly Brush NetYellow = new SolidColorBrush(Color.FromRgb(255, 204, 0));
-        private static readonly Brush NetDark = new SolidColorBrush(Color.FromRgb(10, 10, 10));
+        private static Brush NetCyan => Theme.Accent();
+        private static Brush NetRed => Theme.Danger();
+        private static Brush NetGray => Theme.Get("Muted");
+        private static Brush NetWhite => Theme.Get("Text");
+        private static Brush NetYellow => Theme.Get("Warn");
+        private static Brush NetDark => Theme.Get("Panel");
 
         private SheetViewModel _netVm;
         private NetrunData _net;
@@ -39,7 +39,7 @@ namespace CyberpunkRED_Generator
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             var head = new Border { Background = NetRed, HorizontalAlignment = HorizontalAlignment.Left, Padding = new Thickness(10, 3, 10, 3), Margin = new Thickness(0, 0, 0, 6) };
-            head.Child = new TextBlock { Text = title, Foreground = Brushes.Black, FontWeight = FontWeights.Bold, FontSize = 13 };
+            head.Child = new TextBlock { Text = title, Foreground = Theme.Get("OnAccent"), FontWeight = FontWeights.Bold, FontSize = 13 };
             Grid.SetRow(content, 1);
             grid.Children.Add(head); grid.Children.Add(content);
             return new Border { BorderBrush = NetRed, BorderThickness = new Thickness(2), Background = NetDark, Padding = new Thickness(10), Child = grid };
@@ -50,7 +50,7 @@ namespace CyberpunkRED_Generator
 
         private static TextBox NetBoxCore(double width, TextAlignment align)
         {
-            var tb = new TextBox { Background = Brushes.Black, Foreground = NetCyan, BorderBrush = new SolidColorBrush(Color.FromRgb(68, 68, 68)), CaretBrush = NetCyan, Padding = new Thickness(3), TextAlignment = align, VerticalContentAlignment = VerticalAlignment.Center };
+            var tb = new TextBox { Background = Theme.Get("Back"), Foreground = NetCyan, BorderBrush = Theme.Get("Line"), CaretBrush = NetCyan, Padding = new Thickness(3), TextAlignment = align, VerticalContentAlignment = VerticalAlignment.Center };
             if (width > 0) tb.Width = width;
             return tb;
         }
@@ -261,7 +261,7 @@ namespace CyberpunkRED_Generator
 
         private UIElement BuildNetNotesPanel()
         {
-            var tb = new TextBox { Background = Brushes.Black, Foreground = NetCyan, BorderBrush = new SolidColorBrush(Color.FromRgb(68, 68, 68)), CaretBrush = NetCyan, AcceptsReturn = true, TextWrapping = TextWrapping.Wrap, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, Padding = new Thickness(4) };
+            var tb = new TextBox { Background = Theme.Get("Back"), Foreground = NetCyan, BorderBrush = Theme.Get("Line"), CaretBrush = NetCyan, AcceptsReturn = true, TextWrapping = TextWrapping.Wrap, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, Padding = new Thickness(4) };
             tb.SetBinding(TextBox.TextProperty, new Binding("Notes") { Source = _net, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged });
             return tb;
         }
@@ -393,7 +393,7 @@ namespace CyberpunkRED_Generator
                     eff.TextWrapping = TextWrapping.Wrap; eff.Margin = new Thickness(44, 0, 6, 0);
                     box.Children.Add(eff);
                 }
-                _netProgramList.Children.Add(new Border { BorderBrush = new SolidColorBrush(Color.FromRgb(51, 51, 51)), BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(0, 3, 0, 5), Child = box });
+                _netProgramList.Children.Add(new Border { BorderBrush = Theme.Get("Line"), BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(0, 3, 0, 5), Child = box });
             }
             if (_net.Programs.Count == 0) _netProgramList.Children.Add(MakeText("Дека пуста. Добавь программы из каталога или впиши свою.", NetGray, 13));
         }
@@ -418,7 +418,7 @@ namespace CyberpunkRED_Generator
                 var box = new StackPanel();
                 box.Children.Add(row);
                 if (!string.IsNullOrEmpty(hw.Effect)) { var eff = MakeText(hw.Effect, NetGray, 11); eff.TextWrapping = TextWrapping.Wrap; box.Children.Add(eff); }
-                _netHardwareList.Children.Add(new Border { BorderBrush = new SolidColorBrush(Color.FromRgb(51, 51, 51)), BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(0, 3, 0, 5), Child = box });
+                _netHardwareList.Children.Add(new Border { BorderBrush = Theme.Get("Line"), BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(0, 3, 0, 5), Child = box });
             }
             if (_net.Hardware.Count == 0) _netHardwareList.Children.Add(MakeText("Железа нет.", NetGray, 13));
         }
@@ -437,17 +437,7 @@ namespace CyberpunkRED_Generator
 
         private void ShowNetCatalog(int startTab)
         {
-            var win = new Window
-            {
-                Title = "КАТАЛОГ НЕТРАННЕРА",
-                Owner = this,
-                Width = 940,
-                Height = 660,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Background = new SolidColorBrush(Color.FromRgb(5, 5, 5)),
-                FontFamily = new FontFamily("Consolas")
-            };
-            win.Resources = this.Resources;
+            var win = Ui.Dialog(this, "КАТАЛОГ НЕТРАННЕРА", 940, 660);
 
             int tab = startTab;
             NetItemDef selected = null;
@@ -498,7 +488,7 @@ namespace CyberpunkRED_Generator
                     : selected.Kind == "Железо" ? $"Слотов: {selected.Slots}"
                     : selected.Kind == "Чёрный лёд" ? $"{selected.Class}\nВСП {selected.Per}  РЕА {selected.Spd}  АТК {selected.Atk}  ЗАЩ {selected.Def}  ЦЕЛ {selected.Rez}  Слотов: {selected.Slots}"
                     : $"{selected.Class}\nАТК {selected.Atk}  ЗАЩ {selected.Def}  ЦЕЛ {selected.Rez}";
-                var st = MakeText(stats + "\nЦена: " + GearCatalog.CostText(selected.Cost), NetWhite, 14);
+                var st = MakeText(stats + "\nЦена: " + GearCatalog.CostText(selected.Cost) + (selected.Source != null ? "\nИсточник: " + selected.Source : ""), NetWhite, 14);
                 st.TextWrapping = TextWrapping.Wrap; st.Margin = new Thickness(0, 6, 0, 6);
                 p.Children.Add(st);
                 var eff = MakeText(selected.Effect, NetGray, 13); eff.TextWrapping = TextWrapping.Wrap; p.Children.Add(eff);
@@ -520,16 +510,16 @@ namespace CyberpunkRED_Generator
             Action fill = () =>
             {
                 for (int i = 0; i < tabButtons.Length; i++)
-                    tabButtons[i].Background = i == tab ? new SolidColorBrush(Color.FromRgb(0, 70, 58)) : new SolidColorBrush(Color.FromRgb(26, 26, 26));
+                    tabButtons[i].Background = i == tab ? Theme.Get("Tint") : Theme.Get("Raised");
                 listBox.Items.Clear();
                 foreach (var d in lists[tab])
-                    listBox.Items.Add(new ListBoxItem { Content = d.Name + "  —  " + GearCatalog.CostText(d.Cost), Tag = d, Foreground = NetWhite });
+                    listBox.Items.Add(new ListBoxItem { Content = d.Name + "  —  " + GearCatalog.CostText(d.Cost) + (d.Source != null ? "  [" + d.Source + "]" : ""), Tag = d, Foreground = NetWhite });
                 selected = null; showDetail();
             };
             listBox.SelectionChanged += (s, e) => { selected = (listBox.SelectedItem as ListBoxItem)?.Tag as NetItemDef; showDetail(); };
             for (int i = 0; i < tabButtons.Length; i++) { int idx = i; tabButtons[i].Click += (s, e) => { tab = idx; fill(); }; }
             fill();
-            win.ShowDialog();
+            Ui.Present(win);
         }
     }
 }

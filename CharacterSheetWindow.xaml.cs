@@ -88,9 +88,12 @@ namespace CyberpunkRED_Generator
         {
             Theme.Install(this);
             InitializeComponent();
+            Title = "ТЕРМИНАЛ ПЕРСОНАЖА · v" + AppInfo.VersionText;
             LoadCharacterData(jsonFilePath);
             InitSafety();
             InitMenu();
+            InitLayout();
+            InitStyle();
         }
 
         private void LoadCharacterData(string filePath)
@@ -129,6 +132,8 @@ namespace CyberpunkRED_Generator
 
                 if (_originalData != null)
                 {
+                    int fromVersion = SaveSchema.Upgrade(_originalData);
+                    NoteMigration(fromVersion);
                     var viewModel = new SheetViewModel
                     {
                         Name = _originalData.Name,
@@ -140,6 +145,7 @@ namespace CyberpunkRED_Generator
                         TragicLoves = new ObservableCollection<StringItem>(_originalData.TragicLoves.Select(x => new StringItem { Value = x })),
                         Enemies = _originalData.Enemies,
                         Notes = _originalData.Notes ?? "",
+                        Chassis = _originalData.Chassis,
                         RoleAbilityNotes = _originalData.RoleAbilityNotes ?? "",
 
                         ReputationEvents = _originalData.ReputationEvents ?? "",
@@ -337,6 +343,11 @@ namespace CyberpunkRED_Generator
                     viewModel.Armor = _originalData.Armor ?? new ArmorData();
                     viewModel.Net = _originalData.Net ?? new NetrunData();
                     viewModel.Finance = _originalData.Finance ?? new FinanceData();
+                    viewModel.Agent = _originalData.Agent ?? new AgentState();
+                    viewModel.Hq = _originalData.Hq ?? new HqData();
+                    viewModel.Journal = _originalData.Journal ?? new JournalData();
+                    viewModel.Effects = _originalData.Effects ?? new EffectsData();
+                    viewModel.Vehicles = new ObservableCollection<OwnedVehicle>(_originalData.Vehicles ?? new List<OwnedVehicle>());
 
                     // Загружаем NPC
                     if (_originalData.NPCs != null)
@@ -722,11 +733,17 @@ namespace CyberpunkRED_Generator
                     if (luckStat != null) _originalData.SystemStats["CurrentLuck"] = luckStat.CurrentValue;
 
                     _originalData.Notes = vm.Notes;
+                    _originalData.Chassis = vm.Chassis;
                     _originalData.RoleAbilityNotes = vm.RoleAbilityNotes;
                     _originalData.Armor = vm.Armor;
                     _originalData.Weapons = vm.Weapons.ToList();
                     _originalData.Net = vm.Net;
                     _originalData.Finance = vm.Finance;
+                    _originalData.Vehicles = vm.Vehicles.ToList();
+                    _originalData.Agent = vm.Agent;
+                    _originalData.Hq = vm.Hq;
+                    _originalData.Journal = vm.Journal;
+                    _originalData.Effects = vm.Effects;
 
                     _originalData.StyleNotes = vm.StyleNotes;
                     _originalData.Housing = vm.Housing;
@@ -791,6 +808,8 @@ namespace CyberpunkRED_Generator
                         }
                     }
 
+                    _originalData.SchemaVersion = SaveSchema.Current;
+                    _originalData.AppVersion = AppInfo.VersionText;
                     var options = new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
                     return JsonSerializer.Serialize(_originalData, options);
                 }
@@ -809,6 +828,7 @@ namespace CyberpunkRED_Generator
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            CloseToolTabs();
             if (!_isConfirmedClose)
             {
                 var res = IsDirty()
@@ -1019,24 +1039,54 @@ namespace CyberpunkRED_Generator
                     return;
                 }
 
-                // Запрос ПЧ
-                // Запрос ПЧ
-                int parsedHL = 0;
-                if (def.HumanityLoss != "0" && def.HumanityLoss != "0 (—)")
+                // импланты ставятся после ответа на запрос потери человечности (он открывается вкладкой)
+                var targetBlock = vm.CurrentCyberBlock;
+                Action finish = () =>
+                {
+                    targetBlock.InstalledItems.Add(def);
+                    targetBlock.UsedSlots += def.Slots;
+
+                    if (def.IsPaired && twinBlock != null)
+                    {
+                        if (!twinBlock.InstalledItems.Any(i => i.Name == def.Name))
+                        {
+                            twinBlock.InstalledItems.Add(def);
+                            twinBlock.UsedSlots += def.Slots;
+                        }
+                    }
+
+                    // ЛОГИКА БОРГИРОВАНИЯ (Добавление новых конечностей)
+                    if (def.Name == "Искусственное плечевое крепление")
+                    {
+                        if (!vm.CyberwareBlocks.Any(b => b.Name == "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)"))
+                        {
+                            vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)", MaxSlots = 4, UsedSlots = 0, OptionsText = "" });
+                            vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. ЛЕВАЯ КИБЕРРУКА (EXTRA ARM L)", MaxSlots = 4, UsedSlots = 0, OptionsText = "" });
+                            MessageBox.Show("Плечевое крепление установлено! В ваш лист добавлены слоты для дополнительных киберрук.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    // СТАЛО:
+                    else if (def.Name == "Фасеточное крепление")
+                    {
+                        if (!vm.CyberwareBlocks.Any(b => b.Name == "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)"))
+                        {
+                            vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                            vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 2 (EXTRA OPTIC 2)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                            vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 3 (EXTRA OPTIC 3)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                            vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 4 (EXTRA OPTIC 4)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                            vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 5 (EXTRA OPTIC 5)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
+                            MessageBox.Show("Фасеточное крепление установлено! В ваш лист добавлены слоты для 5 дополнительных киберглаз.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+
+                    vm.RecalculatePenalties();
+                };
+
+                if (def.HumanityLoss != "0" && def.HumanityLoss != "0 (—)" && !(vm.IsBorg && Borg.IsFreeInBorg(def)))
                 {
                     string promptInfo = def.IsPaired ? $"{def.HumanityLoss} (бросайте дважды за парный)" : def.HumanityLoss;
 
-                    Window prompt = new Window
-                    {
-                        Title = "ПОТЕРЯ ЧЕЛОВЕЧНОСТИ",
-                        Width = 350,
-                        SizeToContent = SizeToContent.Height, // <-- Вот она, магия гибкой высоты
-                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                        ResizeMode = ResizeMode.NoResize,
-                        WindowStyle = WindowStyle.ToolWindow,
-                        Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(10, 10, 10)),
-                        Topmost = true
-                    };
+                    var prompt = Ui.Dialog(this, "ПОТЕРЯ ЧЕЛОВЕЧНОСТИ", 380, 300);
 
                     var grid = new Grid { Margin = new Thickness(15) };
                     grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -1044,18 +1094,18 @@ namespace CyberpunkRED_Generator
                     grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
                     grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-                    var tbInfo = new TextBlock { Text = $"Установка: {def.Name}\nСделайте бросок кубиков: {promptInfo}\nВведите итоговый результат потери:", Foreground = System.Windows.Media.Brushes.White, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 15) };
+                    var tbInfo = new TextBlock { Text = $"Установка: {def.Name}\nСделайте бросок кубиков: {promptInfo}\nВведите итоговый результат потери:", Foreground = Theme.Get("Bright"), TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 15) };
                     Grid.SetRow(tbInfo, 0);
 
-                    var inputTb = new TextBox { Background = System.Windows.Media.Brushes.Black, Foreground = System.Windows.Media.Brushes.Cyan, FontSize = 20, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 0, 15) };
+                    var inputTb = new TextBox { Background = Theme.Get("Back"), Foreground = Theme.Get("Accent"), FontSize = 20, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 0, 15) };
                     Grid.SetRow(inputTb, 1);
 
-                    var btnOk = new Button { Content = "ПОДТВЕРДИТЬ УСТАНОВКУ", Background = System.Windows.Media.Brushes.Red, Foreground = System.Windows.Media.Brushes.Black, FontWeight = FontWeights.Bold, Height = 30, Cursor = System.Windows.Input.Cursors.Hand };
+                    var btnOk = new Button { Content = "ПОДТВЕРДИТЬ УСТАНОВКУ", Background = Theme.Get("Danger"), Foreground = Theme.Get("OnAccent"), FontWeight = FontWeights.Bold, Height = 30, Cursor = System.Windows.Input.Cursors.Hand };
                     Grid.SetRow(btnOk, 3);
 
                     // бросок кубиков кнопкой; результат можно поправить вручную (например, если бросали настоящие кубы)
                     string baseInfo = tbInfo.Text;
-                    var btnRoll = new Button { Content = "🎲 БРОСИТЬ КУБЫ", Background = System.Windows.Media.Brushes.Black, Foreground = System.Windows.Media.Brushes.Cyan, BorderBrush = System.Windows.Media.Brushes.Cyan, FontWeight = FontWeights.Bold, Height = 30, Margin = new Thickness(0, 0, 0, 10), Cursor = System.Windows.Input.Cursors.Hand };
+                    var btnRoll = new Button { Content = "🎲 БРОСИТЬ КУБЫ", Background = Theme.Get("Back"), Foreground = Theme.Get("Accent"), BorderBrush = Theme.Get("Accent"), FontWeight = FontWeights.Bold, Height = 30, Margin = new Thickness(0, 0, 0, 10), Cursor = System.Windows.Input.Cursors.Hand };
                     Grid.SetRow(btnRoll, 2);
                     btnRoll.Click += (s2, ev2) =>
                     {
@@ -1069,56 +1119,16 @@ namespace CyberpunkRED_Generator
 
                     btnOk.Click += (s, ev) =>
                     {
-                        if (int.TryParse(inputTb.Text, out int res)) { parsedHL = res; prompt.DialogResult = true; }
+                        if (int.TryParse(inputTb.Text, out int res)) { prompt.Close(); vm.CurrentHumanity -= res; finish(); }
                         else { MessageBox.Show("Введите число!"); }
                     };
 
                     grid.Children.Add(tbInfo); grid.Children.Add(inputTb); grid.Children.Add(btnRoll); grid.Children.Add(btnOk);
                     prompt.Content = grid;
-
-                    bool? result = prompt.ShowDialog();
-                    if (result != true) return;
-
-                    vm.CurrentHumanity -= parsedHL;
+                    Ui.Present(prompt);
+                    return;
                 }
-
-                vm.CurrentCyberBlock.InstalledItems.Add(def);
-                vm.CurrentCyberBlock.UsedSlots += def.Slots;
-
-                if (def.IsPaired && twinBlock != null)
-                {
-                    if (!twinBlock.InstalledItems.Any(i => i.Name == def.Name))
-                    {
-                        twinBlock.InstalledItems.Add(def);
-                        twinBlock.UsedSlots += def.Slots;
-                    }
-                }
-
-                // ЛОГИКА БОРГИРОВАНИЯ (Добавление новых конечностей)
-                if (def.Name == "Искусственное плечевое крепление")
-                {
-                    if (!vm.CyberwareBlocks.Any(b => b.Name == "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)"))
-                    {
-                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. ПРАВАЯ КИБЕРРУКА (EXTRA ARM R)", MaxSlots = 4, UsedSlots = 0, OptionsText = "" });
-                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. ЛЕВАЯ КИБЕРРУКА (EXTRA ARM L)", MaxSlots = 4, UsedSlots = 0, OptionsText = "" });
-                        MessageBox.Show("Плечевое крепление установлено! В ваш лист добавлены слоты для дополнительных киберрук.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-                // СТАЛО:
-                else if (def.Name == "Фасеточное крепление")
-                {
-                    if (!vm.CyberwareBlocks.Any(b => b.Name == "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)"))
-                    {
-                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 1 (EXTRA OPTIC 1)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
-                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 2 (EXTRA OPTIC 2)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
-                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 3 (EXTRA OPTIC 3)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
-                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 4 (EXTRA OPTIC 4)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
-                        vm.CyberwareBlocks.Add(new CyberwareBlockItem { Name = "ДОП. КИБЕРГЛАЗ 5 (EXTRA OPTIC 5)", MaxSlots = 3, UsedSlots = 0, OptionsText = "" });
-                        MessageBox.Show("Фасеточное крепление установлено! В ваш лист добавлены слоты для 5 дополнительных киберглаз.", "БОРГИРОВАНИЕ АКТИВИРОВАНО", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-
-                vm.RecalculatePenalties();
+                finish();
             }
         }
 
@@ -1269,61 +1279,6 @@ namespace CyberpunkRED_Generator
                 vm.ChangeRoleIndex(vm.ActiveRoles.IndexOf(vm.CurrentActiveRole) + 1);
         }
 
-        private void BtnAddRole_Click(object sender, RoutedEventArgs e)
-        {
-            var vm = this.DataContext as SheetViewModel;
-            var availableRoles = CoreDataBase.Roles.Where(r => !vm.ActiveRoles.Any(ar => ar.Name == r)).ToList();
-            if (availableRoles.Count == 0)
-            {
-                MessageBox.Show("Вы уже взяли все возможные роли!", "ИНФО", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            // новую роль можно взять, только когда последняя взятая дошла до ранга 4 (стр. 145)
-            var lastRole = vm.ActiveRoles.LastOrDefault();
-            if (lastRole != null && lastRole.Rank < 4)
-            {
-                MessageBox.Show($"Новую роль можно взять, когда последняя роль ({lastRole.Name}) достигнет 4 ранга. Сейчас ранг {lastRole.Rank}.", "МУЛЬТИКЛАСС НЕДОСТУПЕН", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            Window prompt = new Window { Title = "ВЫБОР РОЛИ", Width = 300, Height = 130, Background = new SolidColorBrush(Color.FromRgb(10, 10, 10)), WindowStartupLocation = WindowStartupLocation.CenterScreen, ResizeMode = ResizeMode.NoResize, WindowStyle = WindowStyle.ToolWindow };
-            prompt.Resources = this.Resources; // ПРИМЕНЯЕМ СТИЛИ ОКНА, чтобы комбобокс стал темным
-
-            var combo = new ComboBox { ItemsSource = availableRoles, SelectedIndex = 0, Margin = new Thickness(10) };
-            var btn = new Button { Content = "ДОБАВИТЬ МУЛЬТИКЛАСС", Margin = new Thickness(10), Background = Brushes.Red, Foreground = Brushes.Black, FontWeight = FontWeights.Bold, Cursor = System.Windows.Input.Cursors.Hand };
-            btn.Click += (s, ev) => {
-                if (combo.SelectedItem != null)
-                {
-                    vm.ActiveRoles.Add(new RoleData { Name = combo.SelectedItem.ToString(), Rank = 1 });
-                    vm.ChangeRoleIndex(vm.ActiveRoles.Count - 1);
-                    prompt.DialogResult = true;
-                }
-            };
-            var stack = new StackPanel(); stack.Children.Add(combo); stack.Children.Add(btn);
-            prompt.Content = stack;
-            prompt.ShowDialog();
-        }
-
-        private void BtnRemoveRole_Click(object sender, RoutedEventArgs e)
-        {
-            var vm = this.DataContext as SheetViewModel;
-            if (vm != null)
-            {
-                if (vm.ActiveRoles.Count > 1)
-                {
-                    var res = MessageBox.Show($"Вы уверены, что хотите удалить роль '{vm.CurrentActiveRole.Name}'?\nВсе вложенные в нее очки способностей будут сброшены.", "УДАЛЕНИЕ РОЛИ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (res == MessageBoxResult.Yes)
-                    {
-                        vm.RemoveCurrentRole();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("У персонажа должна быть хотя бы одна роль! Вы не можете удалить последнюю.", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-        }
         private void LoadEnemiesFromFolder()
         {
             if (!(this.DataContext is SheetViewModel vm)) return;
@@ -1337,6 +1292,7 @@ namespace CyberpunkRED_Generator
                     try { vm.AvailableEnemies.Add(JsonSerializer.Deserialize<EnemySaveData>(File.ReadAllText(file), options)); } catch { }
                 }
             }
+            Npcs.AddTo(vm.AvailableEnemies);
         }
 
         private void BtnAddNPC_Click(object sender, RoutedEventArgs e)
@@ -1533,6 +1489,7 @@ namespace CyberpunkRED_Generator
         {
             if ((sender as Button)?.Tag is EnemySaveData enemyData && this.DataContext is SheetViewModel vm)
             {
+                if (enemyData.IsBuiltIn) { MessageBox.Show("Это встроенный пресет DLC «" + enemyData.Source + "». Его можно скрыть, отключив пакет в настройках.", "ПРЕСЕТ DLC"); return; }
                 var res = MessageBox.Show($"Удалить пресет '{enemyData.Name}' из базы навсегда?", "ПОДТВЕРДИТЕ УДАЛЕНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (res == MessageBoxResult.Yes)
                 {
