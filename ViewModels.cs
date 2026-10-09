@@ -188,6 +188,24 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        // подсвечивает навыки, подходящие под строку поиска, остальные делает тусклыми
+        public void ApplySkillSearch(string text)
+        {
+            string q = (text ?? "").Trim();
+            var cats = new List<SheetSkillCategory>();
+            if (CenterSkillCategories != null) cats.AddRange(CenterSkillCategories);
+            if (RightSkillCategories1 != null) cats.AddRange(RightSkillCategories1);
+            if (RightSkillCategories2 != null) cats.AddRange(RightSkillCategories2);
+            foreach (var cat in cats)
+                foreach (var sk in cat.Skills)
+                {
+                    bool match = q.Length == 0
+                        || (sk.Name ?? "").IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0
+                        || (sk.SubName ?? "").IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
+                    sk.SearchOpacity = match ? 1.0 : 0.2;
+                }
+        }
+
         // Вспомогательный метод для добавления бонусов роли к скиллам
         public void ApplyRoleModToSkill(string skillName, int value)
         {
@@ -356,6 +374,8 @@ namespace CyberpunkRED_Generator
         }
 
         public ObservableCollection<WeaponData> Weapons { get; set; }
+        public NetrunData Net { get; set; } = new NetrunData();
+        public FinanceData Finance { get; set; } = new FinanceData();
         public List<SheetSkillCategory> CenterSkillCategories { get; set; }
         public List<SheetSkillCategory> RightSkillCategories1 { get; set; }
         public List<SheetSkillCategory> RightSkillCategories2 { get; set; }
@@ -786,6 +806,10 @@ namespace CyberpunkRED_Generator
             }
         }
 
+        // прозрачность строки при поиске по навыкам (1 — подходит или поиск пуст)
+        private double _searchOpacity = 1;
+        public double SearchOpacity { get => _searchOpacity; set { _searchOpacity = value; OnPropertyChanged(); } }
+
         public string Description { get; set; }
         public bool CanAddMultiple { get; set; }
         public bool IsVariant { get; set; }
@@ -949,6 +973,11 @@ namespace CyberpunkRED_Generator
     }
     public class ArmorData : INotifyPropertyChanged
     {
+        // названия надетой брони (из каталога или вручную)
+        private string _headName; public string HeadName { get => _headName; set { _headName = value; OnPropertyChanged(); } }
+        private string _bodyName; public string BodyName { get => _bodyName; set { _bodyName = value; OnPropertyChanged(); } }
+        private string _shieldName; public string ShieldName { get => _shieldName; set { _shieldName = value; OnPropertyChanged(); } }
+
         private int _headSpCurrent; public int HeadSpCurrent { get => _headSpCurrent; set { _headSpCurrent = value; OnPropertyChanged(); } }
         private int _headSpMax; public int HeadSpMax { get => _headSpMax; set { _headSpMax = value; OnPropertyChanged(); } }
         private string _headPenalty; public string HeadPenalty { get => _headPenalty; set { _headPenalty = value; OnPropertyChanged(); } }

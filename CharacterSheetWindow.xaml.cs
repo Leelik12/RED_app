@@ -86,16 +86,44 @@ namespace CyberpunkRED_Generator
 
         public CharacterSheetWindow(string jsonFilePath)
         {
+            Theme.Install(this);
             InitializeComponent();
             LoadCharacterData(jsonFilePath);
+            InitSafety();
+            InitMenu();
         }
 
         private void LoadCharacterData(string filePath)
         {
+            string jsonString;
             try
             {
                 _currentFilePath = filePath;
-                string jsonString = File.ReadAllText(filePath);
+                jsonString = File.ReadAllText(filePath);
+
+                // если окно закрыли аварийно, рядом лежит более свежее автосохранение
+                string recovery = RecoveryPath(filePath);
+                if (File.Exists(recovery) && File.GetLastWriteTime(recovery) > File.GetLastWriteTime(filePath))
+                {
+                    var ask = MessageBox.Show($"Найдено автосохранение от {File.GetLastWriteTime(recovery):dd.MM.yyyy HH:mm}, оно новее файла персонажа.\nВосстановить его?", "ВОССТАНОВЛЕНИЕ", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (ask == MessageBoxResult.Yes) { jsonString = File.ReadAllText(recovery); _loadedFromRecovery = true; }
+                    else DeleteRecoveryFile();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при чтении файла:\n{ex.Message}", "ОШИБКА ДАННЫХ", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
+                return;
+            }
+            ApplyCharacterJson(jsonString);
+        }
+
+        // разбирает JSON персонажа и пересобирает весь лист (используется при загрузке и при отмене/повторе)
+        private void ApplyCharacterJson(string jsonString)
+        {
+            try
+            {
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 _originalData = JsonSerializer.Deserialize<CharacterSaveData>(jsonString, options);
 
@@ -307,6 +335,8 @@ namespace CyberpunkRED_Generator
                     while (viewModel.Weapons.Count < 5) viewModel.Weapons.Add(new WeaponData());
 
                     viewModel.Armor = _originalData.Armor ?? new ArmorData();
+                    viewModel.Net = _originalData.Net ?? new NetrunData();
+                    viewModel.Finance = _originalData.Finance ?? new FinanceData();
 
                     // Загружаем NPC
                     if (_originalData.NPCs != null)
@@ -336,13 +366,15 @@ namespace CyberpunkRED_Generator
                     viewModel.UpdateDerivedCombatStats();
 
                     this.DataContext = viewModel;
+                    BuildNetTab();
                     LoadEnemiesFromFolder(); // Подгружаем врагов для комбобокса
+                    _dataReady = true;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при чтении файла:\n{ex.Message}", "ОШИБКА ДАННЫХ", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                if (!_dataReady) this.Close();
             }
         }
         // в сохранении установленные импланты лежат копиями; подтягиваем актуальные данные из базы (кастомные не трогаем)
@@ -619,6 +651,27 @@ namespace CyberpunkRED_Generator
             {
                 if (_originalData != null && !string.IsNullOrEmpty(_currentFilePath))
                 {
+                    string newJson = SerializeCurrentState();
+                    BackupExistingFile();
+                    File.WriteAllText(_currentFilePath, newJson, System.Text.Encoding.UTF8);
+                    _lastSavedJson = newJson;
+                    DeleteRecoveryFile();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Системная ошибка при сохранении: {ex.Message}", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+        }
+
+        // переносит текущее состояние листа в _originalData и возвращает его JSON (без записи на диск)
+        private string SerializeCurrentState()
+        {
+            {
+                {
                     var vm = this.DataContext as SheetViewModel;
 
                     _originalData.Name = vm.Name;
@@ -672,6 +725,8 @@ namespace CyberpunkRED_Generator
                     _originalData.RoleAbilityNotes = vm.RoleAbilityNotes;
                     _originalData.Armor = vm.Armor;
                     _originalData.Weapons = vm.Weapons.ToList();
+                    _originalData.Net = vm.Net;
+                    _originalData.Finance = vm.Finance;
 
                     _originalData.StyleNotes = vm.StyleNotes;
                     _originalData.Housing = vm.Housing;
@@ -737,17 +792,8 @@ namespace CyberpunkRED_Generator
                     }
 
                     var options = new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
-                    string newJson = JsonSerializer.Serialize(_originalData, options);
-                    File.WriteAllText(_currentFilePath, newJson, System.Text.Encoding.UTF8);
-
-                    return true;
+                    return JsonSerializer.Serialize(_originalData, options);
                 }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Системная ошибка при сохранении: {ex.Message}", "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
             }
         }
 
@@ -765,7 +811,9 @@ namespace CyberpunkRED_Generator
         {
             if (!_isConfirmedClose)
             {
-                var res = MessageBox.Show("Хотите сохранить изменения перед выходом?", "СОХРАНЕНИЕ", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                var res = IsDirty()
+                    ? MessageBox.Show("Хотите сохранить изменения перед выходом?", "СОХРАНЕНИЕ", MessageBoxButton.YesNoCancel, MessageBoxImage.Question)
+                    : MessageBoxResult.No;
 
                 if (res == MessageBoxResult.Cancel)
                 {
@@ -782,6 +830,8 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
+                StopAutosave();
+                DeleteRecoveryFile();
                 _isConfirmedClose = true;
                 MainWindow mainMenu = new MainWindow();
                 mainMenu.Show();
@@ -825,6 +875,7 @@ namespace CyberpunkRED_Generator
                     }
                 }
 
+                if (TxtCyberSearch != null) TxtCyberSearch.Text = "";
                 CyberwareOverlay.Visibility = Visibility.Visible;
             }
         }
@@ -991,6 +1042,7 @@ namespace CyberpunkRED_Generator
                     grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
                     grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
                     grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                    grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
                     var tbInfo = new TextBlock { Text = $"Установка: {def.Name}\nСделайте бросок кубиков: {promptInfo}\nВведите итоговый результат потери:", Foreground = System.Windows.Media.Brushes.White, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 15) };
                     Grid.SetRow(tbInfo, 0);
@@ -999,7 +1051,21 @@ namespace CyberpunkRED_Generator
                     Grid.SetRow(inputTb, 1);
 
                     var btnOk = new Button { Content = "ПОДТВЕРДИТЬ УСТАНОВКУ", Background = System.Windows.Media.Brushes.Red, Foreground = System.Windows.Media.Brushes.Black, FontWeight = FontWeights.Bold, Height = 30, Cursor = System.Windows.Input.Cursors.Hand };
-                    Grid.SetRow(btnOk, 2);
+                    Grid.SetRow(btnOk, 3);
+
+                    // бросок кубиков кнопкой; результат можно поправить вручную (например, если бросали настоящие кубы)
+                    string baseInfo = tbInfo.Text;
+                    var btnRoll = new Button { Content = "🎲 БРОСИТЬ КУБЫ", Background = System.Windows.Media.Brushes.Black, Foreground = System.Windows.Media.Brushes.Cyan, BorderBrush = System.Windows.Media.Brushes.Cyan, FontWeight = FontWeights.Bold, Height = 30, Margin = new Thickness(0, 0, 0, 10), Cursor = System.Windows.Input.Cursors.Hand };
+                    Grid.SetRow(btnRoll, 2);
+                    btnRoll.Click += (s2, ev2) =>
+                    {
+                        if (DiceRoller.TryRoll(def.HumanityLoss, def.IsPaired ? 2 : 1, out DiceResult dr))
+                        {
+                            inputTb.Text = dr.Total.ToString();
+                            tbInfo.Text = baseInfo + "\n\nБросок:\n" + dr.Detail;
+                        }
+                        else MessageBox.Show("Не удалось распознать формулу потери человечности. Введите результат вручную.", "БРОСОК");
+                    };
 
                     btnOk.Click += (s, ev) =>
                     {
@@ -1007,7 +1073,7 @@ namespace CyberpunkRED_Generator
                         else { MessageBox.Show("Введите число!"); }
                     };
 
-                    grid.Children.Add(tbInfo); grid.Children.Add(inputTb); grid.Children.Add(btnOk);
+                    grid.Children.Add(tbInfo); grid.Children.Add(inputTb); grid.Children.Add(btnRoll); grid.Children.Add(btnOk);
                     prompt.Content = grid;
 
                     bool? result = prompt.ShowDialog();
@@ -1306,6 +1372,7 @@ namespace CyberpunkRED_Generator
         private void BtnOpenEnemyManager_Click(object sender, RoutedEventArgs e)
         {
             LoadEnemiesFromFolder();
+            if (TxtEnemySearch != null) TxtEnemySearch.Text = "";
             _editingEnemyName = null;
             RbGenCN.IsChecked = true;
             if (this.DataContext is SheetViewModel vm)
@@ -1318,6 +1385,7 @@ namespace CyberpunkRED_Generator
 
         private void BtnCloseEnemyManager_Click(object sender, RoutedEventArgs e)
         {
+            if (TxtEnemySearch != null) TxtEnemySearch.Text = "";
             EnemyManagerOverlay.Visibility = Visibility.Collapsed;
         }
 

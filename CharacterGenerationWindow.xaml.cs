@@ -26,6 +26,7 @@ namespace CyberpunkRED_Generator
 
         public CharacterGenerationWindow()
         {
+            Theme.Install(this);
             InitializeComponent();
 
             CalculateDerivedStats();

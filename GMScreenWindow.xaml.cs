@@ -328,6 +328,7 @@ namespace CyberpunkRED_Generator
 
         public GMScreenWindow()
         {
+            Theme.Install(this);
             InitializeComponent();
             this.DataContext = this;
         }
@@ -471,6 +472,7 @@ namespace CyberpunkRED_Generator
         private void BtnOpenEnemyManager_Click(object sender, RoutedEventArgs e)
         {
             LoadEnemiesFromFolder();
+            if (TxtEnemySearch != null) TxtEnemySearch.Text = "";
             RbGenCN.IsChecked = true;
             _editingEnemyName = null;
             NewEnemySkills.Clear();
@@ -480,6 +482,7 @@ namespace CyberpunkRED_Generator
 
         private void BtnCloseEnemyManager_Click(object sender, RoutedEventArgs e)
         {
+            if (TxtEnemySearch != null) TxtEnemySearch.Text = "";
             EnemyManagerOverlay.Visibility = Visibility.Collapsed;
         }
 
@@ -751,6 +754,14 @@ namespace CyberpunkRED_Generator
                     AvailableEnemies.Remove(enemyData);
                 }
             }
+        }
+
+        private void TxtEnemySearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string q = TxtEnemySearch.Text.Trim();
+            var view = System.Windows.Data.CollectionViewSource.GetDefaultView(AvailableEnemies);
+            view.Filter = q.Length == 0 ? (Predicate<object>)null : o => o is EnemySaveData en && (en.Name ?? "").IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
+            view.Refresh();
         }
 
         private void BtnExit_Click(object sender, RoutedEventArgs e)

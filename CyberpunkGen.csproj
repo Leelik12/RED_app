@@ -256,6 +256,8 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReachFramework" />
+    <Reference Include="System.Printing" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -283,6 +285,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="CharacterSheetWindow.Safety.cs" />
+    <Compile Include="CharacterSheetWindow.Improve.cs" />
+    <Compile Include="CharacterSheetWindow.Search.cs" />
+    <Compile Include="CharacterSheetWindow.Menu.cs" />
+    <Compile Include="CharacterSheetWindow.Catalog.cs" />
+    <Compile Include="GearCatalog.cs" />
+    <Compile Include="NetData.cs" />
+    <Compile Include="AppSettings.cs" />
+    <Compile Include="CharacterSheetWindow.Settings.cs" />
+    <Compile Include="PdfWriter.cs" />
+    <Compile Include="CharacterSheetWindow.Export.cs" />
+    <Compile Include="FinanceData.cs" />
+    <Compile Include="CharacterSheetWindow.Finance.cs" />
+    <Compile Include="CharacterSheetWindow.Net.cs" />
     <Compile Include="CharacterSheetWindow.xaml.cs">
       <DependentUpon>CharacterSheetWindow.xaml</DependentUpon>
     </Compile>
@@ -295,6 +311,7 @@
     </Compile>
     <Compile Include="CoreDataBase.cs" />
     <Compile Include="DataModels.cs" />
+    <Compile Include="DiceRoller.cs" />
     <Compile Include="GMScreenWindow.xaml.cs">
       <DependentUpon>GMScreenWindow.xaml</DependentUpon>
     </Compile>

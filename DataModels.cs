@@ -52,6 +52,9 @@ namespace CyberpunkRED_Generator
         public List<CyberpunkRED_Generator.CyberwareBlockItem> CyberwareBlocks { get; set; } = new List<CyberpunkRED_Generator.CyberwareBlockItem>();
         public string CriticalInjuries { get; set; }
         public string Addictions { get; set; }
+        public List<string> ImprovementLog { get; set; } = new List<string>();
+        public CyberpunkRED_Generator.NetrunData Net { get; set; } = new CyberpunkRED_Generator.NetrunData();
+        public CyberpunkRED_Generator.FinanceData Finance { get; set; } = new CyberpunkRED_Generator.FinanceData();
 
         public List<string> CriticalInjuriesList { get; set; } = new List<string>();
     }
